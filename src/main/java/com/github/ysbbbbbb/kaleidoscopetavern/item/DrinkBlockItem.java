@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -44,6 +45,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         super(block, properties
                 .stacksTo(16)
                 .useBlockDescriptionPrefix()
+                .component(DataComponents.CONSUMABLE, Consumables.DEFAULT_DRINK)
                 .craftRemainder(ModItems.EMPTY_BOTTLE));
     }
 
