@@ -1,32 +1,33 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.entity.ISittable;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.BarStoolBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -34,41 +35,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-import java.util.List;
-
-public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock, ISittable {
-    public static final MapCodec<BarStoolBlock> CODEC = simpleCodec(BarStoolBlock::new);
+public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, ISittable {
+    public static final MapCodec<BarStoolBlock> CODEC = RecordCodecBuilder.mapCodec(builder -> builder.group(
+            DyeColor.CODEC.fieldOf("color").forGetter((o) -> o.color), propertiesCodec()
+    ).apply(builder, (dye, properties) -> new BarStoolBlock(properties, dye)));
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private final DyeColor color;
 
-    public static final VoxelShape NORTH_SHAPE = Shapes.or(
-            Block.box(5, 0, 5, 11, 2, 11),
-            Block.box(7, 1, 7, 9, 12, 9),
-            Block.box(2, 12, 3, 14, 15, 14),
-            Block.box(2, 15, 11, 14, 21, 14)
-    );
-
-    public static final VoxelShape SOUTH_SHAPE = Shapes.or(
-            Block.box(5, 0, 5, 11, 2, 11),
-            Block.box(7, 1, 7, 9, 12, 9),
-            Block.box(2, 12, 2, 14, 15, 13),
-            Block.box(2, 15, 2, 14, 21, 5)
-    );
-
-    public static final VoxelShape EAST_SHAPE = Shapes.or(
-            Block.box(5, 0, 5, 11, 2, 11),
-            Block.box(7, 1, 7, 9, 12, 9),
-            Block.box(2, 12, 2, 13, 15, 14),
-            Block.box(2, 15, 2, 5, 21, 14)
-    );
-
-    public static final VoxelShape WEST_SHAPE = Shapes.or(
-            Block.box(5, 0, 5, 11, 2, 11),
-            Block.box(7, 1, 7, 9, 12, 9),
-            Block.box(3, 12, 2, 14, 15, 14),
-            Block.box(11, 15, 2, 14, 21, 14)
-    );
-
-    public BarStoolBlock(Properties properties) {
+    public BarStoolBlock(Properties properties, DyeColor color) {
         super(properties
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
@@ -79,6 +54,7 @@ public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleW
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
+        this.color = color;
     }
 
     @Override
@@ -114,22 +90,50 @@ public class BarStoolBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
-        return switch (pState.getValue(FACING)) {
-            case SOUTH -> SOUTH_SHAPE;
-            case EAST -> EAST_SHAPE;
-            case WEST -> WEST_SHAPE;
-            default -> NORTH_SHAPE;
-        };
+    protected @NonNull BlockState rotate(BlockState blockState, Rotation rotation) {
+        return blockState.setValue(FACING, rotation.rotate(blockState.getValue(FACING)));
     }
 
     @Override
-    protected @NotNull MapCodec<? extends HorizontalDirectionalBlock> codec() {
+    protected @NonNull BlockState mirror(BlockState blockState, Mirror mirror) {
+        return blockState.rotate(mirror.getRotation(blockState.getValue(FACING)));
+    }
+
+    @Override
+    public @NotNull VoxelShape getShape(@NonNull BlockState pState, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
+        VoxelShape shape = Shapes.empty();
+        shape = Shapes.join(shape, Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.125, 0.6875), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.4375, 0.0625, 0.4375, 0.5625, 0.75, 0.5625), BooleanOp.OR);
+        shape = Shapes.join(shape, Shapes.box(0.125, 0.75, 0.125, 0.875, 0.9375, 0.875), BooleanOp.OR);
+
+        return shape;
+    }
+
+    @Override
+    public @NotNull RenderShape getRenderShape(@NonNull BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    protected @NonNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
 
     @Override
     public float getSitHeight() {
         return 0.9483f;
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
+        return new BarStoolBlockEntity(blockPos, blockState, color);
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> blockEntityType) {
+        if (level.isClientSide()) {
+            return null;
+        }
+        return createTickerHelper(blockEntityType, ModBlocks.BAR_STOOL_BE, BarStoolBlockEntity::tick);
     }
 }

@@ -1,7 +1,6 @@
 {
   "parent": "kaleidoscope_tavern:block/deco/bar_stool/base",
   "textures": {
-    "particle": "minecraft:block/cyan_wool",
-    "texture": "kaleidoscope_tavern:block/deco/bar_stool/cyan"
+    "particle": "minecraft:block/cyan_wool"
   }
 }

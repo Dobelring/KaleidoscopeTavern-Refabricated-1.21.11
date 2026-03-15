@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.BarStoolBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
@@ -13,6 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -45,22 +47,22 @@ public class ModBlocks {
     public static final Block MAGENTA_SOFA = sofaReg("magenta_sofa");
     public static final Block PINK_SOFA = sofaReg("pink_sofa");
     // 高脚凳
-    public static final Block WHITE_BAR_STOOL = barStoolReg("white_bar_stool");
-    public static final Block LIGHT_GRAY_BAR_STOOL = barStoolReg("light_gray_bar_stool");
-    public static final Block GRAY_BAR_STOOL = barStoolReg("gray_bar_stool");
-    public static final Block BLACK_BAR_STOOL = barStoolReg("black_bar_stool");
-    public static final Block BROWN_BAR_STOOL = barStoolReg("brown_bar_stool");
-    public static final Block RED_BAR_STOOL = barStoolReg("red_bar_stool");
-    public static final Block ORANGE_BAR_STOOL = barStoolReg("orange_bar_stool");
-    public static final Block YELLOW_BAR_STOOL = barStoolReg("yellow_bar_stool");
-    public static final Block LIME_BAR_STOOL = barStoolReg("lime_bar_stool");
-    public static final Block GREEN_BAR_STOOL = barStoolReg("green_bar_stool");
-    public static final Block CYAN_BAR_STOOL = barStoolReg("cyan_bar_stool");
-    public static final Block LIGHT_BLUE_BAR_STOOL = barStoolReg("light_blue_bar_stool");
-    public static final Block BLUE_BAR_STOOL = barStoolReg("blue_bar_stool");
-    public static final Block PURPLE_BAR_STOOL = barStoolReg("purple_bar_stool");
-    public static final Block MAGENTA_BAR_STOOL = barStoolReg("magenta_bar_stool");
-    public static final Block PINK_BAR_STOOL = barStoolReg("pink_bar_stool");
+    public static final Block WHITE_BAR_STOOL = barStoolReg("white_bar_stool", DyeColor.WHITE);
+    public static final Block LIGHT_GRAY_BAR_STOOL = barStoolReg("light_gray_bar_stool", DyeColor.LIGHT_GRAY);
+    public static final Block GRAY_BAR_STOOL = barStoolReg("gray_bar_stool", DyeColor.GRAY);
+    public static final Block BLACK_BAR_STOOL = barStoolReg("black_bar_stool", DyeColor.BLACK);
+    public static final Block BROWN_BAR_STOOL = barStoolReg("brown_bar_stool", DyeColor.BROWN);
+    public static final Block RED_BAR_STOOL = barStoolReg("red_bar_stool", DyeColor.RED);
+    public static final Block ORANGE_BAR_STOOL = barStoolReg("orange_bar_stool", DyeColor.ORANGE);
+    public static final Block YELLOW_BAR_STOOL = barStoolReg("yellow_bar_stool", DyeColor.YELLOW);
+    public static final Block LIME_BAR_STOOL = barStoolReg("lime_bar_stool", DyeColor.LIME);
+    public static final Block GREEN_BAR_STOOL = barStoolReg("green_bar_stool", DyeColor.GREEN);
+    public static final Block CYAN_BAR_STOOL = barStoolReg("cyan_bar_stool", DyeColor.CYAN);
+    public static final Block LIGHT_BLUE_BAR_STOOL = barStoolReg("light_blue_bar_stool", DyeColor.LIGHT_BLUE);
+    public static final Block BLUE_BAR_STOOL = barStoolReg("blue_bar_stool", DyeColor.BLUE);
+    public static final Block PURPLE_BAR_STOOL = barStoolReg("purple_bar_stool", DyeColor.PURPLE);
+    public static final Block MAGENTA_BAR_STOOL = barStoolReg("magenta_bar_stool", DyeColor.MAGENTA);
+    public static final Block PINK_BAR_STOOL = barStoolReg("pink_bar_stool", DyeColor.PINK);
     // 展板
     public static final Block BASE_SANDWICH_BOARD = sandwichBoardReg("base_sandwich_board");
     public static final Block GRASS_SANDWICH_BOARD = sandwichBoardReg("grass_sandwich_board", Items.SHORT_GRASS);
@@ -187,6 +189,24 @@ public class ModBlocks {
             WITHER_ROSE_SANDWICH_BOARD,
             EYEBLOSSOM_SANDWICH_BOARD
     ).build();
+    public static final BlockEntityType<BarStoolBlockEntity> BAR_STOOL_BE = FabricBlockEntityTypeBuilder.create(BarStoolBlockEntity::new,
+            BLUE_BAR_STOOL,
+            GREEN_BAR_STOOL,
+            ORANGE_BAR_STOOL,
+            PURPLE_BAR_STOOL,
+            YELLOW_BAR_STOOL,
+            BLACK_BAR_STOOL,
+            WHITE_BAR_STOOL,
+            GRAY_BAR_STOOL,
+            BROWN_BAR_STOOL,
+            LIME_BAR_STOOL,
+            MAGENTA_BAR_STOOL,
+            CYAN_BAR_STOOL,
+            LIGHT_BLUE_BAR_STOOL,
+            PINK_BAR_STOOL,
+            LIGHT_GRAY_BAR_STOOL,
+            RED_BAR_STOOL
+    ).build();
     public static final BlockEntityType<ChalkboardBlockEntity> CHALKBOARD_BE = FabricBlockEntityTypeBuilder.create(ChalkboardBlockEntity::new, CHALKBOARD).build();
     public static final BlockEntityType<BarrelBlockEntity> BARREL_BE = FabricBlockEntityTypeBuilder.create(BarrelBlockEntity::new, BARREL).build();
     public static final BlockEntityType<PressingTubBlockEntity> PRESSING_TUB_BE = FabricBlockEntityTypeBuilder.create(PressingTubBlockEntity::new, PRESSING_TUB).build();
@@ -218,6 +238,7 @@ public class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tap"), TAP_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sandwich_board"), SANDWICH_BOARD_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "bar_stool"), BAR_STOOL_BE);
     }
     public static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> function, BlockBehaviour.Properties properties) {
         Block block = function.apply(properties.setId(resourceKey));
@@ -235,8 +256,8 @@ public class ModBlocks {
         return commonReg(string, properties -> new StringLightsBlock(properties, color), BlockBehaviour.Properties.of());
     }
 
-    private static Block barStoolReg(String string) {
-        return commonReg(string, BarStoolBlock::new, BlockBehaviour.Properties.of());
+    private static Block barStoolReg(String string, DyeColor color) {
+        return commonReg(string, p -> new BarStoolBlock(p, color), BlockBehaviour.Properties.of());
     }
 
     private static Block sandwichBoardReg(String string, Item... items) {
