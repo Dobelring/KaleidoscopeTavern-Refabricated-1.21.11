@@ -73,8 +73,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         BlockPos clickedPos = half == Half.BOTTOM ? pos : pos.below();
         if (level.getBlockEntity(clickedPos) instanceof SandwichBoardBlockEntity sandwichBlock) {
@@ -117,8 +117,8 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -151,7 +151,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, BlockState state) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return new SandwichBoardBlockEntity(pos, state);
         }
@@ -178,7 +178,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, @NotNull ItemStack stack) {
         BlockPos above = pos.above();
         BlockState blockState = state.setValue(HALF, Half.TOP)
                 .setValue(WATERLOGGED, level.isWaterAt(above));
@@ -186,7 +186,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NotNull Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }
@@ -199,12 +199,12 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return state.getValue(HALF) == Half.TOP ? TOP_SHAPE : BOTTOM_SHAPE;
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
@@ -228,7 +228,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (this.transformItemNames == null && !this.transformItems.isEmpty()) {
             this.transformItemNames = this.transformItems.stream()
                     .map(Item::getDescriptionId)

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 @Environment(EnvType.CLIENT)
 public class SitRenderer extends EntityRenderer<SitEntity> {
     private static final ResourceLocation EMPTY = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/empty.png");
@@ -20,11 +21,11 @@ public class SitRenderer extends EntityRenderer<SitEntity> {
     }
 
     @Override
-    public void render(SitEntity entitySit, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
+    public void render(@NotNull SitEntity entitySit, float entityYaw, float partialTicks, @NotNull PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(SitEntity entitySit) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull SitEntity entitySit) {
         return EMPTY;
     }
 }

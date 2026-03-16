@@ -35,8 +35,8 @@ public class BarCounterBlock extends HorizontalDirectionalBlock implements IConn
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         state = this.updateShape(level, pos, state, direction);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
