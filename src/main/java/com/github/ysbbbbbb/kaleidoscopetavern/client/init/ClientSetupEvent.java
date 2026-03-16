@@ -15,6 +15,7 @@ public class ClientSetupEvent {
         BlockEntityRenderers.register(ModBlocks.PRESSING_TUB_BE, PressingTubBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.BARREL_BE, BarrelBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.BAR_CABINET_BE, BarCabinetBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.BAR_STOOL_BE, BarStoolBlockEntityRender::new);
         EntityRendererRegistry.register(ThrownMolotovEntity.TYPE, ThrownMolotovRenderer::new);
     }
 }
