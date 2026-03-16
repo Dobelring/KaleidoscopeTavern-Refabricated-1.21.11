@@ -29,9 +29,13 @@ import org.jspecify.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
 public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBlockEntity, BarStoolBlockEntityRenderState> {
-    private static final float MIN_SMOOTH_FACTOR = 0.28F;
-    private static final float MAX_SMOOTH_FACTOR = 0.78F;
-    private static final float SENSITIVITY_SCALE = 0.012F;
+    private static final float MIN_SMOOTH_FACTOR = 0.20F;
+    private static final float MAX_SMOOTH_FACTOR = 0.58F;
+    private static final float SENSITIVITY_SCALE = 0.007F;
+    private static final float PASSENGER_VELOCITY_BLEND = 0.22F;
+    private static final float PASSENGER_PREDICT_TICKS = 0.18F;
+    private static final float PASSENGER_MIN_STEP = 2.0F;
+    private static final float PASSENGER_STEP_SCALE = 0.26F;
     private final BarStoolBodyModel model;
 
     public BarStoolBlockEntityRender(BlockEntityRendererProvider.Context context) {
@@ -50,24 +54,40 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     @Override
     public void extractRenderState(BarStoolBlockEntity blockEntity, BarStoolBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
-        blockEntityRenderState.cachedRot = blockEntity.getCachedRot();
+        float cachedRot = blockEntity.getCachedRot();
+        boolean hadPassenger = blockEntityRenderState.hasPassenger;
         LivingEntity passenger = resolvePassenger(blockEntity);
         blockEntityRenderState.hasPassenger = passenger != null;
+        float sampleTime = getSampleTime(blockEntity, f);
         if (passenger != null) {
             blockEntityRenderState.passengerBodyRot = Mth.wrapDegrees(passenger.yBodyRot);
+            if (hadPassenger && blockEntityRenderState.hasLastSample) {
+                float dt = Math.max(0.001F, sampleTime - blockEntityRenderState.lastSampleTime);
+                float delta = Mth.wrapDegrees(blockEntityRenderState.passengerBodyRot - blockEntityRenderState.lastPassengerBodyRot);
+                float instantVelocity = delta / dt;
+                blockEntityRenderState.passengerBodyRotVelocity = Mth.lerp(PASSENGER_VELOCITY_BLEND, blockEntityRenderState.passengerBodyRotVelocity, instantVelocity);
+            } else {
+                blockEntityRenderState.passengerBodyRotVelocity = 0.0F;
+            }
+            blockEntityRenderState.lastPassengerBodyRot = blockEntityRenderState.passengerBodyRot;
+            blockEntityRenderState.lastSampleTime = sampleTime;
+            blockEntityRenderState.hasLastSample = true;
+        } else {
+            blockEntityRenderState.hasLastSample = false;
+            blockEntityRenderState.passengerBodyRotVelocity = 0.0F;
         }
-        float targetRot = blockEntityRenderState.hasPassenger ? blockEntityRenderState.passengerBodyRot : blockEntityRenderState.cachedRot;
+        float targetRot = blockEntityRenderState.hasPassenger ? blockEntityRenderState.passengerBodyRot : cachedRot;
         if (!blockEntityRenderState.initialized) {
             blockEntityRenderState.renderRot = targetRot;
             blockEntityRenderState.initialized = true;
         } else if (blockEntityRenderState.hasPassenger) {
-            blockEntityRenderState.renderRot = targetRot;
+            float predictedRot = Mth.wrapDegrees(targetRot + blockEntityRenderState.passengerBodyRotVelocity * PASSENGER_PREDICT_TICKS);
+            blockEntityRenderState.renderRot = smoothPassengerRotation(blockEntityRenderState.renderRot, predictedRot, blockEntityRenderState.passengerBodyRotVelocity);
         } else {
             float delta = Mth.degreesDifferenceAbs(blockEntityRenderState.renderRot, targetRot);
             float smoothFactor = Mth.clamp(MIN_SMOOTH_FACTOR + delta * SENSITIVITY_SCALE, MIN_SMOOTH_FACTOR, MAX_SMOOTH_FACTOR);
             blockEntityRenderState.renderRot = Mth.rotLerp(smoothFactor, blockEntityRenderState.renderRot, targetRot);
         }
-        blockEntityRenderState.targetRot = blockEntityRenderState.renderRot;
         blockEntityRenderState.color = blockEntity.getColor();
     }
 
@@ -76,9 +96,8 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         poseStack.pushPose();
         poseStack.translate(0.5F, 1.5F, 0.5F);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));
-        float bodyRot = blockEntityRenderState.targetRot;
-        poseStack.mulPose(Axis.YP.rotationDegrees(bodyRot + 180.0F));
-        BarStoolBodyModel.State state = new BarStoolBodyModel.State(null, false, blockEntityRenderState.cachedRot, 0.0F);
+        float bodyRot = blockEntityRenderState.renderRot;
+        BarStoolBodyModel.State state = new BarStoolBodyModel.State(bodyRot + 180.0F);
         submitNodeCollector.submitModel(
                 this.model,
                 state,
@@ -90,6 +109,24 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
                 null
         );
         poseStack.popPose();
+    }
+
+    private static float getSampleTime(BarStoolBlockEntity blockEntity, float partialTick) {
+        Level level = blockEntity.getLevel();
+        if (level == null) {
+            return partialTick;
+        }
+        return level.getGameTime() + partialTick;
+    }
+
+    private static float smoothPassengerRotation(float currentRot, float targetRot, float angularVelocity) {
+        float velocityAbs = Math.abs(angularVelocity);
+        float smoothFactor = Mth.clamp(0.24F + velocityAbs * 0.018F, 0.24F, 0.70F);
+        float lerped = Mth.rotLerp(smoothFactor, currentRot, targetRot);
+        float rawStep = Mth.wrapDegrees(lerped - currentRot);
+        float maxStep = PASSENGER_MIN_STEP + velocityAbs * PASSENGER_STEP_SCALE;
+        float clampedStep = Mth.clamp(rawStep, -maxStep, maxStep);
+        return Mth.wrapDegrees(currentRot + clampedStep);
     }
 
     private static @Nullable LivingEntity resolvePassenger(BarStoolBlockEntity blockEntity) {

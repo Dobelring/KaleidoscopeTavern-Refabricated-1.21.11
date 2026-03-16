@@ -11,7 +11,6 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.LevelAccessor;
 
 @Environment(EnvType.CLIENT)
 public class BarStoolBodyModel extends Model<BarStoolBodyModel.State> {
@@ -27,11 +26,11 @@ public class BarStoolBodyModel extends Model<BarStoolBodyModel.State> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 18).addBox(-14.0F, -3.0F, 3.0F, 12.0F, 3.0F, 11.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-14.0F, -9.0F, 11.0F, 12.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, 12.0F, -8.0F));
+        PartDefinition bone = partdefinition.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 18).addBox(-6.0F, -15.0F, -5.0F, 12.0F, 3.0F, 11.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-6.0F, -21.0F, 3.0F, 12.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
 
         PartDefinition cube_r1 = bone.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(46, 11).addBox(-1.0F, -0.5F, -3.5F, 2.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 0).addBox(-13.0F, -0.5F, -3.5F, 2.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, -4.6F, 8.3F, 0.3927F, 0.0F, 0.0F));
+                .texOffs(46, 0).addBox(-13.0F, -0.5F, -3.5F, 2.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -16.6F, 0.3F, 0.3927F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 32);
     }
@@ -43,6 +42,6 @@ public class BarStoolBodyModel extends Model<BarStoolBodyModel.State> {
     }
 
     @Environment(EnvType.CLIENT)
-    public record State(LevelAccessor levelAccessor, boolean hasPassenger, float cacheRot, float rot) {
+    public record State(float rot) {
     }
 }
