@@ -14,6 +14,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class DrinkEffectDataReloadListener extends SimpleJsonResourceReloadListe
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> resources, ResourceManager resourceManager, ProfilerFiller profiler) {
+    protected void apply(Map<ResourceLocation, JsonElement> resources, @NotNull ResourceManager resourceManager, @NotNull ProfilerFiller profiler) {
         INSTANCE.clear();
         for (var entry : resources.entrySet()) {
             var result = DrinkEffectData.CODEC.parse(JsonOps.INSTANCE, entry.getValue());

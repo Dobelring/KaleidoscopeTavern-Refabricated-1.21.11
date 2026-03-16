@@ -70,22 +70,22 @@ public abstract class JuiceFluid extends FlowingFluid {
     }
 
     @Override
-    protected int getSlopeFindDistance(LevelReader world) {
+    protected int getSlopeFindDistance(@NotNull LevelReader world) {
         return slopeFindDistance;
     }
 
     @Override
-    protected int getDropOff(LevelReader world) {
+    protected int getDropOff(@NotNull LevelReader world) {
         return dropOff;
     }
 
     @Override
-    public int getTickDelay(LevelReader world) {
+    public int getTickDelay(@NotNull LevelReader world) {
         return tickRate;
     }
 
     @Override
-    protected boolean canConvertToSource(Level world) {
+    protected boolean canConvertToSource(@NotNull Level world) {
         return false;
     }
 
@@ -95,23 +95,23 @@ public abstract class JuiceFluid extends FlowingFluid {
     }
 
     @Override
-    public @NotNull BlockState createLegacyBlock(FluidState state) {
+    public @NotNull BlockState createLegacyBlock(@NotNull FluidState state) {
         return block.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
     }
 
     @Override
-    protected void beforeDestroyingBlock(LevelAccessor world, BlockPos pos, BlockState state) {
+    protected void beforeDestroyingBlock(@NotNull LevelAccessor world, @NotNull BlockPos pos, BlockState state) {
         BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(pos) : null;
         Block.dropResources(state, world, pos, blockEntity);
     }
 
     @Override
-    public boolean canBeReplacedWith(FluidState state, BlockGetter world, BlockPos pos, Fluid fluid, Direction direction) {
+    public boolean canBeReplacedWith(@NotNull FluidState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull Fluid fluid, @NotNull Direction direction) {
         return direction == Direction.DOWN && !fluid.isSame(this);
     }
 
     @Override
-    public boolean isSame(Fluid fluid) {
+    public boolean isSame(@NotNull Fluid fluid) {
         return fluid == getFlowing() || fluid == getSource();
     }
 
@@ -124,7 +124,7 @@ public abstract class JuiceFluid extends FlowingFluid {
         }
 
         @Override
-        protected void createFluidStateDefinition(StateDefinition.Builder<Fluid, FluidState> builder) {
+        protected void createFluidStateDefinition(StateDefinition.@NotNull Builder<Fluid, FluidState> builder) {
             super.createFluidStateDefinition(builder);
             builder.add(LEVEL);
         }
@@ -135,7 +135,7 @@ public abstract class JuiceFluid extends FlowingFluid {
         }
 
         @Override
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@NotNull FluidState state) {
             return false;
         }
     }
@@ -149,12 +149,12 @@ public abstract class JuiceFluid extends FlowingFluid {
         }
 
         @Override
-        public int getAmount(FluidState state) {
+        public int getAmount(@NotNull FluidState state) {
             return 8;
         }
 
         @Override
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@NotNull FluidState state) {
             return true;
         }
     }

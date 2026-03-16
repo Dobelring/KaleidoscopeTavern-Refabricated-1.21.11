@@ -5,7 +5,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.PressingTubBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
@@ -73,14 +72,14 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.items.deserializeNBT(tag.getCompound("items"));
         this.fluid.readFromNBT(tag.getCompound("fluid"));
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("items", this.items.serializeNBT());
         tag.put("fluid", this.fluid.writeToNBT(new CompoundTag()));
@@ -480,7 +479,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public void setItem(int slot, ItemStack stack) {
+    public void setItem(int slot, @NotNull ItemStack stack) {
         items.setStackInSlot(slot, stack);
     }
 
@@ -494,7 +493,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@NotNull Player player) {
         if (level == null || level.getBlockEntity(worldPosition) != this) {
             return false;
         }
@@ -511,7 +510,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
     }
 
     @Override
-    public boolean canPlaceItem(int slot, ItemStack stack) {
+    public boolean canPlaceItem(int slot, @NotNull ItemStack stack) {
         return items.isItemValid(slot, stack);
     }
 

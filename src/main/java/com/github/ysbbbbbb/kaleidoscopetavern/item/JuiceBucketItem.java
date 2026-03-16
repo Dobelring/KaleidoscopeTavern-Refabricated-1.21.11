@@ -20,7 +20,7 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
     }
 
     @Override
-    public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+    public @NotNull ItemStack finishUsingItem(@NotNull ItemStack stack, Level level, @NotNull LivingEntity entity) {
         if (!level.isClientSide) {
             entity.removeAllEffects();
         }
@@ -38,17 +38,17 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
 
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack) {
         return 32;
     }
 
     @Override
-    public @NotNull UseAnim getUseAnimation(ItemStack stack) {
+    public @NotNull UseAnim getUseAnimation(@NotNull ItemStack stack) {
         return UseAnim.DRINK;
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
         if (player.isShiftKeyDown())
             return super.use(level, player, hand);
         return ItemUtils.startUsingInstantly(level, player, hand);

@@ -71,8 +71,8 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         // 如果玩家拿的是剪刀，可以剪下葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(Items.SHEARS)) {
@@ -91,8 +91,8 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -111,7 +111,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, RandomSource random) {
         if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             this.doGrow(level, pos, state);
         }
@@ -244,17 +244,17 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean isClient) {
         return this.canGrow(level, pos, state);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(@NotNull Level level, @NotNull RandomSource random, @NotNull BlockPos pos, @NotNull BlockState state) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(@NotNull ServerLevel level, @NotNull RandomSource random, @NotNull BlockPos pos, @NotNull BlockState state) {
         this.doGrow(level, pos, state);
     }
 
@@ -264,17 +264,17 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getCollisionShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return collisionShape(state.getValue(TYPE));
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return selectShape(state.getValue(TYPE));
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return ModItems.GRAPEVINE.getDefaultInstance();
     }
 

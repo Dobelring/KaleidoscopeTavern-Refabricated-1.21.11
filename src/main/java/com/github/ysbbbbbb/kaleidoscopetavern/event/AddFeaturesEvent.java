@@ -13,7 +13,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.TreeConfigurati
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import org.jetbrains.annotations.Contract;
 
-
 public class AddFeaturesEvent {
     @Contract
     public static void addFeatures() {

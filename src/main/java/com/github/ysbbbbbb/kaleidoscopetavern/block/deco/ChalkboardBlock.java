@@ -72,8 +72,8 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         Half half = state.getValue(HALF);
         PositionType position = state.getValue(POSITION);
         Direction facing = state.getValue(FACING);
@@ -102,8 +102,8 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -130,13 +130,13 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         handleRemove(level, pos, state, player);
         super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos blockPos, Explosion explosion) {
+    public void wasExploded(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Explosion explosion) {
         handleRemove(level, blockPos, level.getBlockState(blockPos), null);
         super.wasExploded(level, blockPos, explosion);
     }
@@ -190,7 +190,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(@NotNull Level level, @NotNull BlockPos pos, BlockState state, @Nullable LivingEntity entity, @NotNull ItemStack stack) {
         Direction direction = state.getValue(FACING);
 
         // 如果不是玩家放置或者玩家没有按下 Shift 键，那么就尝试和周围的黑板组合成大黑板
@@ -300,7 +300,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, BlockState state) {
         Half half = state.getValue(HALF);
         PositionType position = state.getValue(POSITION);
         // 小黑板
@@ -316,7 +316,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return createTickerHelper(type, ModBlocks.CHALKBOARD_BE, TextBlockEntity::tick);
     }
 
@@ -336,7 +336,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
         Half half = state.getValue(HALF);
         if (facing == Direction.NORTH) {
@@ -351,7 +351,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NotNull Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }

@@ -86,8 +86,8 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -104,7 +104,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide && player.isCreative() && state.getValue(HALF) == Half.TOP) {
             BlockPos below = pos.below();
             BlockState belowState = level.getBlockState(below);
@@ -137,7 +137,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, @NotNull ItemStack stack) {
         BlockPos above = pos.above();
         BlockState blockState = state.setValue(HALF, Half.TOP)
                 .setValue(WATERLOGGED, level.isWaterAt(above));
@@ -145,7 +145,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NotNull Builder lootParamsBuilder) {
         if (state.getValue(HALF) == Half.BOTTOM) {
             return super.getDrops(state, lootParamsBuilder);
         }
@@ -158,7 +158,7 @@ public class StepladderBlock extends HorizontalDirectionalBlock implements Simpl
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
         Half half = state.getValue(HALF);
         return switch (half) {

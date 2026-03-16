@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
+import org.jetbrains.annotations.NotNull;
 
 public class MolotovBlock extends BottleBlock {
     public MolotovBlock() {
@@ -19,7 +20,7 @@ public class MolotovBlock extends BottleBlock {
                 .sound(SoundType.GLASS), false);
     }
     @Override
-    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+    public void onProjectileHit(Level level, @NotNull BlockState state, @NotNull BlockHitResult hit, @NotNull Projectile projectile) {
         if (!level.isClientSide) {
             // 原地生成一个燃烧瓶实体
             BlockPos pos = hit.getBlockPos();

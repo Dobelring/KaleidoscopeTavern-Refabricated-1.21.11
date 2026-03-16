@@ -58,8 +58,8 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         // 只有成熟的葡萄才可以被剪刀收获
         ItemStack heldItem = player.getItemInHand(hand);
         if (heldItem.is(Items.SHEARS) && isMaxAge(state)) {
@@ -74,12 +74,12 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isRandomlyTicking(BlockState state) {
+    public boolean isRandomlyTicking(@NotNull BlockState state) {
         return super.isRandomlyTicking(state) && state.getValue(AGE) < MAX_AGE;
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, RandomSource random) {
         if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
             level.setBlockAndUpdate(pos, state.cycle(AGE));
             EventHooks.onCropsGrowPost(level, pos, state);
@@ -87,8 +87,8 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.canSurvive(level, pos)) {
             return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
         }
@@ -96,7 +96,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
         // 上方必须是葡萄藤架
         var aboveState = level.getBlockState(pos.above());
         if (aboveState.getBlock() instanceof GrapevineTrellisBlock trellis) {
@@ -110,17 +110,17 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state, boolean isClient) {
         return !this.isMaxAge(state);
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(@NotNull Level level, @NotNull RandomSource random, @NotNull BlockPos pos, @NotNull BlockState state) {
         return true;
     }
 
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, RandomSource random, @NotNull BlockPos pos, BlockState state) {
         int newAge = Math.min(state.getValue(AGE) + random.nextInt(1, 3), MAX_AGE);
         level.setBlockAndUpdate(pos, state.setValue(AGE, newAge));
     }
@@ -131,12 +131,12 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return SHAPE;
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder lootParamsBuilder) {
+    public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder lootParamsBuilder) {
         // 只有成熟的葡萄才会掉落物品
         if (isMaxAge(state)) {
             return super.getDrops(state, lootParamsBuilder);
@@ -145,7 +145,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public @NotNull ItemStack getCloneItemStack(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+    public @NotNull ItemStack getCloneItemStack(@NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
         return ModItems.GRAPE.getDefaultInstance();
     }
 }

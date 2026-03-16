@@ -73,8 +73,8 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
@@ -145,7 +145,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType) {
         if (level.isClientSide) {
             return null;
         }
@@ -187,7 +187,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    public void setPlacedBy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable LivingEntity entity, @NotNull ItemStack stack) {
         if (level.isClientSide) {
             return;
         }
@@ -213,13 +213,13 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         handleRemove(level, pos, state, player);
         super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos blockPos, Explosion explosion) {
+    public void wasExploded(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Explosion explosion) {
         handleRemove(level, blockPos, level.getBlockState(blockPos), null);
         super.wasExploded(level, blockPos, explosion);
     }
@@ -269,7 +269,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder builder) {
+    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.@NotNull Builder builder) {
         // 仅原点方块（FLOOR 层中心）掉落物品，避免重复掉落
         if (state.getValue(LAYER) == AttachFace.FLOOR && state.getValue(INDEX) == 4) {
             return super.getDrops(state, builder);
@@ -284,7 +284,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, BlockState state) {
         // 仅底层中间方块附加 BlockEntity
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
@@ -295,7 +295,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         Direction facing = state.getValue(FACING);
         int index = state.getValue(INDEX);
         int col = index % 3;

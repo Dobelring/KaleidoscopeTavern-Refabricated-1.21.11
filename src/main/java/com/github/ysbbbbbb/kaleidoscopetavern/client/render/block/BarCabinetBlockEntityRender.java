@@ -14,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabinetBlockEntity> {
@@ -24,8 +25,8 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
     }
 
     @Override
-    public void render(BarCabinetBlockEntity barCabinet, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(BarCabinetBlockEntity barCabinet, float partialTick, @NotNull PoseStack poseStack,
+                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
         Direction direction = barCabinet.getBlockState().getValue(BarCabinetBlock.FACING);
 
         ItemStack leftStack = barCabinet.getLeftItem();

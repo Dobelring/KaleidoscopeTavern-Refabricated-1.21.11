@@ -136,7 +136,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public void playerWillDestroy(Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (!level.isClientSide && player.isCreative() && state.getValue(HALF) == Half.TOP) {
             BlockPos below = pos.below();
             BlockState belowState = level.getBlockState(below);

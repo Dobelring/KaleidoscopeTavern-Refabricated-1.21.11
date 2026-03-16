@@ -56,8 +56,8 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -92,7 +92,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         AttachFace attachFace = pState.getValue(ATTACH_FACE);
         if (attachFace == AttachFace.FLOOR) {
             return FLOOR_SHAPE;
@@ -113,7 +113,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
         if (this.tooltipKey == null) {
             this.tooltipKey = Util.makeDescriptionId("tooltip", BuiltInRegistries.BLOCK.getKey(this));
         }

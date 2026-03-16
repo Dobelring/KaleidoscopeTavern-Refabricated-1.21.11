@@ -32,7 +32,7 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
         BlockPos relative = pos.relative(this.growthDirection.getOpposite());
         BlockState relativeState = level.getBlockState(relative);
         return relativeState.is(this.getHeadBlock())
@@ -48,7 +48,7 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, BlockState state, boolean isClient) {
         GrowingPlantHeadBlock headBlock = this.getHeadBlock();
         return BlockUtil.getTopConnectedBlock(level, pos, state.getBlock(), this.growthDirection, headBlock).map(headPos -> {
             BlockState blockState = level.getBlockState(headPos);

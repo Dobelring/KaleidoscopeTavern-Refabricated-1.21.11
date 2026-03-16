@@ -90,8 +90,8 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof IPressingTub pressingTub)) {
             return InteractionResult.PASS;
         }
@@ -120,7 +120,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+    public void fallOn(@NotNull Level level, BlockState state, @NotNull BlockPos pos, @NotNull Entity entity, float fallDistance) {
         // 倾斜的果盘不能踩
         if (state.getValue(TILT)) {
             super.fallOn(level, state, pos, entity, fallDistance);
@@ -141,7 +141,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState pState, LootParams.Builder pParams) {
+    public @NotNull List<ItemStack> getDrops(@NotNull BlockState pState, LootParams.@NotNull Builder pParams) {
         List<ItemStack> stacks = super.getDrops(pState, pParams);
         BlockEntity blockEntity = pParams.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof IPressingTub pressingTub) {
@@ -154,8 +154,8 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -191,7 +191,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         if (state.getValue(TILT)) {
             return switch (state.getValue(FACING)) {
                 case NORTH -> TILTED_SHAPE_NORTH;
@@ -205,13 +205,13 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull RenderShape getRenderShape(BlockState state) {
+    public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new PressingTubBlockEntity(pos, state);
     }
 
@@ -221,12 +221,12 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState blockState) {
+    public boolean hasAnalogOutputSignal(@NotNull BlockState blockState) {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos blockPos) {
+    public int getAnalogOutputSignal(@NotNull BlockState state, Level level, @NotNull BlockPos blockPos) {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (blockEntity instanceof IPressingTub pressingTub) {
             return pressingTub.getFluidAmount();
@@ -245,7 +245,7 @@ public class PressingTubBlock extends BaseEntityBlock implements SimpleWaterlogg
     }
 
     @Override
-    public @NotNull ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+    public @NotNull ItemStack pickupBlock(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState state) {
         ItemStack stack = SimpleWaterloggedBlock.super.pickupBlock(level, pos, state);
         if (!stack.isEmpty()) {
             return stack;

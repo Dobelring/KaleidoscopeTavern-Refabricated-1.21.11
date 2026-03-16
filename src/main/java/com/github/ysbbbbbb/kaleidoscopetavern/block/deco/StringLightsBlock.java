@@ -64,8 +64,8 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                           LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
+                                           @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
@@ -73,8 +73,8 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         Item item = player.getItemInHand(hand).getItem();
         if (TRANSFORM_MAP.containsKey(item) && item != this.dyeItem) {
             BlockState transform = TRANSFORM_MAP.get(item)
@@ -116,7 +116,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public @NotNull VoxelShape getShape(BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return switch (pState.getValue(FACING)) {
             case SOUTH -> SOUTH_SHAPE;
             case EAST -> EAST_SHAPE;

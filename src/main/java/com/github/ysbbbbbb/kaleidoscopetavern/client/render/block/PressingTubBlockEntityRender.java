@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import org.jetbrains.annotations.NotNull;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.RenderUtils.stableRandom;
 
@@ -29,8 +30,8 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
     }
 
     @Override
-    public void render(PressingTubBlockEntity pressingTub, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(PressingTubBlockEntity pressingTub, float partialTick, @NotNull PoseStack poseStack,
+                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
         Level level = pressingTub.getLevel();
         if (level == null) {
             return;

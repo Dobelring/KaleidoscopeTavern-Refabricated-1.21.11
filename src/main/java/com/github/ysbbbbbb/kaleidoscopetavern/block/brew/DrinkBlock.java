@@ -78,8 +78,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         // 如果是空手，那么可以尝试取回
         if (!player.getItemInHand(hand).isEmpty()) {
             return super.use(state, level, pos, player, hand, hitResult);
@@ -108,7 +108,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
+    public void onProjectileHit(Level level, @NotNull BlockState state, @NotNull BlockHitResult hit, @NotNull Projectile projectile) {
         // 获取其中所含的效果等级最高的酒
         if (level.isClientSide) {
             super.onProjectileHit(level, state, hit, projectile);
@@ -141,7 +141,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
+    public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params) {
         List<ItemStack> stacks = super.getDrops(state, params);
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof DrinkBlockEntity be) {
@@ -159,7 +159,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         if (this.shapes.length == 0) {
             return super.getShape(state, level, pos, context);
         }
@@ -173,7 +173,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
     @Override
     @Nullable
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new DrinkBlockEntity(pos, state);
     }
 

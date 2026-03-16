@@ -51,8 +51,8 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public @NotNull InteractionResult use(BlockState state, Level level, BlockPos pos, Player player,
-                                          InteractionHand hand, BlockHitResult hitResult) {
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         ItemStack item = player.getItemInHand(hand);
         if (item.is(Items.SHEARS)) {
             if (state.getValue(SHEARED)) {
@@ -68,13 +68,13 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(SHEARED);
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(@NotNull BlockState state, LevelReader level, BlockPos pos) {
         BlockPos relative = pos.relative(this.growthDirection.getOpposite());
         BlockState relativeState = level.getBlockState(relative);
         return relativeState.is(this.getHeadBlock())
@@ -90,7 +90,7 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         // 如果被剪刀修剪过了，就不再随机生长了，直到被重新种植
         if (state.getValue(SHEARED)) {
             return;
@@ -99,13 +99,13 @@ public class WildGrapevineBlock extends GrowingPlantHeadBlock implements Bonemea
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient) {
+    public boolean isValidBonemealTarget(@NotNull LevelReader level, @NotNull BlockPos pos, BlockState state, boolean isClient) {
         // 只有当没有被剪刀修剪过，才可以使用骨粉生长
         return !state.getValue(SHEARED) && super.isValidBonemealTarget(level, pos, state, isClient);
     }
 
     @Override
-    protected int getBlocksToGrowWhenBonemealed(RandomSource randomSource) {
+    protected int getBlocksToGrowWhenBonemealed(@NotNull RandomSource randomSource) {
         return 1;
     }
 

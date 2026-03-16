@@ -23,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 import java.util.List;
@@ -37,8 +38,8 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity> implement
     }
 
     @Override
-    public void render(T textBlock, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(T textBlock, float partialTick, @NotNull PoseStack poseStack,
+                       @NotNull MultiBufferSource buffer, int packedLight, int packedOverlay) {
         Direction facing = textBlock.getBlockState().getValue(ChalkboardBlock.FACING);
 
         // 渲染模型本体

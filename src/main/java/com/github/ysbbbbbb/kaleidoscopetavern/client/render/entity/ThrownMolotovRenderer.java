@@ -23,7 +23,7 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity> {
     }
 
     @Override
-    public void render(ThrownMolotovEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(ThrownMolotovEntity entity, float entityYaw, float partialTick, PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
 
         // 缩小方块模型，使其适合投射物大小
@@ -46,7 +46,7 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity> {
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(ThrownMolotovEntity entity) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull ThrownMolotovEntity entity) {
         return InventoryMenu.BLOCK_ATLAS;
     }
 }
