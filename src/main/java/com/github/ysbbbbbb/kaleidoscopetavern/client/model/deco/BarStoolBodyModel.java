@@ -38,10 +38,9 @@ public class BarStoolBodyModel extends Model<BarStoolBodyModel.State> {
     @Override
     public void setupAnim(State object) {
         super.setupAnim(object);
-        this.bone.yRot = Mth.wrapDegrees(object.rot()) * Mth.DEG_TO_RAD;
     }
 
     @Environment(EnvType.CLIENT)
-    public record State(float rot) {
+    public record State() {
     }
 }

@@ -115,6 +115,7 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<ReiBarrelRecipeC
         registry.addWorkstations(ReiBarrelRecipeCategory.ID, ReiUtil.ofItem(ModItems.BARREL));
     }
 
+    @Deprecated
     public static void registerDisplays(DisplayRegistry registry) {
         ReiUtil.INSTANCE.barrelRecipes().forEach(holder -> {
             var recipe = holder.value();

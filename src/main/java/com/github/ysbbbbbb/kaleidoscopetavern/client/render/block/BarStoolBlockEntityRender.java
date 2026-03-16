@@ -9,6 +9,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -21,14 +23,20 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Environment(EnvType.CLIENT)
 public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBlockEntity, BarStoolBlockEntityRenderState> {
+    private static final Map<DyeColor, Identifier> TEXTURES = buildTextures();
+    // 一些会用到的常量声明
+    private static final int MAX_ROT_CACHE_SIZE = 4096;
     private static final float MIN_SMOOTH_FACTOR = 0.20F;
     private static final float MAX_SMOOTH_FACTOR = 0.58F;
     private static final float SENSITIVITY_SCALE = 0.007F;
@@ -36,83 +44,17 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     private static final float PASSENGER_PREDICT_TICKS = 0.18F;
     private static final float PASSENGER_MIN_STEP = 2.0F;
     private static final float PASSENGER_STEP_SCALE = 0.26F;
+    private static final float RESTORE_SMOOTH_FACTOR = 0.35F;
     private final BarStoolBodyModel model;
+    // 保险起见，还是做一个并发缓存
+    private final Map<Long, Float> renderRotCache = new ConcurrentHashMap<>();
 
     public BarStoolBlockEntityRender(BlockEntityRendererProvider.Context context) {
         this.model = new BarStoolBodyModel(context.bakeLayer(BarStoolBodyModel.LAYER_LOCATION));
     }
 
-    @Override
-    public BarStoolBlockEntityRenderState createRenderState() {
-        return new BarStoolBlockEntityRenderState();
-    }
-
-    private static Identifier getTexture(DyeColor color) {
-        return Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/bar_stool/"+ color.getName() +".png");
-    }
-
-    @Override
-    public void extractRenderState(BarStoolBlockEntity blockEntity, BarStoolBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
-        BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
-        float cachedRot = blockEntity.getCachedRot();
-        boolean hadPassenger = blockEntityRenderState.hasPassenger;
-        LivingEntity passenger = resolvePassenger(blockEntity);
-        blockEntityRenderState.hasPassenger = passenger != null;
-        float sampleTime = getSampleTime(blockEntity, f);
-        if (passenger != null) {
-            blockEntityRenderState.passengerBodyRot = Mth.wrapDegrees(passenger.yBodyRot);
-            if (hadPassenger && blockEntityRenderState.hasLastSample) {
-                float dt = Math.max(0.001F, sampleTime - blockEntityRenderState.lastSampleTime);
-                float delta = Mth.wrapDegrees(blockEntityRenderState.passengerBodyRot - blockEntityRenderState.lastPassengerBodyRot);
-                float instantVelocity = delta / dt;
-                blockEntityRenderState.passengerBodyRotVelocity = Mth.lerp(PASSENGER_VELOCITY_BLEND, blockEntityRenderState.passengerBodyRotVelocity, instantVelocity);
-            } else {
-                blockEntityRenderState.passengerBodyRotVelocity = 0.0F;
-            }
-            blockEntityRenderState.lastPassengerBodyRot = blockEntityRenderState.passengerBodyRot;
-            blockEntityRenderState.lastSampleTime = sampleTime;
-            blockEntityRenderState.hasLastSample = true;
-        } else {
-            blockEntityRenderState.hasLastSample = false;
-            blockEntityRenderState.passengerBodyRotVelocity = 0.0F;
-        }
-        float targetRot = blockEntityRenderState.hasPassenger ? blockEntityRenderState.passengerBodyRot : cachedRot;
-        if (!blockEntityRenderState.initialized) {
-            blockEntityRenderState.renderRot = targetRot;
-            blockEntityRenderState.initialized = true;
-        } else if (blockEntityRenderState.hasPassenger) {
-            float predictedRot = Mth.wrapDegrees(targetRot + blockEntityRenderState.passengerBodyRotVelocity * PASSENGER_PREDICT_TICKS);
-            blockEntityRenderState.renderRot = smoothPassengerRotation(blockEntityRenderState.renderRot, predictedRot, blockEntityRenderState.passengerBodyRotVelocity);
-        } else {
-            float delta = Mth.degreesDifferenceAbs(blockEntityRenderState.renderRot, targetRot);
-            float smoothFactor = Mth.clamp(MIN_SMOOTH_FACTOR + delta * SENSITIVITY_SCALE, MIN_SMOOTH_FACTOR, MAX_SMOOTH_FACTOR);
-            blockEntityRenderState.renderRot = Mth.rotLerp(smoothFactor, blockEntityRenderState.renderRot, targetRot);
-        }
-        blockEntityRenderState.color = blockEntity.getColor();
-    }
-
-    @Override
-    public void submit(BarStoolBlockEntityRenderState blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
-        poseStack.pushPose();
-        poseStack.translate(0.5F, 1.5F, 0.5F);
-        poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));
-        float bodyRot = blockEntityRenderState.renderRot;
-        BarStoolBodyModel.State state = new BarStoolBodyModel.State(bodyRot + 180.0F);
-        submitNodeCollector.submitModel(
-                this.model,
-                state,
-                poseStack,
-                RenderTypes.entityCutoutNoCull(getTexture(blockEntityRenderState.color)),
-                blockEntityRenderState.lightCoords,
-                OverlayTexture.NO_OVERLAY,
-                0,
-                null
-        );
-        poseStack.popPose();
-    }
-
-    private static float getSampleTime(BarStoolBlockEntity blockEntity, float partialTick) {
-        Level level = blockEntity.getLevel();
+    private static float getSampleTime(float partialTick) {
+        ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {
             return partialTick;
         }
@@ -121,7 +63,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
 
     private static float smoothPassengerRotation(float currentRot, float targetRot, float angularVelocity) {
         float velocityAbs = Math.abs(angularVelocity);
-        float smoothFactor = Mth.clamp(0.24F + velocityAbs * 0.018F, 0.24F, 0.70F);
+        float smoothFactor = Mth.clamp(MIN_SMOOTH_FACTOR + velocityAbs * SENSITIVITY_SCALE, MIN_SMOOTH_FACTOR, MAX_SMOOTH_FACTOR);
         float lerped = Mth.rotLerp(smoothFactor, currentRot, targetRot);
         float rawStep = Mth.wrapDegrees(lerped - currentRot);
         float maxStep = PASSENGER_MIN_STEP + velocityAbs * PASSENGER_STEP_SCALE;
@@ -129,12 +71,12 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         return Mth.wrapDegrees(currentRot + clampedStep);
     }
 
-    private static @Nullable LivingEntity resolvePassenger(BarStoolBlockEntity blockEntity) {
-        Level level = blockEntity.getLevel();
+    private static @Nullable LivingEntity resolvePassenger(BarStoolBlockEntityRenderState state) {
+        ClientLevel level = Minecraft.getInstance().level;
         if (level == null) {
             return null;
         }
-        for (SitEntity sitEntity : level.getEntitiesOfClass(SitEntity.class, new AABB(blockEntity.getBlockPos()))) {
+        for (SitEntity sitEntity : level.getEntitiesOfClass(SitEntity.class, new AABB(state.blockPos))) {
             if (!sitEntity.isAlive() || sitEntity.getPassengers().isEmpty()) {
                 continue;
             }
@@ -145,4 +87,80 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         }
         return null;
     }
+
+    private float getRenderRot(BarStoolBlockEntityRenderState state) {
+        if (this.renderRotCache.size() > MAX_ROT_CACHE_SIZE) {
+            this.renderRotCache.clear();
+        }
+        long key = state.blockPos.asLong();
+        float cachedRot = state.cachedRot;
+        float currentRot = this.renderRotCache.getOrDefault(key, cachedRot);
+        LivingEntity passenger = resolvePassenger(state);
+        if (passenger == null) {
+            float restoredRot = Mth.rotLerp(RESTORE_SMOOTH_FACTOR, currentRot, cachedRot);
+            if (Mth.degreesDifferenceAbs(restoredRot, cachedRot) < 0.5F) {
+                this.renderRotCache.remove(key);
+                return cachedRot;
+            }
+            this.renderRotCache.put(key, restoredRot);
+            return restoredRot;
+        }
+        float bodyRot = Mth.rotLerp(state.partialTicks, passenger.yBodyRotO, passenger.yBodyRot);
+        float angularVelocity = Mth.wrapDegrees(passenger.yBodyRot - passenger.yBodyRotO);
+        float predictedRot = bodyRot + angularVelocity * PASSENGER_PREDICT_TICKS;
+        float wobble = Mth.sin(getSampleTime(state.partialTicks) * SENSITIVITY_SCALE) * angularVelocity * PASSENGER_VELOCITY_BLEND;
+        float targetRot = Mth.wrapDegrees(Mth.rotLerp(PASSENGER_VELOCITY_BLEND, bodyRot, predictedRot) + wobble);
+        float smoothedRot = smoothPassengerRotation(currentRot, targetRot, angularVelocity);
+        this.renderRotCache.put(key, smoothedRot);
+        return smoothedRot;
+    }
+
+    private static Identifier getTexture(DyeColor color) {
+        return TEXTURES.getOrDefault(color, TEXTURES.get(DyeColor.WHITE));
+    }
+
+    private static Map<DyeColor, Identifier> buildTextures() {
+        Map<DyeColor, Identifier> textures = new EnumMap<>(DyeColor.class);
+        for (DyeColor color : DyeColor.values()) {
+            textures.put(color, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/bar_stool/" + color.getName() + ".png"));
+        }
+        return textures;
+    }
+
+    @Override
+    public BarStoolBlockEntityRenderState createRenderState() {
+        return new BarStoolBlockEntityRenderState();
+    }
+
+    @Override
+    public void extractRenderState(BarStoolBlockEntity blockEntity, BarStoolBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+        BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
+        blockEntityRenderState.color = blockEntity.getColor();
+        blockEntityRenderState.cachedRot = blockEntity.getCachedRot();
+        blockEntityRenderState.partialTicks = f;
+    }
+
+    @Override
+    public void submit(BarStoolBlockEntityRenderState blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
+        float renderRot = this.getRenderRot(blockEntityRenderState);
+        Identifier texture = getTexture(blockEntityRenderState.color);
+        poseStack.pushPose();
+        poseStack.translate(0.5, 1.5, 0.5);
+        poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));
+        poseStack.mulPose(Axis.YN.rotationDegrees(180.0F - renderRot));
+        BarStoolBodyModel.State state = new BarStoolBodyModel.State();
+        submitNodeCollector.submitModel(
+                this.model,
+                state,
+                poseStack,
+                RenderTypes.entityCutoutNoCull(texture),
+                blockEntityRenderState.lightCoords,
+                OverlayTexture.NO_OVERLAY,
+                0,
+                null
+        );
+        poseStack.popPose();
+    }
+
+
 }

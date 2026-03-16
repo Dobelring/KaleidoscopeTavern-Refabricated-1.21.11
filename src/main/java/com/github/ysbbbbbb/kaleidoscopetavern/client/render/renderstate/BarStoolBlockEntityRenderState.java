@@ -7,13 +7,7 @@ import net.minecraft.world.item.DyeColor;
 
 @Environment(EnvType.CLIENT)
 public class BarStoolBlockEntityRenderState extends BlockEntityRenderState {
-    public float renderRot = 0f;
-    public boolean initialized = false;
-    public boolean hasPassenger = false;
-    public float passengerBodyRot = 0f;
-    public float passengerBodyRotVelocity = 0f;
-    public float lastPassengerBodyRot = 0f;
-    public float lastSampleTime = 0f;
-    public boolean hasLastSample = false;
+    public float cachedRot;
     public DyeColor color;
+    public float partialTicks;
 }

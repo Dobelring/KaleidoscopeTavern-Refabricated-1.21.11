@@ -110,6 +110,7 @@ public class ReiPressingTubRecipeCategory implements DisplayCategory<ReiPressing
         registry.addWorkstations(ReiPressingTubRecipeCategory.ID, ReiUtil.ofItem(ModItems.PRESSING_TUB));
     }
 
+    @Deprecated
     public static void registerDisplays(DisplayRegistry registry) {
         ReiUtil.INSTANCE.pressingTubRecipes().forEach(holder -> {
             PressingTubRecipe recipe = holder.value();
