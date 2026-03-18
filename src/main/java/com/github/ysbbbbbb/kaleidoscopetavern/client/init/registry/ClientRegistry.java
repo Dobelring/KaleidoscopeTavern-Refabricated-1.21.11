@@ -19,6 +19,7 @@ public class ClientRegistry {
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
+        modCompatClient();
     }
 
     public static void renderType() {
@@ -84,5 +85,9 @@ public class ClientRegistry {
                 GRAY_BAR_STOOL,
                 LIGHT_GRAY_BAR_STOOL
         );
+    }
+
+    public static void modCompatClient() {
+
     }
 }

@@ -24,6 +24,7 @@ public class CommonRegistry {
         storageRegister();
         events();
         fuelRegistry();
+        modCompatServer();
     }
 
     public static void events() {
@@ -41,6 +42,10 @@ public class CommonRegistry {
                     DispenserBlock.registerBehavior(blockItem, new BottleBlockDispenseBehavior());
                 }
         }});
+    }
+
+    public static void modCompatServer() {
+
     }
 
 
