@@ -27,6 +27,7 @@ public class CommonRegistry {
         storageRegister();
         events();
         fuelRegistry();
+        modCompatServer();
     }
 
     public static void events() {
@@ -49,6 +50,9 @@ public class CommonRegistry {
         }});
     }
 
+    public static void modCompatServer() {
+
+    }
 
     public static void storageRegister() {
         ItemStorage.SIDED.registerForBlockEntity(

@@ -20,7 +20,7 @@ public class ClientRegistry {
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
-        modCompat();
+        modCompatClient();
     }
 
     public static void renderType() {
@@ -88,7 +88,7 @@ public class ClientRegistry {
         );
     }
 
-    private static void modCompat() {
+    private static void modCompatClient() {
         PonderCompat.init();
     }
 }
