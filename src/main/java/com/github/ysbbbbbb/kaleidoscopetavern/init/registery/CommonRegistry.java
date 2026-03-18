@@ -3,7 +3,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.init.registery;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BottleBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispenseBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -25,7 +24,7 @@ public class CommonRegistry {
         storageRegister();
         events();
         fuelRegistry();
-        modCompat();
+        modCompatServer();
     }
 
     public static void events() {
@@ -45,8 +44,7 @@ public class CommonRegistry {
         }});
     }
 
-    public static void modCompat() {
-        PonderCompat.init();
+    public static void modCompatServer() {
     }
 
     @SuppressWarnings("UnstableApiUsage")

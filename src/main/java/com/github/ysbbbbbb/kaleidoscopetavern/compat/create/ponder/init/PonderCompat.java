@@ -1,8 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init;
 
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 
+@Environment(EnvType.CLIENT)
 public class PonderCompat {
     public static final String ID = "ponder";
 

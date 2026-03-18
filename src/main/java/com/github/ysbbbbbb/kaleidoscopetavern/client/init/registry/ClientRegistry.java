@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
@@ -19,6 +20,7 @@ public class ClientRegistry {
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
+        modCompatClient();
     }
 
     public static void renderType() {
@@ -84,5 +86,9 @@ public class ClientRegistry {
                 GRAY_BAR_STOOL,
                 LIGHT_GRAY_BAR_STOOL
         );
+    }
+
+    public static void modCompatClient() {
+        PonderCompat.init();
     }
 }
