@@ -27,8 +27,9 @@ import net.minecraft.world.phys.Vec3;
 public class BarrelScenes {
     public static void introduction(SceneBuilder scene, SceneBuildingUtil util) {
         Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-        Pig pig = new Pig(EntityType.PIG, level);
+        if (level == null) {
+            return;
+        }
 
         scene.title("barrel_introduction", "");
         scene.configureBasePlate(0, 0, 5);

@@ -32,7 +32,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PressingTubScenes {
     public static void introduction(SceneBuilder scene, SceneBuildingUtil util) {
         Level level = Minecraft.getInstance().level;
-        if (level == null) return;
+        if (level == null) {
+            return;
+        }
 
         scene.title("pressing_tub_introduction", "");
         scene.configureBasePlate(0, 0, 5);
@@ -91,7 +93,9 @@ public class PressingTubScenes {
 
     public static void pressing(SceneBuilder scene, SceneBuildingUtil util) {
         Level level = Minecraft.getInstance().level;
-        if (level == null) return;
+        if (level == null) {
+            return;
+        }
         Pig pig = new Pig(EntityType.PIG, level);
 
         scene.title("pressing_tub_pressing", "");
@@ -129,7 +133,7 @@ public class PressingTubScenes {
         for (int i = 0; i < 8; i++) {
             int j = i;
             scene.world().modifyEntity(slime, (e) -> {
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), 0);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), 0);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(180);
                 e.setYHeadRot(180);
@@ -158,7 +162,7 @@ public class PressingTubScenes {
             scene.idle(1);
             scene.world().modifyEntity(slime, (e) -> {
                 speed.set(decelerate(speed.get(), 0.6));
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), -speed.get() * 0.8);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), -speed.get() * 0.8);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(180);
                 e.setYHeadRot(180);
@@ -190,7 +194,7 @@ public class PressingTubScenes {
                 int j = i;
                 scene.idle(1);
                 scene.world().modifyEntity(slime, (e) -> {
-                    e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), 0);
+                    e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), 0);
                     e.move(MoverType.SELF, e.getDeltaMovement());
                     e.setYBodyRot(180);
                     e.setYHeadRot(180);
@@ -328,8 +332,9 @@ public class PressingTubScenes {
 
     public static void variant(SceneBuilder scene, SceneBuildingUtil util) {
         Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-        Pig pig = new Pig(EntityType.PIG, level);
+        if (level == null) {
+            return;
+        }
 
         scene.title("pressing_tub_variant", "");
         scene.configureBasePlate(0, 0, 5);
@@ -377,7 +382,7 @@ public class PressingTubScenes {
         for (int i = 0; i < 8; i++) {
             int j = i;
             scene.world().modifyEntity(slime, (e) -> {
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), 0);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), 0);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(0);
                 e.setYHeadRot(0);
@@ -406,7 +411,7 @@ public class PressingTubScenes {
             scene.idle(1);
             scene.world().modifyEntity(slime, (e) -> {
                 speed.set(decelerate(speed.get(), 0.6));
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), speed.get() * 0.7);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), speed.get() * 0.7);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(0);
                 e.setYHeadRot(0);
@@ -438,7 +443,7 @@ public class PressingTubScenes {
             scene.idle(1);
             scene.world().modifyEntity(slime, (e) -> {
                 speed.set(decelerate(speed.get(), 0.6));
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), -speed.get() * 0.7);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), -speed.get() * 0.7);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(180);
                 e.setYHeadRot(180);
@@ -492,7 +497,7 @@ public class PressingTubScenes {
             scene.idle(1);
             scene.world().modifyEntity(slime, (e) -> {
                 speed.set(decelerate(speed.get(), 0.6));
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), speed.get() * 0.7);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), speed.get() * 0.7);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(0);
                 e.setYHeadRot(0);
@@ -524,7 +529,7 @@ public class PressingTubScenes {
             scene.idle(1);
             scene.world().modifyEntity(slime, (e) -> {
                 speed.set(decelerate(speed.get(), 0.6));
-                e.setDeltaMovement(0, fallingSpeed(j,0.08D,0.98D), -speed.get() * 0.7);
+                e.setDeltaMovement(0, fallingSpeed(j, 0.08D, 0.98D), -speed.get() * 0.7);
                 e.move(MoverType.SELF, e.getDeltaMovement());
                 e.setYBodyRot(180);
                 e.setYHeadRot(180);

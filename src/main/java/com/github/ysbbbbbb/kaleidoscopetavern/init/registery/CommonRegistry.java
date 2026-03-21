@@ -27,7 +27,7 @@ public class CommonRegistry {
         storageRegister();
         events();
         fuelRegistry();
-        modCompatServer();
+        modCompat();
     }
 
     public static void events() {
@@ -50,7 +50,7 @@ public class CommonRegistry {
         }});
     }
 
-    public static void modCompatServer() {
+    public static void modCompat() {
 
     }
 

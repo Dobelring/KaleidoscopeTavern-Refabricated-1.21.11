@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
@@ -31,10 +32,14 @@ import org.jspecify.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBlockEntity, BarStoolBlockEntityRenderState> {
-    private static final Map<DyeColor, Identifier> TEXTURES = buildTextures();
+    private final Function<DyeColor, Identifier> TEXTURE_CACHE = Util.memoize(color -> {
+        String path = "textures/entity/deco/bar_stool/%s.png".formatted(color.getName());
+        return Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, path);
+    });
     // 一些会用到的常量声明
     private static final int MAX_ROT_CACHE_SIZE = 4096;
     private static final float MIN_SMOOTH_FACTOR = 0.20F;
@@ -115,18 +120,6 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         return smoothedRot;
     }
 
-    private static Identifier getTexture(DyeColor color) {
-        return TEXTURES.getOrDefault(color, TEXTURES.get(DyeColor.WHITE));
-    }
-
-    private static Map<DyeColor, Identifier> buildTextures() {
-        Map<DyeColor, Identifier> textures = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
-            textures.put(color, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/bar_stool/" + color.getName() + ".png"));
-        }
-        return textures;
-    }
-
     @Override
     public BarStoolBlockEntityRenderState createRenderState() {
         return new BarStoolBlockEntityRenderState();
@@ -143,7 +136,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     @Override
     public void submit(BarStoolBlockEntityRenderState blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
         float renderRot = this.getRenderRot(blockEntityRenderState);
-        Identifier texture = getTexture(blockEntityRenderState.color);
+        Identifier texture = TEXTURE_CACHE.apply(blockEntityRenderState.color);
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));

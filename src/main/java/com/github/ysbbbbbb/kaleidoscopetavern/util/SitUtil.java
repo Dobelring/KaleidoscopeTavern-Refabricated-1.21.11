@@ -49,20 +49,17 @@ public class SitUtil {
      * Removes a sit entity from the map that keeps track of them. This does not remove the entity itself.
      *
      * @param level The level to remove the entity from
-     * @param pos The position to remove the entity from
-     * @return true if the entity was removed, false otherwise. This is always false on the client.
+     * @param pos   The position to remove the entity from
      */
-    public static boolean removeSitEntity(Level level, BlockPos pos) {
+    public static void removeSitEntity(Level level, BlockPos pos) {
         if (!level.isClientSide()) {
             Identifier id = getDimensionTypeId(level);
 
             if (OCCUPIED.containsKey(id)) {
                 OCCUPIED.get(id).remove(pos);
-                return true;
             }
         }
 
-        return false;
     }
 
     /**

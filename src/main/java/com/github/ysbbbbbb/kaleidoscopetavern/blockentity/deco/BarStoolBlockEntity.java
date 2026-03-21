@@ -6,6 +6,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.entity.SitEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.SitUtil;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,12 +16,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class BarStoolBlockEntity extends BaseBlockEntity {
 
     private static final String CACHE_ROT_KEY = "CacheRot";
     private static final float ROTATE_SYNC_THRESHOLD = 0.35F;
-    // 颜色,默认为白色
+    /**
+     * 颜色，默认为白色，决定客户端渲染的材质
+     */
     private final DyeColor color;
     private float cachedRot;
 
@@ -34,6 +38,25 @@ public class BarStoolBlockEntity extends BaseBlockEntity {
         super(ModBlocks.BAR_STOOL_BE, pos, state);
         this.color = color;
         this.cachedRot = getInitialRot(state);
+    }
+
+    public boolean isIntactAngle(float tolerance) {
+        float remainder = Math.abs(getCachedRot() % 90);
+        return remainder < tolerance || remainder > 90 - tolerance;
+    }
+
+    public @Nullable Direction currentFacing(float tolerance, BlockState state) {
+        if (isIntactAngle(tolerance) && state.hasProperty(BarStoolBlock.FACING)) {
+            if (Mth.abs(getCachedRot() + 180F) <= tolerance || Mth.abs(getCachedRot() - 180F) <= tolerance)
+                return Direction.NORTH;
+            if (Mth.abs(getCachedRot()) <= tolerance)
+                return Direction.SOUTH;
+            if (Mth.abs(getCachedRot() - 90F) <= tolerance)
+                return Direction.WEST;
+            if (Mth.abs(getCachedRot() + 90F) <= tolerance)
+                return Direction.EAST;
+        }
+        return null;
     }
 
     public float getCachedRot() {
