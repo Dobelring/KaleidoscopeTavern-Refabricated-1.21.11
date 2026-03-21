@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -23,13 +24,16 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBlockEntity> {
-    private static final Map<DyeColor, ResourceLocation> TEXTURES = buildTextures();
+    private final Function<DyeColor, ResourceLocation> TEXTURE_CACHE = Util.memoize(color -> {
+        String path = "textures/entity/deco/bar_stool/%s.png".formatted(color.getName());
+        return new ResourceLocation(KaleidoscopeTavern.MOD_ID, path);
+    });
     private static final int MAX_ROT_CACHE_SIZE = 4096;
     private static final float MIN_SMOOTH_FACTOR = 0.20F;
     private static final float MAX_SMOOTH_FACTOR = 0.58F;
@@ -49,7 +53,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     @Override
     public void render(@NotNull BarStoolBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource multiBufferSource, int packedLight, int packedOverlay) {
         float renderRot = getRenderRot(blockEntity, partialTick);
-        ResourceLocation texture = getTexture(blockEntity.getColor());
+        ResourceLocation texture = TEXTURE_CACHE.apply(blockEntity.getColor());
         poseStack.pushPose();
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180.0F));
@@ -119,17 +123,5 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
         float smoothedRot = smoothPassengerRotation(currentRot, targetRot, angularVelocity);
         this.renderRotCache.put(key, smoothedRot);
         return smoothedRot;
-    }
-
-    private static ResourceLocation getTexture(DyeColor color) {
-        return TEXTURES.getOrDefault(color, TEXTURES.get(DyeColor.WHITE));
-    }
-
-    private static Map<DyeColor, ResourceLocation> buildTextures() {
-        Map<DyeColor, ResourceLocation> textures = new EnumMap<>(DyeColor.class);
-        for (DyeColor color : DyeColor.values()) {
-            textures.put(color, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "textures/entity/deco/bar_stool/" + color.getName() + ".png"));
-        }
-        return textures;
     }
 }
