@@ -30,7 +30,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -46,6 +45,40 @@ public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedB
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private final DyeColor color;
+
+    private static final VoxelShape SHAPE = Shapes.or(
+            Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.125, 0.6875),
+            Shapes.box(0.4375, 0.0625, 0.4375, 0.5625, 0.75, 0.5625),
+            Shapes.box(0.125, 0.75, 0.125, 0.875, 0.9375, 0.875)
+    );
+
+    public static final VoxelShape NORTH_SHAPE = Shapes.or(
+            Block.box(5, 0, 5, 11, 2, 11),
+            Block.box(7, 1, 7, 9, 12, 9),
+            Block.box(2, 12, 3, 14, 15, 14),
+            Block.box(2, 15, 11, 14, 21, 14)
+    );
+
+    public static final VoxelShape SOUTH_SHAPE = Shapes.or(
+            Block.box(5, 0, 5, 11, 2, 11),
+            Block.box(7, 1, 7, 9, 12, 9),
+            Block.box(2, 12, 2, 14, 15, 13),
+            Block.box(2, 15, 2, 14, 21, 5)
+    );
+
+    public static final VoxelShape EAST_SHAPE = Shapes.or(
+            Block.box(5, 0, 5, 11, 2, 11),
+            Block.box(7, 1, 7, 9, 12, 9),
+            Block.box(2, 12, 2, 13, 15, 14),
+            Block.box(2, 15, 2, 5, 21, 14)
+    );
+
+    public static final VoxelShape WEST_SHAPE = Shapes.or(
+            Block.box(5, 0, 5, 11, 2, 11),
+            Block.box(7, 1, 7, 9, 12, 9),
+            Block.box(3, 12, 2, 14, 15, 14),
+            Block.box(11, 15, 2, 14, 21, 14)
+    );
 
     public BarStoolBlock(DyeColor color) {
         super(Properties.of()
@@ -70,6 +103,9 @@ public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedB
             entitySit.setYRot(state.getValue(FACING).toYRot());
             level.addFreshEntity(entitySit);
             player.startRiding(entitySit, true);
+            if (level.getBlockEntity(pos) instanceof BarStoolBlockEntity blockEntity) {
+                blockEntity.setSitEntity(entitySit);
+            }
             return ItemInteractionResult.SUCCESS;
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
@@ -119,13 +155,17 @@ public class BarStoolBlock extends BaseEntityBlock implements SimpleWaterloggedB
     }
 
     @Override
-    public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
-        VoxelShape shape = Shapes.empty();
-        shape = Shapes.join(shape, Shapes.box(0.3125, 0, 0.3125, 0.6875, 0.125, 0.6875), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.4375, 0.0625, 0.4375, 0.5625, 0.75, 0.5625), BooleanOp.OR);
-        shape = Shapes.join(shape, Shapes.box(0.125, 0.75, 0.125, 0.875, 0.9375, 0.875), BooleanOp.OR);
-
-        return shape;
+    public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter blockGetter, @NotNull BlockPos pos, @NotNull CollisionContext ctx) {
+        if (blockGetter.getBlockEntity(pos) instanceof BarStoolBlockEntity barStool) {
+            return switch (barStool.currentFacing(3.25F, state)) {
+                case NORTH -> NORTH_SHAPE;
+                case SOUTH -> SOUTH_SHAPE;
+                case EAST -> EAST_SHAPE;
+                case WEST -> WEST_SHAPE;
+                case null, default -> SHAPE;
+            };
+        }
+        return SHAPE;
     }
 
     @Override
