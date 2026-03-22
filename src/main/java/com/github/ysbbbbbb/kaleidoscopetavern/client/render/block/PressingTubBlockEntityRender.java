@@ -110,7 +110,7 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
         MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         // 如果有流体，渲染流体
         int fluidAmount = blockEntityRenderState.fluidAmount;
-        if (fluidAmount > 0) {
+        if (fluidAmount > 0 && !blockEntityRenderState.tilt) {
             float percent = fluidAmount / (float) IPressingTub.MAX_FLUID_AMOUNT;
             float y = 0.125f + percent * 0.25f;
             Fluid fluid = blockEntityRenderState.fluid;
