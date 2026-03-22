@@ -24,6 +24,7 @@ public class SitEntity extends Entity {
         super(type, level);
     }
 
+    @Deprecated
     public SitEntity(Level level) {
         super(ModEntities.SIT, level);
         noPhysics = true;

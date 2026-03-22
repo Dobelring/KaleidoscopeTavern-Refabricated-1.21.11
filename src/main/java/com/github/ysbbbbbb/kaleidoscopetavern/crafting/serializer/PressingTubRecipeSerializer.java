@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTubRecipe> {
+public class PressingTubRecipeSerializer {
     public static final int DEFAULT_FLUID_AMOUNT = IPressingTub.MAX_FLUID_AMOUNT / 8;
 
     private static final MapCodec<PressingTubRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -44,13 +44,13 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
         }
     };
 
-    @Override
-    public @NotNull MapCodec<PressingTubRecipe> codec() {
+
+    public static @NotNull MapCodec<PressingTubRecipe> codec() {
         return CODEC;
     }
 
-    @Override
-    public @NotNull StreamCodec<RegistryFriendlyByteBuf, PressingTubRecipe> streamCodec() {
+
+    public static @NotNull StreamCodec<RegistryFriendlyByteBuf, PressingTubRecipe> streamCodec() {
         return STREAM_CODEC;
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-//From Neoforge, modified to work with 1.21.11
+//From Neoforge, modified to work with 26.1
 
 /**
  * @since 1.21.11

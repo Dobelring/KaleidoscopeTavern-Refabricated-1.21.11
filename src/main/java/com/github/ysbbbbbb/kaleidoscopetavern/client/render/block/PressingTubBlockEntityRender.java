@@ -16,12 +16,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
@@ -114,7 +113,7 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
             float percent = fluidAmount / (float) IPressingTub.MAX_FLUID_AMOUNT;
             float y = 0.125f + percent * 0.25f;
             Fluid fluid = blockEntityRenderState.fluid;
-            RenderUtils.renderFluid(fluid, poseStack, buffer, blockEntityRenderState.lightCoords, 12, y);
+            RenderUtils.renderFluid(fluid, Minecraft.getInstance().level, blockEntityRenderState.blockPos, poseStack, buffer, blockEntityRenderState.lightCoords, 12, y);
         }
     }
 }

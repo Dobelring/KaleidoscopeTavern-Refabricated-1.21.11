@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -145,7 +145,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
                 this.model,
                 state,
                 poseStack,
-                RenderTypes.entityCutoutNoCull(texture),
+                RenderTypes.entityCutout(texture),
                 blockEntityRenderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
                 0,

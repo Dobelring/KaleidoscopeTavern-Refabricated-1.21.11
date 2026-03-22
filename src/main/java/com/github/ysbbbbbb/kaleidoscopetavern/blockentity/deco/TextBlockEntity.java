@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.network.message.TextOpenS2CMessage
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -79,8 +80,8 @@ public abstract class TextBlockEntity extends BaseBlockEntity {
         ItemStack itemInHand = player.getItemInHand(hand);
 
         // 染料
-        if (itemInHand.getItem() instanceof DyeItem dyeItem) {
-            DyeColor newColor = dyeItem.getDyeColor();
+        if (itemInHand.getItem() instanceof DyeItem) {
+            DyeColor newColor = itemInHand.get(DataComponents.DYE);
             if (newColor != textBlock.getColor()) {
                 textBlock.setColor(newColor);
                 textBlock.refresh();

@@ -5,21 +5,17 @@ import com.github.ysbbbbbb.kaleidoscopetavern.fluid.JuiceFluid;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
@@ -73,9 +69,9 @@ public class ModFluids {
     public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).setId(PortHelper.createBlockId("glow_berries_juice")));
 
     public static void registerFluids() {
-        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, ModItems.GRAPE_BUCKET);
-        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK, ModItems.SWEET_BERRIES_BUCKET);
-        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK, ModItems.GLOW_BERRIES_BUCKET);
+        register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK);
+        register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK);
+        register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK);
     }
 
     @Environment(EnvType.CLIENT)
@@ -92,8 +88,7 @@ public class ModFluids {
     private static void register(String name,
                                  FlowingFluid still,
                                  FlowingFluid flowing,
-                                 Block block,
-                                 Item bucket) {
+                                 Block block) {
         Registry.register(BuiltInRegistries.FLUID, id(name), still);
         Registry.register(BuiltInRegistries.FLUID, id("flowing_" + name), flowing);
         Registry.register(BuiltInRegistries.BLOCK, id(name), block);
@@ -103,22 +98,16 @@ public class ModFluids {
     private static void registerRender(Fluid still, Fluid flowing, String stillTexture, String flowTexture, int color) {
         Identifier stillId = id(stillTexture);
         Identifier flowId = id(flowTexture);
-        FluidRenderHandlerRegistry.INSTANCE.register(still, flowing, new SimpleFluidRenderHandler(stillId, flowId, stillId, color));
-        registration(still, color, stillId, flowId);
-        registration(flowing, color, stillId, flowId);
+        Material stillMaterial = new Material(stillId);
+        Material flowMaterial = new Material(flowId);
+        FluidRenderingRegistry.register(still, flowing, new FluidModel.Unbaked(stillMaterial, flowMaterial, null, null), FluidRenderingRegistry.get(still));
+        registration(still, color);
+        registration(flowing, color);
     }
 
     @Environment(EnvType.CLIENT)
-    @SuppressWarnings("deprecation")
-    private static void registration(Fluid fluid, int color, Identifier stillId, Identifier flowId) {
+    private static void registration(Fluid fluid, int color) {
         FluidVariantRendering.register(fluid, new FluidVariantRenderHandler() {
-            @Override
-            public TextureAtlasSprite @NonNull [] getSprites(@NonNull FluidVariant fluidVariant) {
-                TextureAtlasSprite stillSprite =  Minecraft.getInstance().getModelManager().atlasManager.get(new Material(TextureAtlas.LOCATION_BLOCKS, stillId));
-                TextureAtlasSprite flowSprite = Minecraft.getInstance().getModelManager().atlasManager.get(new Material(TextureAtlas.LOCATION_BLOCKS, flowId));
-                return new TextureAtlasSprite[]{stillSprite, flowSprite};
-            }
-
             @Override
             public int getColor(@NonNull FluidVariant fluidVariant, BlockAndTintGetter view, BlockPos pos) {
                 return color;

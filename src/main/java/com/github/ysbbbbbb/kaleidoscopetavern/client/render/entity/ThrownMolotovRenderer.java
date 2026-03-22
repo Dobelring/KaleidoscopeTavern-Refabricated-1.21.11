@@ -7,24 +7,23 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity, ThrownMolotovEntityRenderState> {
-    private final BlockRenderDispatcher renderer;
+    private final BlockModelResolver resolver;
+    public static final BlockDisplayContext BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
 
     public ThrownMolotovRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.renderer = context.getBlockRenderDispatcher();
+        this.resolver = context.getBlockModelResolver();
     }
 
     @Override
@@ -37,6 +36,7 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity, T
         super.extractRenderState(entity, entityRenderState, f);
         entityRenderState.partialTicks = f;
         entityRenderState.tickCount = entity.tickCount;
+        this.resolver.update(entityRenderState.bottleModel, ModBlocks.MOLOTOV.defaultBlockState(), BLOCK_DISPLAY_CONTEXT);
     }
 
     @Override
@@ -53,15 +53,9 @@ public class ThrownMolotovRenderer extends EntityRenderer<ThrownMolotovEntity, T
         poseStack.mulPose(Axis.XP.rotationDegrees(rotation * 0.7F));
         poseStack.translate(-0.5, -0.5, -0.5);
 
-        BlockState blockState = ModBlocks.MOLOTOV.defaultBlockState();
-        BlockStateModel blockStateModel = renderer.getBlockModel(blockState);
-        submitNodeCollector.submitBlockModel(
+        entityRenderState.bottleModel.submit(
                 poseStack,
-                Sheets.cutoutBlockSheet(),
-                blockStateModel,
-                1.0F,
-                1.0F,
-                1.0F,
+                submitNodeCollector,
                 entityRenderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
                 0

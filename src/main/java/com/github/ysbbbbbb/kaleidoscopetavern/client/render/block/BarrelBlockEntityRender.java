@@ -22,13 +22,12 @@ import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -82,7 +81,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         poseStack.mulPose(Axis.YN.rotationDegrees(180 - barrel.facing.get2DDataValue() * 90));
         BarrelModel.State state = new BarrelModel.State(barrel.isOpen);
         this.model.setupAnim(state);
-        RenderType renderType = RenderTypes.entityCutoutNoCull(LARGE_TEXTURE);
+        RenderType renderType = RenderTypes.entityCutout(LARGE_TEXTURE);
         submitNodeCollector.submitModel(
                 model,
                 state,
@@ -106,11 +105,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
             float y = percent * 0.65f;
             Fluid fluid = fluidTank.getFluid();
-            if (fluid == Fluids.WATER) {
-                RenderUtils.renderWaterFluid(minecraft.level, barrel.blockPos, fluid, poseStack, buffer, barrel.lightCoords, 16, y);
-            }else {
-                RenderUtils.renderFluid(fluid, poseStack, buffer, barrel.lightCoords, 16, y);
-            }
+            RenderUtils.renderFluid(fluid, minecraft.level, barrel.blockPos, poseStack, buffer, barrel.lightCoords, 16, y);
             poseStack.popPose();
         }
     }

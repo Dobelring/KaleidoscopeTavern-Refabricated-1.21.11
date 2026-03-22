@@ -232,20 +232,17 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void wasExploded(@NonNull ServerLevel serverLevel, @NonNull BlockPos blockPos, @NonNull Explosion explosion) {
-        BlockState state = serverLevel.getBlockState(blockPos);
+    public void wasExploded(@NonNull ServerLevel level, @NonNull BlockPos blockPos, @NonNull Explosion explosion) {
+        BlockState state = level.getBlockState(blockPos);
         if (isBarrelPart(state)) {
-            handleRemove(serverLevel, blockPos, state, null);
+            handleRemove(level, blockPos, state, null);
         } else {
-            cleanupNearbyBarrelParts(serverLevel, blockPos);
+            cleanupNearbyBarrelParts(level, blockPos);
         }
-        super.wasExploded(serverLevel, blockPos, explosion);
+        super.wasExploded(level, blockPos, explosion);
     }
 
     public static BlockPos getOriginPos(BlockPos pos, BlockState state) {
-        if (!isBarrelPart(state)) {
-            return pos;
-        }
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
 
@@ -260,7 +257,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Nullable
     public static BarrelBlockEntity getBarrelEntity(Level level, BlockPos clickPos, BlockState clickState) {
-        if (isBarrelPart(clickState)) {
+        if (clickState.getBlock() instanceof BarrelBlock) {
             BlockPos origin = getOriginPos(clickPos, clickState);
             // 获取原点位置的 BlockEntity，并检查是否为 BarrelBlockEntity
             if (level.getBlockEntity(origin) instanceof BarrelBlockEntity barrelEntity) {
@@ -271,7 +268,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        if (level.isClientSide() || !isBarrelPart(state)) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -280,6 +277,10 @@ public class BarrelBlock extends BaseEntityBlock {
 
         // 破坏 3x3x3 范围
         destroyByOrigin(level, origin, drop);
+    }
+
+    private static boolean isBarrelPart(BlockState state) {
+        return state.getBlock() instanceof BarrelBlock && state.hasProperty(LAYER) && state.hasProperty(INDEX);
     }
 
     private static void cleanupNearbyBarrelParts(Level level, BlockPos centerPos) {
@@ -311,10 +312,6 @@ public class BarrelBlock extends BaseEntityBlock {
                 }
             }
         }
-    }
-
-    private static boolean isBarrelPart(BlockState state) {
-        return state.getBlock() instanceof BarrelBlock && state.hasProperty(LAYER) && state.hasProperty(INDEX);
     }
 
     @Override

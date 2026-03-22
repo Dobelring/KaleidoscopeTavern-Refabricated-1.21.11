@@ -70,9 +70,9 @@ public class BarCabinetBlock extends BaseEntityBlock {
 
         if (level.getBlockEntity(pos) instanceof BarCabinetBlockEntity barCabinet
             && this.onClick(barCabinet, player, stack, isLeftSide)) {
-            float pitch = stack.isEmpty() ? level.random.nextFloat() * 0.2F + 0.8F : level.random.nextFloat() * 0.2F + 0.2F;
+            float pitch = stack.isEmpty() ? level.getRandom().nextFloat() * 0.2F + 0.8F : level.getRandom().nextFloat() * 0.2F + 0.2F;
             level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS,
-                    level.random.nextFloat() * 0.2F + 0.8F, pitch);
+                    level.getRandom().nextFloat() * 0.2F + 0.8F, pitch);
             return InteractionResult.SUCCESS;
         }
 

@@ -6,6 +6,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
@@ -16,7 +17,7 @@ public class PressingTubRecipe extends SingleItemRecipe {
     private final int fluidAmount;
 
     public PressingTubRecipe(Ingredient ingredient, Fluid fluid, int fluidAmount) {
-        super("pressing_tub", ingredient, fluid.getBucket().getDefaultInstance());
+        super(new CommonInfo(false), ingredient, new ItemStackTemplate(fluid.getBucket()));
         this.fluid = fluid;
         this.fluidAmount = fluidAmount;
     }
@@ -46,12 +47,17 @@ public class PressingTubRecipe extends SingleItemRecipe {
         return true;
     }
 
+    @Override
+    public @NonNull String group() {
+        return "";
+    }
+
     public Ingredient getIngredient() {
         return this.input();
     }
 
     public ItemStack getResult() {
-        return this.result();
+        return this.result().create();
     }
 
     public Fluid getFluid() {

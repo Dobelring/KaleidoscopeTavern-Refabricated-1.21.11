@@ -13,8 +13,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ModRecipes {
-    public static final RecipeSerializer<PressingTubRecipe> PRESSING_TUB_SERIALIZER = new PressingTubRecipeSerializer();
-    public static final RecipeSerializer<BarrelRecipe> BARREL_SERIALIZER = new BarrelRecipeSerializer();
+    public static final RecipeSerializer<PressingTubRecipe> PRESSING_TUB_SERIALIZER = new RecipeSerializer<>(PressingTubRecipeSerializer.codec(), PressingTubRecipeSerializer.streamCodec());
+    public static final RecipeSerializer<BarrelRecipe> BARREL_SERIALIZER = new RecipeSerializer<>(BarrelRecipeSerializer.codec(), BarrelRecipeSerializer.streamCodec());
 
     public static final RecipeType<PressingTubRecipe> PRESSING_TUB_RECIPE = simple(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pressing_tub"));
     public static final RecipeType<BarrelRecipe> BARREL_RECIPE = simple(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"));

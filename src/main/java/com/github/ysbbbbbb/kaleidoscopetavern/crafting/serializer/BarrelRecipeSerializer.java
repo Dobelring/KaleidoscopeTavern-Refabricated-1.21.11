@@ -10,16 +10,15 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
 
-public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
+public class BarrelRecipeSerializer  {
     public static final Identifier EMPTY_RECIPE_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "empty");
     public static final int DEFAULT_UNIT_TIME = 2400;
     public static final int MAX_INGREDIENTS = 4;
@@ -36,6 +35,14 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
         return nonnull;
     }
 
+    private record RecipeResult(Item item, int count) {
+    }
+
+    private static final MapCodec<RecipeResult> RESULT_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            BuiltInRegistries.ITEM.byNameCodec().fieldOf("id").forGetter(RecipeResult::item),
+            Codec.INT.optionalFieldOf("count", 1).forGetter(RecipeResult::count)
+    ).apply(instance, RecipeResult::new));
+
     private static final MapCodec<BarrelRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Ingredient.CODEC.listOf().xmap(
                     BarrelRecipeSerializer::normalizeIngredients,
@@ -43,9 +50,10 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
             ).optionalFieldOf("ingredients", NonNullList.create()).forGetter(BarrelRecipe::ingredients),
             BuiltInRegistries.FLUID.byNameCodec().fieldOf("fluid").forGetter(BarrelRecipe::fluid),
             Ingredient.CODEC.fieldOf("carrier").forGetter(BarrelRecipe::carrier),
-            ItemStack.CODEC.fieldOf("result").forGetter(BarrelRecipe::result),
+            RESULT_CODEC.fieldOf("result").forGetter(recipe -> new RecipeResult(recipe.result(), recipe.resultCount())),
             Codec.INT.optionalFieldOf("unit_time", DEFAULT_UNIT_TIME).forGetter(BarrelRecipe::unitTime)
-    ).apply(instance, BarrelRecipe::new));
+    ).apply(instance, (ingredients, fluid, carrier, result, unitTime) ->
+            new BarrelRecipe(ingredients, fluid, carrier, result.item(), result.count(), unitTime)));
 
     private static final StreamCodec<RegistryFriendlyByteBuf, BarrelRecipe> STREAM_CODEC = new StreamCodec<>() {
         @Override
@@ -61,9 +69,11 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
             Identifier fluidId = buf.readIdentifier();
             Fluid fluid = Objects.requireNonNull(BuiltInRegistries.FLUID.getValue(fluidId));
             Ingredient carrier = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
-            ItemStack result = ItemStack.STREAM_CODEC.decode(buf);
+            Identifier resultId = buf.readIdentifier();
+            Item result = Objects.requireNonNull(BuiltInRegistries.ITEM.getValue(resultId));
+            int resultCount = buf.readVarInt();
             int unitTime = buf.readVarInt();
-            return new BarrelRecipe(ingredients, fluid, carrier, result, unitTime);
+            return new BarrelRecipe(ingredients, fluid, carrier, result, resultCount, unitTime);
         }
 
         @Override
@@ -76,18 +86,19 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
             Identifier fluidId = BuiltInRegistries.FLUID.getKey(recipe.fluid());
             buf.writeIdentifier(Objects.requireNonNull(fluidId));
             Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.carrier());
-            ItemStack.STREAM_CODEC.encode(buf, recipe.result());
+            Identifier resultId = BuiltInRegistries.ITEM.getKey(recipe.result());
+            buf.writeIdentifier(Objects.requireNonNull(resultId));
+            buf.writeVarInt(recipe.resultCount());
             buf.writeVarInt(recipe.unitTime());
         }
     };
 
-    @Override
-    public @NotNull MapCodec<BarrelRecipe> codec() {
+
+    public static @NotNull MapCodec<BarrelRecipe> codec() {
         return CODEC;
     }
 
-    @Override
-    public @NotNull StreamCodec<RegistryFriendlyByteBuf, BarrelRecipe> streamCodec() {
+    public static @NotNull StreamCodec<RegistryFriendlyByteBuf, BarrelRecipe> streamCodec() {
         return STREAM_CODEC;
     }
 }

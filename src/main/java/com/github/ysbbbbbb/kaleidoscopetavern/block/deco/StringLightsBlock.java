@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class StringLightsBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final MapCodec<StringLightsBlock> CODEC = simpleCodec(p -> new StringLightsBlock(p, Items.WHITE_DYE));
@@ -45,7 +47,7 @@ public class StringLightsBlock extends HorizontalDirectionalBlock implements Sim
 
     public StringLightsBlock(Properties properties, @Nullable Item dyeItem) {
         super(properties
-                .mapColor(dyeItem instanceof DyeItem dye ? dye.getDyeColor() : DyeColor.WHITE)
+                .mapColor(DyeColor.WHITE)
                 .instrument(NoteBlockInstrument.HAT)
                 .strength(0.8F)
                 .sound(SoundType.CHAIN)

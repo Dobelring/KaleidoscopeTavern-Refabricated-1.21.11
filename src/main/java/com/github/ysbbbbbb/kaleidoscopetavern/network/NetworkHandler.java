@@ -11,8 +11,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 public class NetworkHandler {
 
     public static void init() {
-        PayloadTypeRegistry.playS2C().register(TextOpenS2CMessage.TYPE, TextOpenS2CMessage.STREAM_CODEC);
-        PayloadTypeRegistry.playC2S().register(TextUpdateC2SMessage.TYPE, TextUpdateC2SMessage.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(TextOpenS2CMessage.TYPE, TextOpenS2CMessage.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(TextUpdateC2SMessage.TYPE, TextUpdateC2SMessage.STREAM_CODEC);
         ServerPlayNetworking.registerGlobalReceiver(TextUpdateC2SMessage.TYPE, TextUpdateC2SMessage::receive);
     }
 

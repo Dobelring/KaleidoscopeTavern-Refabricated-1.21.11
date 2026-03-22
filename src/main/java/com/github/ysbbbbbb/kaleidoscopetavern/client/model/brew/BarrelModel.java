@@ -20,7 +20,7 @@ public class BarrelModel extends Model<BarrelModel.State> {
     private final ModelPart body;
 
     public BarrelModel(ModelPart root) {
-        super(root, RenderTypes::entityCutoutNoCull);
+        super(root, RenderTypes::entityCutout);
         this.root = root.getChild("root");
         this.close = this.root.getChild("close");
         this.open = this.root.getChild("open");

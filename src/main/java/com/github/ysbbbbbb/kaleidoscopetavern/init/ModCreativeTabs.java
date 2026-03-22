@@ -1,7 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +23,7 @@ public class ModCreativeTabs {
 
 
     public static void registerTabs() {
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_MAIN_TAB, FabricItemGroup.builder()
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_MAIN_TAB, FabricCreativeModeTab.builder()
                 .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_main.name"))
                 .icon(() -> BuiltInRegistries.ITEM.getValue(MAIN_ICON_ID).getDefaultInstance())
                 .displayItems((par, output) -> {
@@ -54,7 +54,7 @@ public class ModCreativeTabs {
                     output.accept(ModItems.WHISKEY);
                 }).build());
 
-        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricItemGroup.builder()
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricCreativeModeTab.builder()
                 .title(Component.translatable("item_group.kaleidoscope_tavern.tavern_deco.name"))
                 .icon(() -> BuiltInRegistries.ITEM.getValue(DECO_ICON_ID).getDefaultInstance())
                 .displayItems((par, output) -> {

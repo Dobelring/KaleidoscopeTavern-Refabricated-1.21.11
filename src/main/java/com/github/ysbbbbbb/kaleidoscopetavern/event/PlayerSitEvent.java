@@ -28,7 +28,7 @@ public class PlayerSitEvent {
 
     private static InteractionResult onUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult hitResult) {
         if (level.isClientSide() || !level.mayInteract(player, hitResult.getBlockPos()) || player.isShiftKeyDown() || SitUtil.isPlayerSitting(player) || hitResult.getDirection() != Direction.UP)
-            return InteractionResult.PASS;
+                return InteractionResult.PASS;
 
         BlockPos hitPos = hitResult.getBlockPos();
         BlockState s = level.getBlockState(hitPos);
@@ -36,16 +36,15 @@ public class PlayerSitEvent {
 
         if (b instanceof ISittable iSittable && isPlayerInRange(player, hitPos) && !SitUtil.isOccupied(level, hitPos) && player.getItemInHand(hand).isEmpty()) {
             SitEntity sit = ModEntities.SIT.create(level, EntitySpawnReason.SPAWN_ITEM_USE);
-            if (sit == null) return InteractionResult.PASS;
+            if (sit == null) return InteractionResult.CONSUME;
             sit.absSnapTo(hitPos.getX() + 0.5D, hitPos.getY() + iSittable.getSitHeight(), hitPos.getZ() + 0.5D);
 
             if (SitUtil.addSitEntity(level, hitPos, sit, player.position())) {
                 level.addFreshEntity(sit);
-                player.startRiding(sit);
-                return InteractionResult.SUCCESS;
+                player.startRiding(sit, false, false);
+                return InteractionResult.SUCCESS_SERVER;
             }
         }
-
         return InteractionResult.PASS;
     }
 

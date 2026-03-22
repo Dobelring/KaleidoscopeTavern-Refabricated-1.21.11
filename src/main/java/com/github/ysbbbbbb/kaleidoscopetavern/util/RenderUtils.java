@@ -4,22 +4,24 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.impl.client.rendering.fluid.FluidRenderingRegistryImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -37,14 +39,17 @@ public class RenderUtils {
      * @param y         流体平面贴图的高度，根据实际流体显示高度调整
      */
     public static void renderFluid(Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
-        TextureAtlasSprite sprite = getStillFluidSprite(null, null, fluid);
-        int color = getFluidColor(null, null, fluid);
+        renderFluid(fluid, null, null, poseStack, buffer, light, size, y);
+    }
+
+    public static void renderFluid(Fluid fluid, BlockAndTintGetter level, BlockPos pos, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
+        TextureAtlasSprite sprite = getStillFluidSprite(fluid);
+        int color = getFluidColor(level, pos, fluid);
         renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
     }
 
     public static void renderWaterFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
-        TextureAtlasSprite sprite = getStillFluidSprite(level, pos, fluid);
-        renderSurface(poseStack, buffer, sprite, -12618012, light, Mth.clamp(size, 1, 16), y);
+        renderFluid(fluid, level, pos, poseStack, buffer, light, size, y);
     }
 
     /**
@@ -62,6 +67,7 @@ public class RenderUtils {
                                      int color, int light, int size, float y) {
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderTypes.translucentMovingBlock());
         Matrix4f matrix = poseStack.last().pose();
+        int tintedColor = ensureAlpha(color);
 
         // 贴图的位置和大小
         int margin = (16 - size) / 2;
@@ -70,27 +76,27 @@ public class RenderUtils {
 
         // 渲染一个平面
         vertexConsumer.addVertex(matrix, min, y, min)
-                .setColor(color)
+                .setColor(tintedColor)
                 .setUv(sprite.getU0(), sprite.getV0())
-                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setOverlay(0)
                 .setLight(light)
                 .setNormal(0, 1, 0);
         vertexConsumer.addVertex(matrix, min, y, max)
-                .setColor(color)
+                .setColor(tintedColor)
                 .setUv(sprite.getU0(), sprite.getV(spriteSize))
-                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setOverlay(0)
                 .setLight(light)
                 .setNormal(0, 1, 0);
         vertexConsumer.addVertex(matrix, max, y, max)
-                .setColor(color)
+                .setColor(tintedColor)
                 .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
-                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setOverlay(0)
                 .setLight(light)
                 .setNormal(0, 1, 0);
         vertexConsumer.addVertex(matrix, max, y, min)
-                .setColor(color)
+                .setColor(tintedColor)
                 .setUv(sprite.getU(spriteSize), sprite.getV0())
-                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setOverlay(0)
                 .setLight(light)
                 .setNormal(0, 1, 0);
     }
@@ -112,30 +118,28 @@ public class RenderUtils {
         h ^= (h >>> 31);
         return (float) (int) h / (float) Integer.MAX_VALUE;
     }
-
-    private static TextureAtlasSprite getStillFluidSprite(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
-        FluidState state = fluid.defaultFluidState();
-        FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);
-        if (handler != null) {
-            TextureAtlasSprite[] sprites = handler.getFluidSprites(level, pos, state);
-            if (sprites.length > 0 && sprites[0] != null) {
-                return sprites[0];
-            }
+    private static TextureAtlasSprite getStillFluidSprite(Fluid fluid) {
+        FluidModel.Unbaked unbaked = FluidRenderingRegistryImpl.getUnbakedModels().get(fluid);
+        if (unbaked != null) {
+            Identifier sprite = unbaked.stillMaterial().sprite();
+            return Minecraft.getInstance().getModelManager().atlasManager.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, sprite));
+        }
+        if (fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER) {
+            return Minecraft.getInstance().getModelManager().atlasManager.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, Identifier.withDefaultNamespace("block/water_still")));
+        }
+        if (fluid == Fluids.LAVA || fluid == Fluids.FLOWING_LAVA) {
+            return Minecraft.getInstance().getModelManager().atlasManager.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, Identifier.withDefaultNamespace("block/lava_still")));
         }
         Identifier missing = MissingTextureAtlasSprite.getLocation();
-        return Minecraft.getInstance().getModelManager().atlasManager.get(new Material(TextureAtlas.LOCATION_BLOCKS, missing));
+        return Minecraft.getInstance().getModelManager().atlasManager.get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, missing));
     }
 
     private static int getFluidColor(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
-        if (level == null || pos == null) {
-            return 0xFFFFFFFF;
-        }
-        FluidState state = fluid.defaultFluidState();
-        FluidRenderHandler handler = FluidRenderHandlerRegistry.INSTANCE.get(fluid);
+        FluidVariantRenderHandler handler = FluidVariantRendering.getHandler(fluid);
         if (handler == null) {
             return 0xFFFFFFFF;
         }
-        return handler.getFluidColor(level, pos, state);
+        return handler.getColor(FluidVariant.of(fluid), level, pos);
     }
 
     private static int ensureAlpha(int color) {

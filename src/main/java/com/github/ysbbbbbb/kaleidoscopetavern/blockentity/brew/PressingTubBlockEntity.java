@@ -4,7 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
@@ -14,7 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SidedStorageBlockEntity;
@@ -102,8 +101,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     worldPosition.getZ() + 0.5,
                     SoundEvents.ITEM_FRAME_ADD_ITEM,
                     SoundSource.BLOCKS,
-                    0.5F + this.level.random.nextFloat(),
-                    this.level.random.nextFloat() * 0.7F + 0.6F);
+                    0.5F + this.level.getRandom().nextFloat(),
+                    this.level.getRandom().nextFloat() * 0.7F + 0.6F);
         }
         return true;
     }
@@ -122,8 +121,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     worldPosition.getZ() + 0.5,
                     SoundEvents.ITEM_FRAME_REMOVE_ITEM,
                     SoundSource.BLOCKS,
-                    0.5F + this.level.random.nextFloat(),
-                    this.level.random.nextFloat() * 0.7F + 0.6F);
+                    0.5F + this.level.getRandom().nextFloat(),
+                    this.level.getRandom().nextFloat() * 0.7F + 0.6F);
         }
         return true;
     }
@@ -170,7 +169,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     playFinishedPressEffect();
                     return false;
                 }
-                ItemStack output = recipe.assemble(container, serverLevel.registryAccess());
+                ItemStack output = recipe.assemble(container);
                 // 产物为空，无法继续压榨（一般不太可能发生）
                 if (output.isEmpty()) {
                     playFailPressEffect(stack);
@@ -227,8 +226,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     worldPosition.getZ() + 0.5,
                     SoundEvents.SLIME_BLOCK_FALL,
                     SoundSource.BLOCKS,
-                    0.5F + this.level.random.nextFloat(),
-                    this.level.random.nextFloat() * 0.3F + 0.7F);
+                    0.5F + this.level.getRandom().nextFloat(),
+                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
 
             if (stack == null) {
                 serverLevel.sendParticles(ParticleTypes.RAIN,
@@ -237,7 +236,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                         worldPosition.getZ() + 0.5,
                         10, 0.25, 0.2, 0.25, 0.05);
             } else {
-                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, stack);
+                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, stack.getItem());
                 serverLevel.sendParticles(option,
                         worldPosition.getX() + 0.5,
                         worldPosition.getY() + 0.5,
@@ -258,8 +257,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     worldPosition.getZ() + 0.5,
                     SoundEvents.WOOD_FALL,
                     SoundSource.BLOCKS,
-                    0.5F + this.level.random.nextFloat(),
-                    this.level.random.nextFloat() * 0.3F + 0.7F);
+                    0.5F + this.level.getRandom().nextFloat(),
+                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
 
             if (stack == null) {
                 BlockState state = ModBlocks.PRESSING_TUB.defaultBlockState();
@@ -270,7 +269,7 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                         worldPosition.getZ() + 0.5,
                         10, 0.25, 0.2, 0.25, 0.05);
             } else {
-                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, stack);
+                ItemParticleOption option = new ItemParticleOption(ParticleTypes.ITEM, stack.getItem());
                 serverLevel.sendParticles(option,
                         worldPosition.getX() + 0.5,
                         worldPosition.getY() + 0.5,
@@ -291,8 +290,8 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
                     worldPosition.getZ() + 0.5,
                     SoundEvents.HONEY_BLOCK_HIT,
                     SoundSource.BLOCKS,
-                    0.5F + this.level.random.nextFloat(),
-                    this.level.random.nextFloat() * 0.3F + 0.7F);
+                    0.5F + this.level.getRandom().nextFloat(),
+                    this.level.getRandom().nextFloat() * 0.3F + 0.7F);
 
             serverLevel.sendParticles(ParticleTypes.RAIN,
                     worldPosition.getX() + 0.5,
@@ -419,14 +418,14 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
             double dz = dirs[i][1];
 
             // 生成位置：方块中心偏向弹射方向，加少量随机扰动
-            double spawnX = worldPosition.getX() + 0.5 + dx * 0.3 + Mth.nextDouble(level.random, -0.05, 0.05);
-            double spawnY = worldPosition.getY() + 0.5 + Mth.nextDouble(level.random, 0, 0.1);
-            double spawnZ = worldPosition.getZ() + 0.5 + dz * 0.3 + Mth.nextDouble(level.random, -0.05, 0.05);
+            double spawnX = worldPosition.getX() + 0.5 + dx * 0.3 + Mth.nextDouble(level.getRandom(), -0.05, 0.05);
+            double spawnY = worldPosition.getY() + 0.5 + Mth.nextDouble(level.getRandom(), 0, 0.1);
+            double spawnZ = worldPosition.getZ() + 0.5 + dz * 0.3 + Mth.nextDouble(level.getRandom(), -0.05, 0.05);
 
             // 速度：沿弹射方向加随机扰动，带少量向上分量
-            double velX = dx * 0.15 + Mth.nextDouble(level.random, -0.02, 0.02);
-            double velY = 0.1 + Mth.nextDouble(level.random, -0.02, 0.02);
-            double velZ = dz * 0.15 + Mth.nextDouble(level.random, -0.02, 0.02);
+            double velX = dx * 0.15 + Mth.nextDouble(level.getRandom(), -0.02, 0.02);
+            double velY = 0.1 + Mth.nextDouble(level.getRandom(), -0.02, 0.02);
+            double velZ = dz * 0.15 + Mth.nextDouble(level.getRandom(), -0.02, 0.02);
 
             this.popResource(level, () -> new ItemEntity(level, spawnX, spawnY, spawnZ, split, velX, velY, velZ), split);
         }
@@ -527,6 +526,6 @@ public class PressingTubBlockEntity extends BaseBlockEntity implements IPressing
         if (side == Direction.DOWN) {
             return Storage.empty();
         }
-        return InventoryStorage.of(this, side);
+        return ContainerStorage.of(this, side);
     }
 }

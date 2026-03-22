@@ -3,6 +3,7 @@
   "package": "com.github.ysbbbbbb.kaleidoscopetavern.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "HeightWarningDisableMixin",
     "LivingEntityMixin"
   ],
   "injectors": {

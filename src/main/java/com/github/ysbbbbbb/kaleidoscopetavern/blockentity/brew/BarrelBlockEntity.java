@@ -148,7 +148,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         if (level instanceof ServerLevel serverLevel) {
             quickCheck.getRecipeFor(container, serverLevel).ifPresentOrElse(holder -> {
                 BarrelRecipe recipe = holder.value();
-                ItemStack assemble = recipe.assemble(container, level.registryAccess());
+                ItemStack assemble = recipe.assemble(container);
                 output.setStackInSlot(0, assemble);
                 recipeId = holder.id().identifier();
                 recipeHolder = holder;
@@ -465,7 +465,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         BarrelRecipe barrelRecipe = holder.value();
         ItemStack belowStack = belowState.getBlock().asItem().getDefaultInstance();
         if (barrelRecipe.carrier().test(belowStack)) {
-            this.transform(level, below, belowState, (BottleBlockItem) barrelRecipe.result().getItem());
+            this.transform(level, below, belowState, (BottleBlockItem) barrelRecipe.result());
         }
     }
 

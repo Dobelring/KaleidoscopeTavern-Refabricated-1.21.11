@@ -139,7 +139,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         }
         // brew level 从 1 开始，所以要 -1 来获取对应的效果列表
         for (DrinkEffectData.Entry entry : effects.get(brewLevel - 1)) {
-            if (!level.isClientSide() && level.random.nextFloat() < entry.probability()) {
+            if (!level.isClientSide() && level.getRandom().nextFloat() < entry.probability()) {
                 // json 里的持续时间是秒，但是内部游戏是 tick，需要转化
                 int duration = entry.duration() * 20;
                 int amplifier = entry.amplifier();
@@ -162,7 +162,7 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         // brew level 从 1 开始，所以要 -1 来获取对应的效果列表
         List<MobEffectInstance> instances = Lists.newArrayList();
         for (DrinkEffectData.Entry entry : effects.get(brewLevel - 1)) {
-            if (level.random.nextFloat() < entry.probability()) {
+            if (level.getRandom().nextFloat() < entry.probability()) {
                 int duration = entry.duration() * 20;
                 int amplifier = entry.amplifier();
                 instances.add(new MobEffectInstance(entry.effect(), duration, amplifier));
