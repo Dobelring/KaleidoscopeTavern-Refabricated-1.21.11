@@ -31,7 +31,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("deprecation")
 public class BarrelBlock extends BaseEntityBlock {
@@ -218,13 +220,25 @@ public class BarrelBlock extends BaseEntityBlock {
         super.playerWillDestroy(level, pos, state, player);
     }
 
+    private static boolean isBarrelPart(BlockState state) {
+        return state.getBlock() instanceof BarrelBlock && state.hasProperty(LAYER) && state.hasProperty(INDEX);
+    }
+
     @Override
     public void wasExploded(@NotNull Level level, @NotNull BlockPos blockPos, @NotNull Explosion explosion) {
-        handleRemove(level, blockPos, level.getBlockState(blockPos), null);
+        BlockState state = level.getBlockState(blockPos);
+        if (isBarrelPart(state)) {
+            handleRemove(level, blockPos, state, null);
+        } else {
+            cleanupNearbyBarrelParts(level, blockPos);
+        }
         super.wasExploded(level, blockPos, explosion);
     }
 
     public static BlockPos getOriginPos(BlockPos pos, BlockState state) {
+        if (!isBarrelPart(state)) {
+            return pos;
+        }
         AttachFace layer = state.getValue(LAYER);
         int index = state.getValue(INDEX);
 
@@ -239,7 +253,7 @@ public class BarrelBlock extends BaseEntityBlock {
 
     @Nullable
     public static BarrelBlockEntity getBarrelEntity(Level level, BlockPos clickPos, BlockState clickState) {
-        if (clickState.getBlock() instanceof BarrelBlock) {
+        if (isBarrelPart(clickState)) {
             BlockPos origin = getOriginPos(clickPos, clickState);
             // 获取原点位置的 BlockEntity，并检查是否为 BarrelBlockEntity
             if (level.getBlockEntity(origin) instanceof BarrelBlockEntity barrelEntity) {
@@ -250,7 +264,7 @@ public class BarrelBlock extends BaseEntityBlock {
     }
 
     private static void handleRemove(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        if (level.isClientSide) {
+        if (level.isClientSide || !isBarrelPart(state)) {
             return;
         }
 
@@ -258,10 +272,34 @@ public class BarrelBlock extends BaseEntityBlock {
         BlockPos origin = getOriginPos(pos, state);
 
         // 破坏 3x3x3 范围
+        destroyByOrigin(level, origin, drop);
+    }
+
+    private static void cleanupNearbyBarrelParts(Level level, BlockPos centerPos) {
+        Set<BlockPos> origins = new HashSet<>();
+        for (BlockPos checkPos : BlockPos.betweenClosed(centerPos.offset(-1, -1, -1), centerPos.offset(1, 1, 1))) {
+            BlockState checkState = level.getBlockState(checkPos);
+            if (isBarrelPart(checkState)) {
+                origins.add(getOriginPos(checkPos, checkState));
+            }
+        }
+        for (BlockPos origin : origins) {
+            destroyByOrigin(level, origin, true);
+        }
+    }
+
+    private static void destroyByOrigin(Level level, BlockPos origin, boolean drop) {
         for (int y = 0; y < 3; y++) {
             for (int r = 0; r < 3; r++) {
                 for (int c = 0; c < 3; c++) {
                     BlockPos targetPos = origin.offset(c - 1, y, r - 1);
+                    BlockState targetState = level.getBlockState(targetPos);
+                    if (!isBarrelPart(targetState)) {
+                        continue;
+                    }
+                    if (!getOriginPos(targetPos, targetState).equals(origin)) {
+                        continue;
+                    }
                     level.destroyBlock(targetPos, drop);
                 }
             }
