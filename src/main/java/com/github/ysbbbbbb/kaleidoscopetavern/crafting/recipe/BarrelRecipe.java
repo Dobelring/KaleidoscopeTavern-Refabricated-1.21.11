@@ -84,7 +84,7 @@ public record BarrelRecipe(
 
     @Override
     public @NonNull String group() {
-        return "";
+        return "wine_barrel";
     }
 
     @Override

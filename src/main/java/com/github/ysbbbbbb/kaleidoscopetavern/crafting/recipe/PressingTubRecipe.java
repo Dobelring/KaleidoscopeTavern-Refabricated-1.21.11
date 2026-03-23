@@ -49,7 +49,7 @@ public class PressingTubRecipe extends SingleItemRecipe {
 
     @Override
     public @NonNull String group() {
-        return "";
+        return "pressing_tub";
     }
 
     public Ingredient getIngredient() {

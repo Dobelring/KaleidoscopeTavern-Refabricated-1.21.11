@@ -118,6 +118,7 @@ public class RenderUtils {
         h ^= (h >>> 31);
         return (float) (int) h / (float) Integer.MAX_VALUE;
     }
+    @SuppressWarnings("all")
     private static TextureAtlasSprite getStillFluidSprite(Fluid fluid) {
         FluidModel.Unbaked unbaked = FluidRenderingRegistryImpl.getUnbakedModels().get(fluid);
         if (unbaked != null) {
