@@ -1,22 +1,42 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class BottleBlockItem extends BlockItem {
-    public static final String BREW_LEVEL_KEY = "BrewLevel";
 
     public BottleBlockItem(Block block) {
         this(block, new Properties()
                 .stacksTo(16));
+    }
+
+    public @NotNull InteractionResult placeForDispenser(@NotNull BlockPlaceContext placeContext, DispenserBlockEntity entity) {
+        BlockState blockState = placeContext.getLevel().getBlockState(placeContext.getClickedPos());
+        if (blockState.is(this.getBlock()) && this.getBlock() instanceof DrinkBlock drinkBlock && drinkBlock.getMaxCount() > 1) {
+            if (blockState.getValue(drinkBlock.getCountProperty()) < drinkBlock.getMaxCount()) {
+                BlockPlaceContext updatedPlaceContext = this.updatePlacementContext(placeContext);
+                if (updatedPlaceContext != null)
+                    placeContext.getItemInHand().consume(1, updatedPlaceContext.getPlayer());
+                entity.applyComponentsFromItemStack(placeContext.getItemInHand());
+                entity.setChanged();
+                return drinkBlock.tryIncreaseCount(placeContext.getLevel(), placeContext.getClickedPos(), blockState, placeContext.getItemInHand()) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+            }
+        }
+        return super.place(placeContext);
     }
 
     public BottleBlockItem(Block block, Properties properties) {
