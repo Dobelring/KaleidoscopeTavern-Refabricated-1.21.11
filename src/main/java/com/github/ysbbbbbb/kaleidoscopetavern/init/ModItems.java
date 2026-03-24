@@ -102,7 +102,7 @@ public class ModItems {
     public static final Item MONA_LISA_PAINTING = registerItem("mona_lisa_painting", p -> new PaintingBlockItem(ModBlocks.MONA_LISA_PAINTING, p));
     public static final Item MONDRIAN_PAINTING = registerItem("mondrian_painting", p -> new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING, p));
     // 空瓶
-    public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE);
+    public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE, BottleBlockItem::new);
     // 葡萄
     public static final Item GRAPE = registerItem("grape", p -> new Item(p.food(ModFoods.GRAPE)));
     // 野生葡萄藤
@@ -122,7 +122,7 @@ public class ModItems {
     // 龙头
     public static final Item TAP = registerItem("tap", p -> new BlockItem(ModBlocks.TAP, p.useBlockDescriptionPrefix()));
     // 酒桶
-    public static final Item BARREL = registerItem("barrel", p -> new BottleBlockItem(ModBlocks.BARREL, p.useBlockDescriptionPrefix()));
+    public static final Item BARREL = registerItem("barrel", p -> new BlockItem(ModBlocks.BARREL, p.useBlockDescriptionPrefix()));
     // 酒柜
     public static final Item BAR_CABINET =registerItem("bar_cabinet", p -> new BlockItem(ModBlocks.BAR_CABINET, p.useBlockDescriptionPrefix()));
     public static final Item GLASS_BAR_CABINET = registerItem("glass_bar_cabinet", p -> new BlockItem(ModBlocks.GLASS_BAR_CABINET, p.useBlockDescriptionPrefix()));
