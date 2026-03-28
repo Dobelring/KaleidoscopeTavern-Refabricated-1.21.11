@@ -21,6 +21,10 @@ repositories {
 	maven {
 		url = URI("https://cursemaven.com")
 	}
+	maven {
+		name = "cassian's maven"
+		url = URI("https://maven.cassian.cc")
+	}
 }
 
 dependencies {
@@ -31,7 +35,10 @@ dependencies {
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
-	
+	implementation("cc.cassian.rrv:reliable-recipe-viewer-fabric:${providers.gradleProperty("rrv_version").get()}") {
+		exclude(group = "net.fabricmc.fabric-api")
+		exclude(group = "eu.pb4")
+	}
 }
 
 tasks.processResources {
