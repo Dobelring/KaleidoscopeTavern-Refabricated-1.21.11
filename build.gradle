@@ -18,31 +18,35 @@ repositories {
 	maven {
 		  name = "Terraformers"
 		  url = "https://maven.terraformersmc.com/"}
-	  maven { url = "https://api.modrinth.com/maven"}
-	  maven {
+	maven { url = "https://api.modrinth.com/maven"}
+	maven {
 		  // location of the maven that hosts JEI files before January 2023
 		  name = "Progwml6's maven"
 		  url = "https://dvs1.progwml6.com/files/maven/"
-	  }
-	  maven {
+	}
+	maven {
 		  // location of the maven that hosts JEI files since January 2023
 		  name = "Jared's maven"
 		  url = "https://maven.blamejared.com/"
-	  }
-	  maven {
+	 }
+	maven {
 		  // location of a maven mirror for JEI files, as a fallback
 		  name = "ModMaven"
 		  url = "https://modmaven.dev"
-	  }
-	  maven {
+	}
+	maven {
 		url = "https://maven.shedaniel.me"
-	  }
-	  maven {
+	}
+	maven {
 		url = "https://maven.architectury.dev"
 		content {
 			includeGroup "dev.architectury"
 		}
-	  }
+	}
+	maven {
+		name = "cassian's maven"
+		url = "https://maven.cassian.cc"
+	}
 	maven {
 		url "https://cursemaven.com"
 	}
@@ -60,14 +64,17 @@ dependencies {
 	modCompileOnly("mezz.jei:jei-1.21.11-fabric:27.4.0.15")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-
+	modImplementation("cc.cassian.rrv:reliable-recipe-viewer-fabric:${project.rrv_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+		exclude(group: "eu.pb4")
+	}
 	// REI 前置
 	modImplementation "me.shedaniel.cloth:cloth-config-fabric:21.11.153"
 	modImplementation "dev.architectury:architectury-fabric:19.0.1"
 	// REI API for Fabric
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
-	modRuntimeOnly "maven.modrinth:rei:21.11.814+fabric-fabric,1.21.11"
+	modCompileOnly "maven.modrinth:rei:21.11.814+fabric-fabric,1.21.11"
 	
 }
 

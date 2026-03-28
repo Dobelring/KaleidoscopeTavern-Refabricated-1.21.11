@@ -22,7 +22,8 @@
 		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
 		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
 		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
-		"rei_common": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREICommonPlugin"]
+		"rei_common": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREICommonPlugin"],
+		"rrv": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVPlugin"]
 	},
 	"mixins": [
 		"kaleidoscope_tavern.mixins.json"
