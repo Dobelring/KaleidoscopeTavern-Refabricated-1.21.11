@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -65,7 +66,7 @@ public class RenderUtils {
      */
     public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(Sheets.translucentBlockSheet());
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
         Matrix4f matrix = poseStack.last().pose();
         int tintedColor = ensureAlpha(color);
 
@@ -136,6 +137,7 @@ public class RenderUtils {
     }
 
     private static int getFluidColor(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
+        if (fluid == Fluids.WATER) return -12618012;
         FluidVariantRenderHandler handler = FluidVariantRendering.getHandler(fluid);
         if (handler == null) {
             return 0xFFFFFFFF;
