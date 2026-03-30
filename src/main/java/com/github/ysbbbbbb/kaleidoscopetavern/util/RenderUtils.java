@@ -10,9 +10,9 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.impl.client.rendering.fluid.FluidRenderingRegistryImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -65,7 +65,7 @@ public class RenderUtils {
      */
     public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderTypes.translucentMovingBlock());
+        VertexConsumer vertexConsumer = buffer.getBuffer(Sheets.translucentBlockSheet());
         Matrix4f matrix = poseStack.last().pose();
         int tintedColor = ensureAlpha(color);
 
