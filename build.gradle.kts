@@ -25,6 +25,16 @@ repositories {
 		name = "cassian's maven"
 		url = URI("https://maven.cassian.cc")
 	}
+	maven {
+		// location of the maven that hosts JEI files since January 2023
+		name = "Jared's maven"
+		url = URI("https://maven.blamejared.com/")
+	}
+	maven {
+		// location of a maven mirror for JEI files, as a fallback
+		name = "ModMaven"
+		url = URI("https://modmaven.dev")
+	}
 }
 
 dependencies {
@@ -35,10 +45,11 @@ dependencies {
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
-	implementation("cc.cassian.rrv:reliable-recipe-viewer-fabric:${providers.gradleProperty("rrv_version").get()}") {
+	compileOnly("cc.cassian.rrv:reliable-recipe-viewer-fabric:${providers.gradleProperty("rrv_version").get()}") {
 		exclude(group = "net.fabricmc.fabric-api")
 		exclude(group = "eu.pb4")
 	}
+	implementation("mezz.jei:jei-26.1-fabric:29.2.0.20")
 }
 
 tasks.processResources {
