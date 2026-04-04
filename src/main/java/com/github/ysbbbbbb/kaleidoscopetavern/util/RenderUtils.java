@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
@@ -125,6 +126,7 @@ public class RenderUtils {
     }
 
     private static int getFluidColor(BlockAndTintGetter level, BlockPos pos, Fluid fluid) {
+        if (fluid == Fluids.WATER) return -12618012;
         if (level == null || pos == null) {
             return 0xFFFFFFFF;
         }
