@@ -66,7 +66,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
         }
         // 并且下方是泥土，那么可以种植
         BlockState belowState = level.getBlockState(pos.below());
-        if (belowState.is(BlockTags.DIRT)) {
+        if (belowState.is(BlockTags.SUPPORTS_VEGETATION)) {
             BlockState plantedState = ModBlocks.GRAPEVINE_TRELLIS
                     .defaultBlockState()
                     .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
