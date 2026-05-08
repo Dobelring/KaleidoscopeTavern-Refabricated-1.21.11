@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 
 @Environment(EnvType.CLIENT)
-public class ModEntitiesRender {
+public final class ModEntitiesRender {
         public static void init() {
             EntityRendererRegistry.register(ModEntities.SIT, NoopRenderer::new);
             EntityModelLayerRegistry.registerModelLayer(SmallChalkboardModel.LAYER_LOCATION, SmallChalkboardModel::createBodyLayer);

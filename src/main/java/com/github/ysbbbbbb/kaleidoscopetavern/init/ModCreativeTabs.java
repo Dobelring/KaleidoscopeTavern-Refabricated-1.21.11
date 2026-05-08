@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
-public class ModCreativeTabs {
+public final class ModCreativeTabs {
     private static final ResourceLocation MAIN_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine");
 
     private static final ResourceLocation DECO_ICON_ID = new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder");

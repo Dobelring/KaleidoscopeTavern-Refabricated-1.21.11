@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 
-public class ModEntities {
+public final class ModEntities {
     public static final EntityType<SitEntity> SIT = SitEntity.TYPE;
     public static final EntityType<ThrownMolotovEntity> THROWN_MOLOTOV = ThrownMolotovEntity.TYPE;
 

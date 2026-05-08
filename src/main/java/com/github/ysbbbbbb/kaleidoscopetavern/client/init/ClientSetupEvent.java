@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 
 @Environment(EnvType.CLIENT)
-public class ClientSetupEvent {
+public final class ClientSetupEvent {
 
     public static void init() {
         BlockEntityRenderers.register(ModBlocks.BAR_CABINET_BE, BarCabinetBlockEntityRender::new);

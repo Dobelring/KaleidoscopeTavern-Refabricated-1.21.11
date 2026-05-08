@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemNameBlockItem;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids.*;
 
-public class ModItems {
+public final class ModItems {
     // 葡萄
     public static final Item GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
     // 野生葡萄藤

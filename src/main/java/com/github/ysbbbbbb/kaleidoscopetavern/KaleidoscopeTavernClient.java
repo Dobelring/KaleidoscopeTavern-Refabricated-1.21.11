@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public class KaleidoscopeTavernClient implements ClientModInitializer {
+public final class KaleidoscopeTavernClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientRegistry.init();

@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
 
 @Environment(EnvType.CLIENT)
-public class ClientRegistry {
+public final class ClientRegistry {
     public static void init() {
         NetworkHandler.Clientside.init();
         renderType();
