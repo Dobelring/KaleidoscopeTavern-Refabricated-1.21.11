@@ -1,35 +1,43 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv;
 
-import cc.cassian.rrv.api.ReliableRecipeViewerPlugin;
+import cc.cassian.rrv.api.ReliableRecipeViewerClientPlugin;
 import cc.cassian.rrv.api.recipe.ItemView;
-import cc.cassian.rrv.common.recipe.ServerRecipeManager;
-import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.barrel.BarrelServerRecipe;
+import cc.cassian.rrv.api.recipe.ReliableClientRecipe;
+import cc.cassian.rrv.client.recipe.ClientRecipeManager;
+import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.barrel.BarrelViewRecipe;
-import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.pressing_tub.PressingTubServerRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.pressing_tub.PressingTubViewRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ModRRVPlugin implements ReliableRecipeViewerPlugin {
+public class ModRRVPlugin implements ReliableRecipeViewerClientPlugin {
     @Override
     public void onIntegrationInitialize() {
-        ItemView.addServerRecipeProvider(list -> {
-            ServerRecipeManager.INSTANCE.getRecipesForType(ModRecipes.BARREL_RECIPE).forEach(recipe -> {
-                List<Ingredient> ingredients = new ArrayList<>(recipe.ingredients());
-                ingredients.addFirst(Ingredient.of(recipe.fluid().getBucket()));
-                list.add(new BarrelServerRecipe(ItemStackTemplate.fromNonEmptyStack(recipe.result().getDefaultInstance()), ingredients, recipe.carrier()));
-            });
-            ServerRecipeManager.INSTANCE.getRecipesForType(ModRecipes.PRESSING_TUB_RECIPE).forEach(recipe -> {
-                list.add(new PressingTubServerRecipe(ItemStackTemplate.fromNonEmptyStack(recipe.getFluid().getBucket().getDefaultInstance()), recipe.input()));
-            });
+        KaleidoscopeTavern.LOGGER.info("Initializing RRV integration");
+        ItemView.addClientRecipeProvider(recipeList -> {
+            addBarrelRecipes(recipeList);
+            addPressingTubRecipes(recipeList);
         });
+    }
 
-        ItemView.addClientRecipeWrapper(BarrelServerRecipe.TYPE, i -> Collections.singletonList(new BarrelViewRecipe(i)));
-        ItemView.addClientRecipeWrapper(PressingTubServerRecipe.TYPE, i -> Collections.singletonList(new PressingTubViewRecipe(i)));
+    private static void addBarrelRecipes(List<ReliableClientRecipe> recipeList) {
+        ClientRecipeManager.INSTANCE.getRecipesForType(ModRecipes.BARREL_RECIPE).forEach(holder -> {
+            var recipe = holder.value();
+            List<Ingredient> ingredients = new ArrayList<>();
+            ingredients.addFirst(Ingredient.of(recipe.fluid().getBucket()));
+            ingredients.addAll(recipe.ingredients());
+            recipeList.add(new BarrelViewRecipe(holder.id().identifier(), ItemStackTemplate.fromNonEmptyStack(recipe.result().getDefaultInstance()), ingredients, recipe.carrier()));
+        });
+    }
+
+    private static void addPressingTubRecipes(List<ReliableClientRecipe> recipeList) {
+        ClientRecipeManager.INSTANCE.getRecipesForType(ModRecipes.PRESSING_TUB_RECIPE).forEach(holder -> {
+            var recipe = holder.value();
+            recipeList.add(new PressingTubViewRecipe(holder.id().identifier(), ItemStackTemplate.fromNonEmptyStack(recipe.getResult()), recipe.getIngredient()));
+        });
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 
-public class ModCreativeTabs {
+public final class ModCreativeTabs {
     private static final Identifier MAIN_ICON_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "wine");
 
     private static final Identifier DECO_ICON_ID = Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "stepladder");

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class ModItems {
+public final class ModItems {
     // 沙发
     public static final Item WHITE_SOFA = registerItem("white_sofa", p -> new SofaBlockItem(ModBlocks.WHITE_SOFA, p));
     public static final Item LIGHT_GRAY_SOFA = registerItem("light_gray_sofa", p -> new SofaBlockItem(ModBlocks.LIGHT_GRAY_SOFA, p));

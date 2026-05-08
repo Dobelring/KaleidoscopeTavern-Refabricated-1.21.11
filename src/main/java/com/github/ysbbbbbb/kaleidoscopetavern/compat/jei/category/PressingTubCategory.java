@@ -80,6 +80,7 @@ public class PressingTubCategory implements IRecipeCategory<RecipeHolder<Pressin
         guiGraphics.text(font, sequence, (WIDTH - font.width(sequence) - 5), 42, 0x555555, false);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setRecipe(@NonNull IRecipeLayoutBuilder builder, RecipeHolder<PressingTubRecipe> holder, @NonNull IFocusGroup focuses) {
         PressingTubRecipe recipe = holder.value();

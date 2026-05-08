@@ -8,7 +8,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KaleidoscopeTavern implements ModInitializer {
+public final class KaleidoscopeTavern implements ModInitializer {
 
     public static final String MOD_ID = "kaleidoscope_tavern";
 

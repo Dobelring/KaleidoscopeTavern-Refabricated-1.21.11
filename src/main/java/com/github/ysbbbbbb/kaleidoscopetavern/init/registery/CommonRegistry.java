@@ -16,7 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.DispenserBlock;
 
-public class CommonRegistry {
+public final class CommonRegistry {
     public static void init() {
         NetworkHandler.init();
         ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "drink_effect"), new DrinkEffectDataReloadListener());

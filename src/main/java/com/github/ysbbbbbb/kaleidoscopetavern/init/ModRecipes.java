@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-public class ModRecipes {
+public final class ModRecipes {
     public static final RecipeSerializer<PressingTubRecipe> PRESSING_TUB_SERIALIZER = new RecipeSerializer<>(PressingTubRecipeSerializer.codec(), PressingTubRecipeSerializer.streamCodec());
     public static final RecipeSerializer<BarrelRecipe> BARREL_SERIALIZER = new RecipeSerializer<>(BarrelRecipeSerializer.codec(), BarrelRecipeSerializer.streamCodec());
 

@@ -5,10 +5,13 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity.ThrownMolotov
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEntities;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 
-public class ClientSetupEvent {
+@Environment(EnvType.CLIENT)
+public final class ClientSetupEvent {
 
     public static void init() {
         BlockEntityRenderers.register(ModBlocks.CHALKBOARD_BE, ChalkboardBlockEntityRender::new);

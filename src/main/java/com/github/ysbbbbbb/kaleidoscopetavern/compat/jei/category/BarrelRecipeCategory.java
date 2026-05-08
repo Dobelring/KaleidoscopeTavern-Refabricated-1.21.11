@@ -62,6 +62,7 @@ public class BarrelRecipeCategory implements IRecipeCategory<RecipeHolder<Barrel
         this.bgDraw.draw(guiGraphics);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setRecipe(@NonNull IRecipeLayoutBuilder builder, RecipeHolder<BarrelRecipe> holder, @NonNull IFocusGroup focuses) {
         BarrelRecipe recipe = holder.value();

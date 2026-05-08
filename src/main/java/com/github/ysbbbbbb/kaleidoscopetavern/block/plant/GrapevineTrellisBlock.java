@@ -129,7 +129,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
         if (belowState.is(this)) {
             return isMaxAge(belowState);
         } else {
-            return belowState.is(BlockTags.DIRT);
+            return belowState.is(BlockTags.SUPPORTS_VEGETATION);
         }
     }
 
