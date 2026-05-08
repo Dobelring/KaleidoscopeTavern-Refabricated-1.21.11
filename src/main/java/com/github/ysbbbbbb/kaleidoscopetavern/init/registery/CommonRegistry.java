@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.DispenserBlock;
 
-public class CommonRegistry {
+public final class CommonRegistry {
     public static void init() {
         NetworkHandler.init();
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new DrinkEffectDataReloadListener());

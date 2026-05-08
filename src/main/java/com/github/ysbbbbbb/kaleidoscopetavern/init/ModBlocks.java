@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.shapes.Shapes;
 
-public class ModBlocks {
+public final class ModBlocks {
     // 沙发
     public static final Block WHITE_SOFA = new SofaBlock();
     public static final Block LIGHT_GRAY_SOFA = new SofaBlock();

@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 
-public class ModFluids {
+public final class ModFluids {
 
     public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_GRAPE_JUICE,

@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 
-public class ModDataComponents {
+public final class ModDataComponents {
 
     public static final DataComponentType<Integer> BREW_LEVEL = DataComponentType.<Integer>builder()
             .persistent(Codec.INT)

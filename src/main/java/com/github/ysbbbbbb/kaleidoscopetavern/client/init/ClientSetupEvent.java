@@ -4,10 +4,13 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.render.block.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity.ThrownMolotovRenderer;
 import com.github.ysbbbbbb.kaleidoscopetavern.entity.ThrownMolotovEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 
-public class ClientSetupEvent {
+@Environment(EnvType.CLIENT)
+public final class ClientSetupEvent {
 
     public static void init() {
         BlockEntityRenderers.register(ModBlocks.CHALKBOARD_BE, ChalkboardBlockEntityRender::new);
