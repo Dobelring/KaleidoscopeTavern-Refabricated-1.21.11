@@ -28,7 +28,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import org.jspecify.annotations.NonNull;
 
-public class ModFluids {
+public final class ModFluids {
 
     public static final FlowingFluid GRAPE_JUICE = new JuiceFluid.Still(
             () -> ModFluids.FLOWING_GRAPE_JUICE,

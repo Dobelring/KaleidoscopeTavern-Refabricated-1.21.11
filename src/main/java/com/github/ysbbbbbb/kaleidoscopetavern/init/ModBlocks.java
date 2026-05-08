@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class ModBlocks {
+public final class ModBlocks {
     // 沙发
     public static final Block WHITE_SOFA = sofaReg("white_sofa");
     public static final Block LIGHT_GRAY_SOFA = sofaReg("light_gray_sofa");

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
-public class ModEntities {
+public final class ModEntities {
     public static final EntityType<SitEntity> SIT = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
             Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sit"),

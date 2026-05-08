@@ -25,14 +25,15 @@ public class BarrelViewRecipe implements ReliableClientRecipe {
         return BarrelViewType.INSTANCE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void bindSlots(RecipeViewMenu.SlotFillContext slotFillContext) {
-        slotFillContext.bindSlot(0, SlotContent.of(this.ingredients.getFirst()));
+        slotFillContext.bindSlot(0, SlotContent.of(this.ingredients.getFirst().items().map(s -> s.value().getDefaultInstance().copyWithCount(4)).toList()));
         for (int i = 1; i < this.ingredients.size(); i++) {
-            slotFillContext.bindSlot(i, SlotContent.of(this.ingredients.get(i)));
+            slotFillContext.bindSlot(i, SlotContent.of(this.ingredients.get(i).items().map(s -> s.value().getDefaultInstance().copyWithCount(16)).toList()));
         }
         slotFillContext.bindSlot(5, SlotContent.of(this.carrier));
-        slotFillContext.bindSlot(6, SlotContent.of(this.result));
+        slotFillContext.bindSlot(6, SlotContent.of(this.result.copyWithCount(16)));
     }
 
     @Override

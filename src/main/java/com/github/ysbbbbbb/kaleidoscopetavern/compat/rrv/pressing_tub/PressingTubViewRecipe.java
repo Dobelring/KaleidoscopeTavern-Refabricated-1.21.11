@@ -23,9 +23,10 @@ public class PressingTubViewRecipe implements ReliableClientRecipe {
         return PressingTubViewType.INSTANCE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void bindSlots(RecipeViewMenu.SlotFillContext slotFillContext) {
-        slotFillContext.bindSlot(0, SlotContent.of(this.input));
+        slotFillContext.bindSlot(0, SlotContent.of(this.input.items().map(s -> s.value().getDefaultInstance().copyWithCount(8)).toList()));
         slotFillContext.bindSlot(1, SlotContent.of(Ingredient.of(Items.BUCKET)));
         slotFillContext.bindSlot(2, SlotContent.of(this.result));
     }

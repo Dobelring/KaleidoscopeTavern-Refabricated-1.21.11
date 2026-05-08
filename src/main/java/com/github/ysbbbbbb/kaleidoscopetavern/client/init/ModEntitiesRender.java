@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 
 @Environment(EnvType.CLIENT)
-public class ModEntitiesRender {
+public final class ModEntitiesRender {
     public static void init() {
         EntityRenderers.register(ModEntities.SIT, NoopRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(SmallChalkboardModel.LAYER_LOCATION, SmallChalkboardModel::createBodyLayer);
