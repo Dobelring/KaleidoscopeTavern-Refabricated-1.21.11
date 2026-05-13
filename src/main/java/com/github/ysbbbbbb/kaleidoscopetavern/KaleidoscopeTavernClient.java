@@ -1,0 +1,14 @@
+package com.github.ysbbbbbb.kaleidoscopetavern;
+
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry.ClientRegistry;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
+public final class KaleidoscopeTavernClient implements ClientModInitializer {
+    @Override
+    public void onInitializeClient() {
+        ClientRegistry.init();
+    }
+}

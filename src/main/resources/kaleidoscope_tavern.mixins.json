@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "com.github.ysbbbbbb.kaleidoscopetavern.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "LivingEntityMixin",
+    "MobMixin",
+    "RedStoneWireBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.CameraMixin",
+    "client.EntityRendererDispatcherMixin",
+    "client.PlayerRendererMixin"
+  ],
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}
