@@ -6,7 +6,7 @@
       "item": "minecraft:chain"
     },
     "L": {
-      "tag": "c:ingots/iron"
+      "tag": "forge:ingots/iron"
     },
     "W": {
       "item": "minecraft:magenta_wool"

@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlantGrapeEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
@@ -7,16 +8,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,6 +41,7 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.*;
 @SuppressWarnings("deprecation")
 public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrellis {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty WAXED = BooleanProperty.create("waxed");
 
     public TrellisBlock() {
         super(Properties.of()
@@ -49,12 +53,27 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(TYPE, TrellisType.SINGLE)
+                .setValue(WAXED, false)
                 .setValue(WATERLOGGED, false));
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+    public @NotNull InteractionResult use(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
                                           @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        // 打蜡与去除
+        boolean waxed = state.getValue(WAXED);
+        if (waxed && player.getItemInHand(hand).is(ItemTags.AXES)) {
+            level.setBlockAndUpdate(pos, state.setValue(WAXED, false));
+            level.playSound(player, pos, SoundEvents.AXE_WAX_OFF, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.levelEvent(player, LevelEvent.PARTICLES_WAX_OFF, pos, 0);
+            return InteractionResult.SUCCESS;
+        } else if (!waxed && player.getItemInHand(hand).is(Items.HONEYCOMB)) {
+            level.setBlockAndUpdate(pos, state.setValue(WAXED, true));
+            level.playSound(player, pos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
+            return InteractionResult.SUCCESS;
+        }
+
         // 玩家手持的是葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(ModItems.GRAPEVINE)) {
@@ -65,20 +84,10 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
         if (type != TrellisType.SINGLE) {
             return super.use(state, level, pos, player, hand, hitResult);
         }
-        // 并且下方是泥土，那么可以种植
-        BlockState belowState = level.getBlockState(pos.below());
-        if (belowState.is(BlockTags.DIRT)) {
-            BlockState plantedState = ModBlocks.GRAPEVINE_TRELLIS
-                    .defaultBlockState()
-                    .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
-            level.setBlockAndUpdate(pos, plantedState);
-            level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS);
-            if (!player.isCreative()) {
-                itemInHand.shrink(1);
-            }
-            return InteractionResult.SUCCESS;
-        }
-        return super.use(state, level, pos, player, hand, hitResult);
+        // 通过事件来执行各种不同的种植逻辑
+        PlantGrapeEvent plantGrapeEvent = new PlantGrapeEvent(state, level, pos, player, hand, hitResult);
+        plantGrapeEvent.post();
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -131,7 +140,7 @@ public class TrellisBlock extends Block implements SimpleWaterloggedBlock, ITrel
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(TYPE, WATERLOGGED);
+        builder.add(TYPE, WAXED, WATERLOGGED);
     }
 
     @Override

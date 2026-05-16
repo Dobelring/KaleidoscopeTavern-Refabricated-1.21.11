@@ -12,11 +12,13 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.phys.shapes.Shapes;
 
+@SuppressWarnings("all")
 public final class ModBlocks {
     // 沙发
     public static final Block WHITE_SOFA = new SofaBlock();
@@ -107,10 +109,16 @@ public final class ModBlocks {
     public static final Block MONDRIAN_PAINTING = new PaintingBlock();
     public static final Block NIGHT_EPIPHANY_PAINTING = new PaintingBlock();
 
+    // 桌子
+    public static final Block TABLE = new TableBlock();
     // 果盆
     public static final Block PRESSING_TUB = new PressingTubBlock();
     // 空瓶
     public static final Block EMPTY_BOTTLE = new BottleBlock();
+    // 杂项的瓶子
+    public static final Block WATER_BOTTLE = new BottleBlock();
+    public static final Block HONEY_BOTTLE = new BottleBlock();
+    public static final Block DRAGON_BREATH_BOTTLE = new BottleBlock();
     // 酒桶
     public static final Block BARREL = new BarrelBlock();
     // 酒柜
@@ -121,10 +129,35 @@ public final class ModBlocks {
     public static final Block WILD_GRAPEVINE_PLANT = new WildGrapevinePlantBlock();
     // 藤架
     public static final Block TRELLIS = new TrellisBlock();
-    // 葡萄藤
-    public static final Block GRAPEVINE_TRELLIS = new GrapevineTrellisBlock();
     // 葡萄
-    public static final Block GRAPE_CROP = new GrapeCropBlock();
+    public static final Block GRAPE_CROP = new GrapeCropBlock(
+            (state, level, pos, random) -> 0.25F,
+            () -> new ItemStack(ModItems.GRAPE, 3)
+    );
+    public static final Block ICE_GRAPE_CROP = new GrapeCropBlock(
+            (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F,
+            () -> new ItemStack(ModItems.ICE_GRAPE, 3)
+    );
+    public static final Block GOLD_GRAPE_CROP = new GrapeCropBlock(
+            (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F,
+            () -> new ItemStack(ModItems.GOLD_GRAPE, 3)
+    );
+
+    // 葡萄藤
+    public static final Block GRAPEVINE_TRELLIS = new GrapevineTrellisBlock(
+            (state, level, pos, random) -> 0.25F,
+            ModBlocks.GRAPE_CROP::defaultBlockState
+    );
+    public static final Block ICE_GRAPEVINE_TRELLIS = new GrapevineTrellisBlock(
+            (state, level, pos, random) ->
+                    level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F,
+            ModBlocks.ICE_GRAPE_CROP::defaultBlockState
+    );
+    public static final Block GOLD_GRAPEVINE_TRELLIS = new GrapevineTrellisBlock(
+            (state, level, pos, random) ->
+                    level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F,
+            ModBlocks.GOLD_GRAPE_CROP::defaultBlockState
+    );
     // 燃烧瓶
     public static final Block MOLOTOV =new MolotovBlock();
     // 龙头
@@ -145,6 +178,7 @@ public final class ModBlocks {
             ),
             Block.box(2, 0, 2, 14, 16, 14)
     ).build();
+
     public static final Block CHAMPAGNE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
             Block.box(2, 0, 6, 14, 16, 10),
@@ -154,6 +188,7 @@ public final class ModBlocks {
             ),
             Block.box(2, 0, 2, 14, 16, 14)
     ).build();
+
     public static final Block VODKA = DrinkBlock.create().maxCount(4).shapes(
             Block.box(4, 0, 4, 12, 15, 12),
             Block.box(0, 0, 4, 16, 15, 12),
@@ -163,16 +198,19 @@ public final class ModBlocks {
             ),
             Block.box(0, 0, 0, 16, 16, 16)
     ).build();
+
     public static final Block BRANDY = DrinkBlock.create().maxCount(3).irregular().shapes(
             Block.box(3, 0, 6, 13, 13, 10),
             Block.box(1, 0, 3, 15, 12, 12),
             Block.box(1, 0, 1, 16, 12, 13)
     ).build();
+
     public static final Block CARIGNAN = DrinkBlock.create().maxCount(3).irregular().shapes(
             Block.box(3, 0, 6, 13, 13, 10),
             Block.box(1, 0, 3, 15, 12, 12),
             Block.box(1, 0, 1, 16, 12, 13)
     ).build();
+
     public static final Block SAKURA_WINE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
             Block.box(2, 0, 6, 14, 16, 10),
@@ -182,6 +220,7 @@ public final class ModBlocks {
             ),
             Block.box(2, 0, 2, 14, 16, 14)
     ).build();
+
     public static final Block PLUM_WINE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 12, 10),
             Block.box(3, 0, 6, 13, 12, 10),
@@ -191,6 +230,7 @@ public final class ModBlocks {
             ),
             Block.box(3, 0, 3, 13, 12, 13)
     ).build();
+
     public static final Block WHISKEY = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
             Block.box(2, 0, 6, 14, 16, 10),
@@ -200,6 +240,7 @@ public final class ModBlocks {
             ),
             Block.box(2, 0, 2, 14, 16, 14)
     ).build();
+
     public static final Block ICE_WINE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
             Block.box(2, 0, 6, 14, 16, 10),
@@ -209,7 +250,154 @@ public final class ModBlocks {
             ),
             Block.box(2, 0, 2, 14, 16, 14)
     ).build();
+
+    public static final Block POLARIS_SWEET_WHITE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block HONEY_WINE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block RED_QUEEN = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block MINERS_STAR = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block RUM = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block RIESLING_DRY_WHITE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(4, 0, 4, 12, 15, 12),
+            Block.box(0, 0, 4, 16, 15, 12),
+            Shapes.or(
+                    Block.box(0, 0, 8, 16, 15, 16),
+                    Block.box(4, 0, 0, 12, 15, 16)
+            ),
+            Block.box(0, 0, 0, 16, 16, 16)
+    ).build();
+
+    public static final Block SUNSET_GLOW = DrinkBlock.create().maxCount(3).shapes(
+            Block.box(3, 0, 6, 13, 13, 10),
+            Block.box(1, 0, 3, 15, 12, 12),
+            Block.box(1, 0, 1, 16, 12, 13)
+    ).build();
+
+    public static final Block MADAME_SHEXIANG = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(4, 0, 4, 12, 15, 12),
+            Block.box(0, 0, 4, 16, 15, 12),
+            Shapes.or(
+                    Block.box(0, 0, 8, 16, 15, 16),
+                    Block.box(4, 0, 0, 12, 15, 16)
+            ),
+            Block.box(0, 0, 0, 16, 16, 16)
+    ).build();
+
+    public static final Block SWEET_BERRY_WINE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(4, 0, 4, 12, 15, 12),
+            Block.box(0, 0, 4, 16, 15, 12),
+            Shapes.or(
+                    Block.box(0, 0, 8, 16, 15, 16),
+                    Block.box(4, 0, 0, 12, 15, 16)
+            ),
+            Block.box(0, 0, 0, 16, 16, 16)
+    ).build();
+
+    public static final Block SHERRY = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block MOTHER_SNOW = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(4, 0, 4, 12, 15, 12),
+            Block.box(0, 0, 4, 16, 15, 12),
+            Shapes.or(
+                    Block.box(0, 0, 8, 16, 15, 16),
+                    Block.box(4, 0, 0, 12, 15, 16)
+            ),
+            Block.box(0, 0, 0, 16, 16, 16)
+    ).build();
+
+    public static final Block LUMINOUS_BRIDE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block GLOWFLOWER_BREW = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block SAUVIGNON_BLANC_DRY_WHITE = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
     public static final Block VINEGAR = DrinkBlock.create().maxCount(4).shapes(
+            Block.box(6, 0, 6, 10, 16, 10),
+            Block.box(2, 0, 6, 14, 16, 10),
+            Shapes.or(
+                    Block.box(2, 0, 10, 14, 16, 14),
+                    Block.box(6, 0, 2, 10, 16, 14)
+            ),
+            Block.box(2, 0, 2, 14, 16, 14)
+    ).build();
+
+    public static final Block WATERMELON_JUICE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
             Block.box(2, 0, 6, 14, 16, 10),
             Shapes.or(
@@ -264,16 +452,13 @@ public final class ModBlocks {
             GLASS_BAR_CABINET
     ).build(null);
     public static final BlockEntityType<DrinkBlockEntity> DRINK_BE = BlockEntityType.Builder.of(DrinkBlockEntity::new,
-            WINE,
-            CHAMPAGNE,
-            VODKA,
-            BRANDY,
-            CARIGNAN,
-            SAKURA_WINE,
-            PLUM_WINE,
-            WHISKEY,
-            ICE_WINE,
-            VINEGAR
+            WINE, CHAMPAGNE, VODKA, BRANDY, CARIGNAN,
+            SAKURA_WINE, PLUM_WINE, WHISKEY, ICE_WINE,
+            POLARIS_SWEET_WHITE, HONEY_WINE, RED_QUEEN, MINERS_STAR,
+            RUM, RIESLING_DRY_WHITE, SUNSET_GLOW, MADAME_SHEXIANG,
+            SWEET_BERRY_WINE, SHERRY, MOTHER_SNOW, LUMINOUS_BRIDE,
+            GLOWFLOWER_BREW, SAUVIGNON_BLANC_DRY_WHITE, VINEGAR,
+            WATERMELON_JUICE
     ).build(null);
 
     public static void registerBlocks() {
@@ -358,6 +543,10 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "night_epiphany_painting"), NIGHT_EPIPHANY_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "water_bottle"), WATER_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "honey_bottle"), HONEY_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "dragon_breath_bottle"), DRAGON_BREATH_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "table"), TABLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glass_bar_cabinet"), GLASS_BAR_CABINET);
@@ -365,12 +554,17 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wild_grapevine_plant"), WILD_GRAPEVINE_PLANT);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "trellis"), TRELLIS);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grapevine_trellis"), GRAPEVINE_TRELLIS);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_grapevine_trellis"), ICE_GRAPEVINE_TRELLIS);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gold_grapevine_trellis"), GOLD_GRAPEVINE_TRELLIS);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grape_crop"), GRAPE_CROP);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_grape_crop"), ICE_GRAPE_CROP);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gold_grape_crop"), GOLD_GRAPE_CROP);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "molotov"), MOLOTOV);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tap"), TAP);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_counter"), BAR_COUNTER);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder"), STEPLADDER);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD);
+
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine"), WINE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "champagne"), CHAMPAGNE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vodka"), VODKA);
@@ -381,6 +575,21 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "whiskey"), WHISKEY);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_wine"), ICE_WINE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vinegar"), VINEGAR);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "polaris_sweet_white"), POLARIS_SWEET_WHITE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "honey_wine"), HONEY_WINE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "red_queen"), RED_QUEEN);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "miners_star"), MINERS_STAR);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "rum"), RUM);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "riesling_dry_white"), RIESLING_DRY_WHITE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sunset_glow"), SUNSET_GLOW);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "madame_shexiang"), MADAME_SHEXIANG);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sweet_berry_wine"), SWEET_BERRY_WINE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sherry"), SHERRY);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mother_snow"), MOTHER_SNOW);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "luminous_bride"), LUMINOUS_BRIDE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glowflower_brew"), GLOWFLOWER_BREW);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sauvignon_blanc_dry_white"), SAUVIGNON_BLANC_DRY_WHITE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "watermelon_juice"), WATERMELON_JUICE);
 
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sandwich_board"), SANDWICH_BOARD_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_stool"), BAR_STOOL_BE);

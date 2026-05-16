@@ -11,10 +11,10 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -68,10 +68,55 @@ public final class ModFluids {
     );
     public static final LiquidBlock GLOW_BERRIES_JUICE_BLOCK = new LiquidBlock(GLOW_BERRIES_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
 
+    public static final FlowingFluid ICE_GRAPE_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_ICE_GRAPE_JUICE,
+            () -> ModFluids.ICE_GRAPE_JUICE,
+            () -> ModItems.ICE_GRAPE_BUCKET,
+            () -> ModFluids.ICE_GRAPE_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_ICE_GRAPE_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_ICE_GRAPE_JUICE,
+            () -> ModFluids.ICE_GRAPE_JUICE,
+            () -> ModItems.ICE_GRAPE_BUCKET,
+            () -> ModFluids.ICE_GRAPE_JUICE_BLOCK
+    );
+    public static final LiquidBlock ICE_GRAPE_JUICE_BLOCK = new LiquidBlock(ICE_GRAPE_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+
+    public static final FlowingFluid GOLD_GRAPE_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_GOLD_GRAPE_JUICE,
+            () -> ModFluids.GOLD_GRAPE_JUICE,
+            () -> ModItems.GOLD_GRAPE_BUCKET,
+            () -> ModFluids.GOLD_GRAPE_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_GOLD_GRAPE_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_GOLD_GRAPE_JUICE,
+            () -> ModFluids.GOLD_GRAPE_JUICE,
+            () -> ModItems.GOLD_GRAPE_BUCKET,
+            () -> ModFluids.GOLD_GRAPE_JUICE_BLOCK
+    );
+    public static final LiquidBlock GOLD_GRAPE_JUICE_BLOCK = new LiquidBlock(GOLD_GRAPE_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+
+    public static final FlowingFluid GREEN_GRAPE_JUICE = new JuiceFluid.Still(
+            () -> ModFluids.FLOWING_GREEN_GRAPE_JUICE,
+            () -> ModFluids.GREEN_GRAPE_JUICE,
+            () -> ModItems.GREEN_GRAPE_BUCKET,
+            () -> ModFluids.GREEN_GRAPE_JUICE_BLOCK
+    );
+    public static final FlowingFluid FLOWING_GREEN_GRAPE_JUICE = new JuiceFluid.Flowing(
+            () -> ModFluids.FLOWING_GREEN_GRAPE_JUICE,
+            () -> ModFluids.GREEN_GRAPE_JUICE,
+            () -> ModItems.GREEN_GRAPE_BUCKET,
+            () -> ModFluids.GREEN_GRAPE_JUICE_BLOCK
+    );
+    public static final LiquidBlock GREEN_GRAPE_JUICE_BLOCK = new LiquidBlock(GREEN_GRAPE_JUICE, BlockBehaviour.Properties.copy(Blocks.WATER));
+
     public static void registerFluids() {
         register("grape_juice", GRAPE_JUICE, FLOWING_GRAPE_JUICE, GRAPE_JUICE_BLOCK, ModItems.GRAPE_BUCKET);
         register("sweet_berries_juice", SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, SWEET_BERRIES_JUICE_BLOCK, ModItems.SWEET_BERRIES_BUCKET);
         register("glow_berries_juice", GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, GLOW_BERRIES_JUICE_BLOCK, ModItems.GLOW_BERRIES_BUCKET);
+        register("ice_grape_juice", ICE_GRAPE_JUICE, FLOWING_ICE_GRAPE_JUICE, ICE_GRAPE_JUICE_BLOCK, ModItems.ICE_GRAPE_BUCKET);
+        register("gold_grape_juice", GOLD_GRAPE_JUICE, FLOWING_GOLD_GRAPE_JUICE, GOLD_GRAPE_JUICE_BLOCK, ModItems.GOLD_GRAPE_BUCKET);
+        register("green_grape_juice", GREEN_GRAPE_JUICE, FLOWING_GREEN_GRAPE_JUICE, GREEN_GRAPE_JUICE_BLOCK, ModItems.GREEN_GRAPE_BUCKET);
     }
 
     @Environment(EnvType.CLIENT)
@@ -79,6 +124,9 @@ public final class ModFluids {
         registerRender(GRAPE_JUICE, FLOWING_GRAPE_JUICE, "block/grape_juice_still", "block/grape_juice_flow", 0xFFFFFFFF);
         registerRender(SWEET_BERRIES_JUICE, FLOWING_SWEET_BERRIES_JUICE, "block/sweet_berries_juice_still", "block/sweet_berries_juice_flow", 0xFFFFFFFF);
         registerRender(GLOW_BERRIES_JUICE, FLOWING_GLOW_BERRIES_JUICE, "block/glow_berries_juice_still", "block/glow_berries_juice_flow", 0xFFFFFFFF);
+        registerRender(ICE_GRAPE_JUICE, FLOWING_ICE_GRAPE_JUICE, "block/ice_grape_juice_still", "block/ice_grape_juice_flow", 0xFFFFFFFF);
+        registerRender(GOLD_GRAPE_JUICE, FLOWING_GOLD_GRAPE_JUICE, "block/gold_grape_juice_still", "block/gold_grape_juice_flow", 0xFFFFFFFF);
+        registerRender(GREEN_GRAPE_JUICE, FLOWING_GREEN_GRAPE_JUICE, "block/green_grape_juice_still", "block/green_grape_juice_flow", 0xFFFFFFFF);
     }
 
     private static void register(String name,

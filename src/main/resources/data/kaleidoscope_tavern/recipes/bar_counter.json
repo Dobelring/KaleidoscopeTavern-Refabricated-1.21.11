@@ -3,7 +3,7 @@
   "category": "misc",
   "key": {
     "N": {
-      "tag": "c:nuggets/gold"
+      "tag": "forge:nuggets/gold"
     },
     "W": {
       "tag": "minecraft:planks"

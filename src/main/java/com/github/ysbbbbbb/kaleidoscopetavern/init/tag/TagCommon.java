@@ -7,6 +7,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public interface TagCommon {
+    TagKey<Item> FRUITS_GRAPES = itemTag("fruits/grapes");
+
+    // 均衡饮食模组
+    TagKey<Item> FRUITS = dietTag("fruits");
+    TagKey<Item> GRAINS = dietTag("grains");
+    TagKey<Item> PROTEINS = dietTag("proteins");
+    TagKey<Item> SUGARS = dietTag("sugars");
+    TagKey<Item> DIET_VEGETABLES = dietTag("vegetables");
 
     // 静谧四季模组
     TagKey<Item> SPRING_CROPS = seasonsItemTag("spring_crops");
@@ -18,6 +26,23 @@ public interface TagCommon {
     TagKey<Block> SUMMER_CROPS_BLOCK = seasonsBlockTag("summer_crops");
     TagKey<Block> AUTUMN_CROPS_BLOCK = seasonsBlockTag("autumn_crops");
     TagKey<Block> WINTER_CROPS_BLOCK = seasonsBlockTag("winter_crops");
+
+    // 节气模组
+    TagKey<Block> DRY_AVERAGE = eclipticSeasonsTag("crops/dry_average");
+    TagKey<Block> AVERAGE_MOIST = eclipticSeasonsTag("crops/average_moist");
+    TagKey<Block> MOIST_HUMID = eclipticSeasonsTag("crops/moist_humid");
+    TagKey<Block> HUMID_HUMID = eclipticSeasonsTag("crops/humid_humid");
+
+    static TagKey<Item> itemTag(String name) {
+        return TagKey.create(Registries.ITEM, new ResourceLocation("forge", name));
+    }
+
+    /**
+     * 兼容均衡饮食模组
+     */
+    static TagKey<Item> dietTag(String name) {
+        return TagKey.create(Registries.ITEM, new ResourceLocation("diet", name));
+    }
 
     /**
      * 静谧四季模组兼容
@@ -31,7 +56,7 @@ public interface TagCommon {
     }
 
     static TagKey<Block> blockTag(String name) {
-        return TagKey.create(Registries.BLOCK, new ResourceLocation("c", name));
+        return TagKey.create(Registries.BLOCK, new ResourceLocation("forge", name));
     }
 
     static TagKey<Block> eclipticSeasonsTag(String name) {

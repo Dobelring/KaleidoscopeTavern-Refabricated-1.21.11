@@ -1,7 +1,9 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.ViewportEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
@@ -17,10 +19,16 @@ public final class ClientRegistry {
     public static void init() {
         NetworkHandler.Clientside.init();
         renderType();
+        events();
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
+        ParticleFactoryRegistry.init();
         modCompatClient();
+    }
+
+    public static void events() {
+        ViewportEvent.ComputeCameraAngles.register();
     }
 
     public static void renderType() {
@@ -65,6 +73,10 @@ public final class ClientRegistry {
                 VODKA,
                 GRAPE_CROP,
                 GRAPEVINE_TRELLIS,
+                ICE_GRAPE_CROP,
+                ICE_GRAPEVINE_TRELLIS,
+                GOLD_GRAPE_CROP,
+                GOLD_GRAPEVINE_TRELLIS,
                 WILD_GRAPEVINE,
                 WILD_GRAPEVINE_PLANT,
                 BAR_CABINET,

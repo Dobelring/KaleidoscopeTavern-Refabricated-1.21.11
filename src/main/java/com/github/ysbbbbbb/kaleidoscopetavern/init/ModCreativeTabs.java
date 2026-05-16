@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.init;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.item.BottleBlockItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,6 +30,9 @@ public final class ModCreativeTabs {
                 .displayItems((par, output) -> {
                     output.accept(ModItems.GRAPEVINE);
                     output.accept(ModItems.GRAPE);
+                    output.accept(ModItems.ICE_GRAPE);
+                    output.accept(ModItems.GOLD_GRAPE);
+                    output.accept(ModItems.GREEN_GRAPE);
                     output.accept(ModItems.TRELLIS);
 
                     output.accept(ModItems.PRESSING_TUB);
@@ -36,22 +40,54 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.TAP);
 
                     output.accept(ModItems.GRAPE_BUCKET);
+                    output.accept(ModItems.ICE_GRAPE_BUCKET);
+                    output.accept(ModItems.GOLD_GRAPE_BUCKET);
+                    output.accept(ModItems.GREEN_GRAPE_BUCKET);
                     output.accept(ModItems.SWEET_BERRIES_BUCKET);
                     output.accept(ModItems.GLOW_BERRIES_BUCKET);
 
                     output.accept(ModItems.EMPTY_BOTTLE);
                     output.accept(ModItems.MOLOTOV);
+                    output.accept(ModItems.WATERMELON_JUICE);
 
-                    output.accept(ModItems.VINEGAR);
-                    output.accept(ModItems.WINE);
-                    output.accept(ModItems.ICE_WINE);
-                    output.accept(ModItems.SAKURA_WINE);
-                    output.accept(ModItems.PLUM_WINE);
-                    output.accept(ModItems.CHAMPAGNE);
-                    output.accept(ModItems.VODKA);
-                    output.accept(ModItems.BRANDY);
-                    output.accept(ModItems.CARIGNAN);
-                    output.accept(ModItems.WHISKEY);
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.VINEGAR));
+
+                    // 葡萄桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.SAKURA_WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.CHAMPAGNE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.BRANDY));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.CARIGNAN));
+
+                    // 冰葡萄桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.ICE_WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.POLARIS_SWEET_WHITE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.SHERRY));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.MOTHER_SNOW));
+
+                    // 黄金葡萄桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.MINERS_STAR));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.HONEY_WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.MADAME_SHEXIANG));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.SUNSET_GLOW));
+
+                    // 青提桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.SAUVIGNON_BLANC_DRY_WHITE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RIESLING_DRY_WHITE));
+
+                    // 发光浆果桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.LUMINOUS_BRIDE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.GLOWFLOWER_BREW));
+
+                    // 甜浆果桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.PLUM_WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.SWEET_BERRY_WINE));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RED_QUEEN));
+
+                    // 水桶
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.VODKA));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.WHISKEY));
+                    output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RUM));
                 }).build());
 
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricItemGroup.builder()
@@ -62,6 +98,8 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GLASS_BAR_CABINET);
                     output.accept(ModItems.BAR_COUNTER);
                     output.accept(ModItems.STEPLADDER);
+
+                    output.accept(ModItems.TABLE);
 
                     output.accept(ModItems.STRING_LIGHTS_COLORLESS);
                     output.accept(ModItems.STRING_LIGHTS_WHITE);

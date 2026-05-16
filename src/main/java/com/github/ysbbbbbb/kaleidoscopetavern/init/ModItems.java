@@ -14,12 +14,18 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids.*;
 public final class ModItems {
     // 葡萄
     public static final Item GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
+    public static final Item ICE_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
+    public static final Item GOLD_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
+    public static final Item GREEN_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
     // 野生葡萄藤
     public static final Item GRAPEVINE = new GrapevineItem();
     // 果汁桶
     public static final Item GRAPE_BUCKET = new JuiceBucketItem(GRAPE_JUICE);
     public static final Item SWEET_BERRIES_BUCKET = new JuiceBucketItem(SWEET_BERRIES_JUICE);
     public static final Item GLOW_BERRIES_BUCKET = new JuiceBucketItem(GLOW_BERRIES_JUICE);
+    public static final Item ICE_GRAPE_BUCKET = new JuiceBucketItem(ICE_GRAPE_JUICE);
+    public static final Item GOLD_GRAPE_BUCKET = new JuiceBucketItem(GOLD_GRAPE_JUICE);
+    public static final Item GREEN_GRAPE_BUCKET = new JuiceBucketItem(GREEN_GRAPE_JUICE);
     // 空瓶
     public static final Item EMPTY_BOTTLE = new BottleBlockItem(ModBlocks.EMPTY_BOTTLE);
 
@@ -61,6 +67,8 @@ public final class ModItems {
 
     // 黑板
     public static final Item CHALKBOARD = new BlockItem(ModBlocks.CHALKBOARD, new Item.Properties());
+    // 桌子
+    public static final Item TABLE = new BlockItem(ModBlocks.TABLE, new Item.Properties());
 
     // 展板
     public static final Item BASE_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.BASE_SANDWICH_BOARD);
@@ -142,14 +150,35 @@ public final class ModItems {
     public static final Item WHISKEY = new DrinkBlockItem(ModBlocks.WHISKEY);
     public static final Item ICE_WINE = new DrinkBlockItem(ModBlocks.ICE_WINE);
     public static final Item VINEGAR = new DrinkBlockItem(ModBlocks.VINEGAR);
+    public static final Item POLARIS_SWEET_WHITE = new DrinkBlockItem(ModBlocks.POLARIS_SWEET_WHITE);
+    public static final Item MOTHER_SNOW = new DrinkBlockItem(ModBlocks.MOTHER_SNOW);
+    public static final Item SHERRY = new DrinkBlockItem(ModBlocks.SHERRY);
+    public static final Item SWEET_BERRY_WINE = new DrinkBlockItem(ModBlocks.SWEET_BERRY_WINE);
+    public static final Item RED_QUEEN = new DrinkBlockItem(ModBlocks.RED_QUEEN);
+    public static final Item RUM = new DrinkBlockItem(ModBlocks.RUM);
+    public static final Item MINERS_STAR = new DrinkBlockItem(ModBlocks.MINERS_STAR);
+    public static final Item HONEY_WINE = new DrinkBlockItem(ModBlocks.HONEY_WINE);
+    public static final Item MADAME_SHEXIANG = new DrinkBlockItem(ModBlocks.MADAME_SHEXIANG);
+    public static final Item SUNSET_GLOW = new DrinkBlockItem(ModBlocks.SUNSET_GLOW);
+    public static final Item SAUVIGNON_BLANC_DRY_WHITE = new DrinkBlockItem(ModBlocks.SAUVIGNON_BLANC_DRY_WHITE);
+    public static final Item RIESLING_DRY_WHITE = new DrinkBlockItem(ModBlocks.RIESLING_DRY_WHITE);
+    public static final Item LUMINOUS_BRIDE = new DrinkBlockItem(ModBlocks.LUMINOUS_BRIDE);
+    public static final Item GLOWFLOWER_BREW = new DrinkBlockItem(ModBlocks.GLOWFLOWER_BREW);
+    public static final Item WATERMELON_JUICE = new DrinkBlockItem(ModBlocks.WATERMELON_JUICE);
 
     public static void registerItems() {
         // 已存在的物品（确保全部注册）
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grape"), GRAPE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_grape"), ICE_GRAPE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gold_grape"), GOLD_GRAPE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "green_grape"), GREEN_GRAPE);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grapevine"), GRAPEVINE);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "grape_bucket"), GRAPE_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sweet_berries_bucket"), SWEET_BERRIES_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glow_berries_bucket"), GLOW_BERRIES_BUCKET);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_grape_bucket"), ICE_GRAPE_BUCKET);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "gold_grape_bucket"), GOLD_GRAPE_BUCKET);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "green_grape_bucket"), GREEN_GRAPE_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
 
         // 沙发
@@ -190,6 +219,8 @@ public final class ModItems {
 
         // 黑板
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD);
+        // 桌子
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "table"), TABLE);
 
         // 展板
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "base_sandwich_board"), BASE_SANDWICH_BOARD);
@@ -263,5 +294,20 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "whiskey"), WHISKEY);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ice_wine"), ICE_WINE);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "vinegar"), VINEGAR);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "polaris_sweet_white"), POLARIS_SWEET_WHITE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "honey_wine"), HONEY_WINE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "red_queen"), RED_QUEEN);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sherry"), SHERRY);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mother_snow"), MOTHER_SNOW);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "rum"), RUM);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sweet_berry_wine"), SWEET_BERRY_WINE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "miners_star"), MINERS_STAR);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "madame_shexiang"), MADAME_SHEXIANG);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sauvignon_blanc_dry_white"), SAUVIGNON_BLANC_DRY_WHITE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "watermelon_juice"), WATERMELON_JUICE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sunset_glow"), SUNSET_GLOW);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "riesling_dry_white"), RIESLING_DRY_WHITE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "luminous_bride"), LUMINOUS_BRIDE);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glowflower_brew"), GLOWFLOWER_BREW);
     }
 }

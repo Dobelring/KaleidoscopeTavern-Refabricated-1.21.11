@@ -57,7 +57,7 @@ repositories {
 }
 
 loom {
-	accessWidenerPath = file('src/main/resources/kaleidoscope_tavern.accesswidener')
+	accessWidenerPath = file('src/main/resources/kaleidoscope_tavern.accessWidener')
 }
 
 dependencies {

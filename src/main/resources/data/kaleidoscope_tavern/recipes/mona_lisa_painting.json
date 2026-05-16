@@ -6,7 +6,7 @@
       "item": "minecraft:item_frame"
     },
     {
-      "tag": "c:gems/diamond"
+      "tag": "forge:gems/diamond"
     }
   ],
   "result": {

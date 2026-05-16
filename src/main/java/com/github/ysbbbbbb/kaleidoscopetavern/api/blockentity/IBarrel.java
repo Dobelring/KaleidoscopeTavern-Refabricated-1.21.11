@@ -32,9 +32,9 @@ public interface IBarrel {
     int BREWING_STARTED = 1;
 
     /**
-     * 发酵等级，达到 7 时为最高品质
+     * 发酵等级，达到 6 时为最高品质
      */
-    int BREWING_FINISHED = 7;
+    int BREWING_FINISHED = 6;
 
     /**
      * 打开酒桶盖子
@@ -180,13 +180,6 @@ public interface IBarrel {
     int getBrewLevel();
 
     /**
-     * 获取当前酒桶正在使用的酿造配方 ID，如果没有正在使用的配方则返回 null。
-     *
-     * @return 当前酿造配方的 ResourceLocation ID，或者 null 如果没有正在使用的配方
-     */
-    @Nullable ResourceLocation getRecipeId();
-
-    /**
      * 获取当前阶段的剩余时间，单位为 tick，每过一个 tick 减少 1，当达到 0 时进入下一个阶段。
      *
      * @return 当前阶段的剩余时间，单位为 tick
@@ -199,4 +192,11 @@ public interface IBarrel {
      * @return 酒桶的输出槽，包含 1 个槽位，用于存放酿造完成后的成品。
      */
     ItemStackHandler getOutput();
+
+    /**
+     * 获取当前酒桶缓存的配方 ID，主要用于获取酿造时间和容器
+     *
+     * @return 当没有任何配方时，返回 null
+     */
+    @Nullable ResourceLocation getRecipeId();
 }
