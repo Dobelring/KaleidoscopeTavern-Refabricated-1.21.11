@@ -11,7 +11,7 @@ base {
 }
 
 loom {
-	accessWidenerPath = file("src/main/resources/kaleidoscope_tavern.accesswidener")
+	accessWidenerPath = file("src/main/resources/kaleidoscope_tavern.accessWidener")
 }
 
 repositories {
@@ -52,6 +52,10 @@ repositories {
 	}
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
+	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
 }
 
 dependencies {
@@ -75,7 +79,7 @@ dependencies {
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:21.11.814"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:21.11.814"
 	modCompileOnly "maven.modrinth:rei:21.11.814+fabric-fabric,1.21.11"
-	
+	modImplementation ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.11.1")
 }
 
 processResources {

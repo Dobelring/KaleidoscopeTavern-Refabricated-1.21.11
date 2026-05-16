@@ -32,6 +32,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper.getSlotForHand;
 
@@ -40,32 +41,46 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     public static final int MAX_AGE = BlockStateProperties.MAX_AGE_5;
     public static final VoxelShape SHAPE = Block.box(2, 6, 2, 14, 16, 14);
 
-    private final float growPerTickProbability;
+    private final GrowPerTickProbability probability;
+    private final Supplier<ItemStack> shearResult;
 
-    public GrapeCropBlock(Properties properties) {
+    public GrapeCropBlock(Properties properties, GrowPerTickProbability probability, Supplier<ItemStack> shearResult) {
         super(properties
                 .mapColor(MapColor.PLANT)
-                .noCollision()
+                .noOcclusion()
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.CROP)
                 .offsetType(OffsetType.XYZ)
                 .pushReaction(PushReaction.DESTROY));
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(AGE, 0));
-        this.growPerTickProbability = 0.25F;
+        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
+        this.probability = probability;
+        this.shearResult = shearResult;
     }
 
-
+    @Deprecated(since = "1.1.0")
+    public GrapeCropBlock(Properties properties) {
+        this(
+                properties,
+                (state, level, pos, random) -> 0.25F,
+                () -> new ItemStack(ModItems.GRAPE, 3)
+        );
+    }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+    public @NotNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         // 只有成熟的葡萄才可以被剪刀收获
         ItemStack heldItem = player.getItemInHand(hand);
         if (heldItem.is(Items.SHEARS) && isMaxAge(state)) {
             level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            Block.popResource(level, pos, this.shearResult.get());
 
-            Block.popResource(level, pos, new ItemStack(ModItems.GRAPE, 3));
+            // 有 30% 强制额外掉落 1-2 青提葡萄
+            if (level.random.nextFloat() < 0.3F) {
+                int count = level.random.nextInt(1, 3);
+                Block.popResource(level, pos, new ItemStack(ModItems.GREEN_GRAPE, count));
+            }
+
             heldItem.hurtAndBreak(1, player, getSlotForHand(hand));
             player.playSound(SoundEvents.BEEHIVE_SHEAR);
             return InteractionResult.SUCCESS;
@@ -80,18 +95,19 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
 
     @Override
     public void randomTick(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, RandomSource random) {
-            if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
-            level.setBlockAndUpdate(pos, state.cycle(AGE));
+        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
+            int nextAge = state.getValue(AGE) + random.nextInt(1, 3);
+            level.setBlockAndUpdate(pos, state.setValue(AGE, Math.min(nextAge, MAX_AGE)));
             EventHooks.onCropsGrowPost(level, pos, state);
         }
     }
 
-
-
     @Override
-    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
-
-        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
+    protected @NonNull BlockState updateShape(BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+        if (blockState.canSurvive(levelReader, blockPos)) {
+            return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
+        }
+        return Blocks.AIR.defaultBlockState();
     }
 
     @Override

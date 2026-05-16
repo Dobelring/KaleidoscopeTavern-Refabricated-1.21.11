@@ -2,6 +2,9 @@
   "type": "kaleidoscope_tavern:barrel",
   "carrier": "kaleidoscope_tavern:empty_bottle",
   "fluid": "kaleidoscope_tavern:sweet_berries_juice",
+  "ingredients": [
+    "minecraft:sugar"
+  ],
   "result": {
     "count": 1,
     "id": "kaleidoscope_tavern:plum_wine"

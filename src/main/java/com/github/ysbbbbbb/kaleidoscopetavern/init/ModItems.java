@@ -15,6 +15,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class ModItems {
+    // 桌子
+    public static final Item TABLE = registerItem("table", p -> new BlockItem(ModBlocks.TABLE, p.useBlockDescriptionPrefix()));
     // 沙发
     public static final Item WHITE_SOFA = registerItem("white_sofa", p -> new SofaBlockItem(ModBlocks.WHITE_SOFA, p));
     public static final Item LIGHT_GRAY_SOFA = registerItem("light_gray_sofa", p -> new SofaBlockItem(ModBlocks.LIGHT_GRAY_SOFA, p));
@@ -105,6 +107,10 @@ public final class ModItems {
     public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE, BottleBlockItem::new);
     // 葡萄
     public static final Item GRAPE = registerItem("grape", p -> new Item(p.food(ModFoods.GRAPE)));
+    public static final Item ICE_GRAPE = registerItem("ice_grape", p -> new Item(p.food(ModFoods.GRAPE)));
+    public static final Item GOLD_GRAPE = registerItem("gold_grape", p -> new Item(p.food(ModFoods.GRAPE)));
+
+    public static final Item GREEN_GRAPE = registerItem("green_grape", p -> new Item(p.food(ModFoods.GRAPE)));
     // 野生葡萄藤
     public static final Item GRAPEVINE = registerItem("grapevine", createBlockItemWithCustomItemName(ModBlocks.WILD_GRAPEVINE));
     // 黑板
@@ -137,15 +143,37 @@ public final class ModItems {
     public static final Item WHISKEY = registerItem("whiskey", p -> new DrinkBlockItem(ModBlocks.WHISKEY, p));
     public static final Item ICE_WINE = registerItem("ice_wine", p -> new DrinkBlockItem(ModBlocks.ICE_WINE, p));
     public static final Item VINEGAR = registerItem("vinegar", p -> new DrinkBlockItem(ModBlocks.VINEGAR, p));
+    public static final Item POLARIS_SWEET_WHITE = registerItem("polaris_sweet_white", p -> new DrinkBlockItem(ModBlocks.POLARIS_SWEET_WHITE, p));
+    public static final Item HONEY_WINE = registerItem("honey_wine", p -> new DrinkBlockItem(ModBlocks.HONEY_WINE, p));
+    public static final Item RED_QUEEN = registerItem("red_queen", p -> new DrinkBlockItem(ModBlocks.RED_QUEEN, p));
+    public static final Item MINERS_STAR = registerItem("miners_star", p -> new DrinkBlockItem(ModBlocks.MINERS_STAR, p));
+    public static final Item RUM = registerItem("rum", p -> new DrinkBlockItem(ModBlocks.RUM, p));
+    public static final Item RIESLING_DRY_WHITE = registerItem("riesling_dry_white", p -> new DrinkBlockItem(ModBlocks.RIESLING_DRY_WHITE, p));
+    public static final Item SUNSET_GLOW = registerItem("sunset_glow", p -> new DrinkBlockItem(ModBlocks.SUNSET_GLOW, p));
+    public static final Item MADAME_SHEXIANG = registerItem("madame_shexiang", p -> new DrinkBlockItem(ModBlocks.MADAME_SHEXIANG, p));
+    public static final Item SWEET_BERRY_WINE = registerItem("sweet_berry_wine", p -> new DrinkBlockItem(ModBlocks.SWEET_BERRY_WINE, p));
+    public static final Item SHERRY = registerItem("sherry", p -> new DrinkBlockItem(ModBlocks.SHERRY, p));
+    public static final Item MOTHER_SNOW = registerItem("mother_snow", p -> new DrinkBlockItem(ModBlocks.MOTHER_SNOW, p));
+    public static final Item LUMINOUS_BRIDE = registerItem("luminous_bride", p -> new DrinkBlockItem(ModBlocks.LUMINOUS_BRIDE, p));
+    public static final Item GLOWFLOWER_BREW = registerItem("glowflower_brew", p -> new DrinkBlockItem(ModBlocks.GLOWFLOWER_BREW, p));
+    public static final Item SAUVIGNON_BLANC_DRY_WHITE = registerItem("sauvignon_blanc_dry_white", p -> new DrinkBlockItem(ModBlocks.SAUVIGNON_BLANC_DRY_WHITE, p));
+    public static final Item WATERMELON_JUICE = registerItem("watermelon_juice", p -> new DrinkBlockItem(ModBlocks.WATERMELON_JUICE, p));
 
     // 果汁桶
     public static final Item GRAPE_BUCKET = registerItem("grape_bucket", p -> new JuiceBucketItem(ModFluids.GRAPE_JUICE, p));
+
+    public static final Item ICE_GRAPE_BUCKET = registerItem("ice_grape_bucket", p -> new JuiceBucketItem(ModFluids.ICE_GRAPE_JUICE, p));
+
+    public static final Item GOLD_GRAPE_BUCKET = registerItem("gold_grape_bucket", p -> new JuiceBucketItem(ModFluids.GOLD_GRAPE_JUICE, p));
+
+    public static final Item GREEN_GRAPE_BUCKET = registerItem("green_grape_bucket", p -> new JuiceBucketItem(ModFluids.GREEN_GRAPE_JUICE, p));
     public static final Item SWEET_BERRIES_BUCKET = registerItem("sweet_berries_bucket", p -> new JuiceBucketItem(ModFluids.SWEET_BERRIES_JUICE, p));
     public static final Item GLOW_BERRIES_BUCKET = registerItem("glow_berries_bucket", p -> new JuiceBucketItem(ModFluids.GLOW_BERRIES_JUICE, p));
-    public static void init() {
+    public static void registerItems() {
 
     }
 
+    @SuppressWarnings("deprecation")
     public static Item registerItemViaBlock(Block block, BiFunction<Block, Item.Properties, Item> biFunction, Item.Properties properties) {
         return registerItem(
                 blockIdToItemId(block.builtInRegistryHolder().key()), properties2 -> biFunction.apply(block, properties2), properties.useBlockDescriptionPrefix()

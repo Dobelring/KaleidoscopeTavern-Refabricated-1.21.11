@@ -84,7 +84,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
      */
     private boolean open = true;
     /**
-     * 发酵等级，没有开始酿造时为 0，每过单位时间增加 1，达到 7 时为最高品质
+     * 发酵等级，没有开始酿造时为 0，每过单位时间增加 1，达到 6 时为最高品质
      */
     private int brewLevel = BREWING_NOT_STARTED;
     /**
@@ -399,7 +399,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
      * @param tapPos 水龙头所处的位置
      */
     @Override
-    public boolean canTapExtract(Level level, BlockPos tapPos, LivingEntity user) {
+    public boolean canTapExtract(Level level, BlockPos tapPos, @Nullable LivingEntity user) {
         // 检查是否处于酿造状态
         if (!this.isBrewing()) {
             this.tip(user, "tap_extract_not_brewing");
@@ -485,7 +485,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         level.setBlockAndUpdate(below, state);
 
         // 存入对应等级的酒类
-        ItemStack filledStack = result.getFilledStack(this.brewLevel);
+        ItemStack filledStack = result.getFilledStack(this.getBrewLevel());
         if (level.getBlockEntity(below) instanceof DrinkBlockEntity drinkBlock) {
             drinkBlock.addItem(filledStack);
         }
@@ -517,7 +517,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         }
         this.fluid.readFromNBT(valueInput);
         this.open = valueInput.getBooleanOr("open", true);
-        this.brewLevel = valueInput.getIntOr("brew_level", BREWING_NOT_STARTED);
+        this.brewLevel = BottleBlockItem.clampBrewLevel(valueInput.getIntOr("brew_level", BREWING_NOT_STARTED));
         this.brewTime = valueInput.getIntOr("brew_time", -1);
         this.recipeId = valueInput.getString("recipe_id").map(Identifier::parse).orElse(null);
         this.recipeHolder = null;
@@ -530,7 +530,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         this.output.serialize(valueOutput, OUTPUT_ITEMS_KEY, OUTPUT_SIZE_KEY);
         this.fluid.writeToNBT(valueOutput);
         valueOutput.putBoolean("open", this.open);
-        valueOutput.putInt("brew_level", this.brewLevel);
+        valueOutput.putInt("brew_level", this.getBrewLevel());
         valueOutput.putInt("brew_time", this.brewTime);
         valueOutput.putString("recipe_id", this.recipeId == null ? "" : this.recipeId.toString());
     }
@@ -549,7 +549,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
 
         ItemStack result = output.getStackInSlot(0);
         Component resultText = result.getHoverName();
-        Component levelText = Component.translatable("message.kaleidoscope_tavern.barrel.brew_level.%d".formatted(this.brewLevel));
+        Component levelText = Component.translatable("message.kaleidoscope_tavern.barrel.brew_level.%d".formatted(this.getBrewLevel()));
 
         if (!this.isBrewing()) {
             Component message = Component.translatable("message.kaleidoscope_tavern.barrel.not_brewing");
@@ -571,12 +571,12 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
 
     @Override
     public boolean isBrewing() {
-        return brewLevel >= BREWING_STARTED;
+        return getBrewLevel() >= BREWING_STARTED;
     }
 
     @Override
     public boolean isMaxBrewLevel() {
-        return brewLevel >= BREWING_FINISHED;
+        return getBrewLevel() >= BREWING_FINISHED;
     }
 
     @Override
@@ -601,7 +601,7 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
 
     @Override
     public int getBrewLevel() {
-        return brewLevel;
+        return BottleBlockItem.clampBrewLevel(brewLevel);
     }
 
     @Override

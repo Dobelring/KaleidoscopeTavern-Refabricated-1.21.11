@@ -2,6 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
@@ -20,6 +21,7 @@ public final class ClientRegistry {
         ClientSetupEvent.init();
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
+        ModParticleFactoryRegistry.init();
         modCompatClient();
     }
 
@@ -64,7 +66,11 @@ public final class ClientRegistry {
                 MOLOTOV,
                 VODKA,
                 GRAPE_CROP,
+                ICE_GRAPE_CROP,
+                GOLD_GRAPE_CROP,
                 GRAPEVINE_TRELLIS,
+                ICE_GRAPEVINE_TRELLIS,
+                GOLD_GRAPEVINE_TRELLIS,
                 WILD_GRAPEVINE,
                 WILD_GRAPEVINE_PLANT,
                 BAR_CABINET,

@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.utils.PonderB
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModParticles;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.CustomFluidTank;
 import com.zurrtum.create.catnip.math.Pointing;
 import com.zurrtum.create.client.ponder.api.ParticleEmitter;
@@ -115,7 +116,7 @@ public class BarrelScenes {
         barrel.modifyBlockEntity(BarrelBlockEntity.class, (be) -> {
             be.doTapExtract(level, tap.pos);
         });
-        ParticleEmitter emitter = scene.effects().simpleParticleEmitter(ParticleTypes.DRIPPING_DRIPSTONE_WATER, new Vec3(0, -0.01, 0));
+        ParticleEmitter emitter = scene.effects().simpleParticleEmitter(ModParticles.WATER_TAP_DRIP, new Vec3(0, -0.01, 0));
         for (int i = 0; i < 42; i++) {
             scene.effects().emitParticles(tap.blockSurface(Direction.DOWN).relative(Direction.UP, 0.25), emitter, 1, 1);
             scene.idle(1);
