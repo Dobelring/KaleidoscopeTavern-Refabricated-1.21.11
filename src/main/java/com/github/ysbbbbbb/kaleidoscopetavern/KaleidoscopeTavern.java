@@ -1,9 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.config.GeneralConfig;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.registery.CommonRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 
+import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +16,7 @@ public final class KaleidoscopeTavern implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		NeoForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, GeneralConfig.init());
 		CommonRegistry.init();
 		ModDataComponents.register();
 		ModEffects.registerEffects();

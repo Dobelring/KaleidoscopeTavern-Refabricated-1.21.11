@@ -66,6 +66,22 @@ public final class CommonRegistry {
         DispenserBlock.registerBehavior(ModItems.ICE_WINE, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.VINEGAR, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.MOLOTOV, new BottleBlockDispenseBehavior());
+
+        DispenserBlock.registerBehavior(ModItems.POLARIS_SWEET_WHITE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.MOTHER_SNOW, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.SHERRY, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.SWEET_BERRY_WINE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.RED_QUEEN, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.RUM, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.MINERS_STAR, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.HONEY_WINE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.MADAME_SHEXIANG, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.SUNSET_GLOW, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.SAUVIGNON_BLANC_DRY_WHITE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.RIESLING_DRY_WHITE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.LUMINOUS_BRIDE, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.GLOWFLOWER_BREW, new BottleBlockDispenseBehavior());
+        DispenserBlock.registerBehavior(ModItems.WATERMELON_JUICE, new BottleBlockDispenseBehavior());
     }
 
     public static void modCompat() {

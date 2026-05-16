@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class BottleBlockItem extends BlockItem {
+    @SuppressWarnings("unused")
     public static final String BREW_LEVEL_KEY = "BrewLevel";
 
     public BottleBlockItem(Block block) {

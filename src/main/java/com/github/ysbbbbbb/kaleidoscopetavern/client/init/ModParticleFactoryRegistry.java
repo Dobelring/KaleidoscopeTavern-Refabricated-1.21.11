@@ -4,14 +4,14 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.particle.TapDripParticle;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModParticles;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.impl.client.particle.ParticleFactoryRegistryImpl;
 
-@SuppressWarnings("UnstableApiUsage")
 @Environment(EnvType.CLIENT)
-public class ParticleFactoryRegistry {
+public final class ModParticleFactoryRegistry {
 
     public static void init() {
-        ParticleFactoryRegistryImpl.INSTANCE.register(ModParticles.WATER_TAP_DRIP, TapDripParticle::createWaterTapDripParticle);
-        ParticleFactoryRegistryImpl.INSTANCE.register(ModParticles.LAVA_TAP_DRIP, TapDripParticle::createLavaTapDripParticle);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.WATER_TAP_DRIP, TapDripParticle.WaterProvider::new);
+        ParticleFactoryRegistry.getInstance().register(ModParticles.LAVA_TAP_DRIP, TapDripParticle.LavaProvider::new);
     }
 }

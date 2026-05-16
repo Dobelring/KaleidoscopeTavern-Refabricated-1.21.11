@@ -16,6 +16,10 @@ loom {
 
 repositories {
 	maven {
+		name = "Fuzs Mod Resources"
+		url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+	}
+	maven {
 		  name = "Terraformers"
 		  url = "https://maven.terraformersmc.com/"}
 	  maven { url = "https://api.modrinth.com/maven"}
@@ -50,7 +54,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
+	modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.1.6"
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
 	modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:19.27.0.340")
 	modCompileOnly "dev.emi:emi-fabric:1.1.22+1.21.1:api"

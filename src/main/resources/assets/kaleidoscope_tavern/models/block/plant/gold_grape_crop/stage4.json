@@ -1,11 +1,11 @@
 {
-	"format_version": "1.21.6",
+	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"render_type": "cutout",
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "kaleidoscope_tavern:block/plant/gold_grape_crop",
-		"particle": "kaleidoscope_tavern:block/plant/grape/particle_2"
+		"particle": "kaleidoscope_tavern:block/plant/grape/particle_5"
 	},
 	"elements": [
 		{
