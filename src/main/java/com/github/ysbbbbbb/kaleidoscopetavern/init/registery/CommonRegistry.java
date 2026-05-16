@@ -66,7 +66,6 @@ public final class CommonRegistry {
         DispenserBlock.registerBehavior(ModItems.ICE_WINE, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.VINEGAR, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.MOLOTOV, new BottleBlockDispenseBehavior());
-
         DispenserBlock.registerBehavior(ModItems.POLARIS_SWEET_WHITE, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.MOTHER_SNOW, new BottleBlockDispenseBehavior());
         DispenserBlock.registerBehavior(ModItems.SHERRY, new BottleBlockDispenseBehavior());
