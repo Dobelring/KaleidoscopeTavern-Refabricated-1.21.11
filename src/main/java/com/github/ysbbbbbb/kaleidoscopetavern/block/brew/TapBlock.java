@@ -1,19 +1,15 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.ITapBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.TapBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
-import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.VoxelShapeUtils;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -22,7 +18,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -36,6 +35,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -53,6 +53,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
     public final EnumMap<Direction, VoxelShape> shapes;
@@ -65,6 +66,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(OPEN, false)
+                .setValue(TRIGGERED, false)
                 .setValue(WATERLOGGED, false));
         this.shapes = VoxelShapeUtils.horizontalShapes(
                 Block.box(5, 5, 6, 11, 13, 16)
@@ -72,7 +74,23 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+    protected void neighborChanged(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Block block, @Nullable Orientation orientation, boolean isMoving) {
+        boolean hasSignal = level.hasNeighborSignal(pos) || level.hasNeighborSignal(pos.above());
+        boolean triggered = state.getValue(TRIGGERED);
+        // 如果有信号，且是关闭状态，此时可以尝试打开
+        if (hasSignal && !triggered) {
+            if (!state.getValue(OPEN)) {
+                this.tryOpen(state, level, pos, null);
+            }
+            BlockState newState = level.getBlockState(pos);
+            level.setBlock(pos, newState.setValue(TRIGGERED, true), Block.UPDATE_NONE);
+        } else if (!hasSignal && triggered) {
+            BlockState newState = level.getBlockState(pos);
+            level.setBlock(pos, newState.setValue(TRIGGERED, false), Block.UPDATE_NONE);
+        }
+    }
+    @Override
+    public @NotNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
                                                 @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND) {
             // 如果龙头已经是开启的，直接无视条件关闭
@@ -84,60 +102,43 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
                 return InteractionResult.SUCCESS;
             }
 
-            Direction tapFacing = state.getValue(FACING);
-
-            // 检查龙头是否紧贴着桶
-            BlockPos relative = pos.relative(tapFacing.getOpposite());
-            BlockState barrelState = level.getBlockState(relative);
-            if (!(barrelState.getBlock() instanceof BarrelBlock)) {
-                Component message = Component.translatable("message.kaleidoscope_tavern.tap.not_connected");
-                if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
-                }
-                this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
-            }
-
-            if (!isValidConnection(barrelState, tapFacing)) {
-                Component message = Component.translatable("message.kaleidoscope_tavern.tap.connected_is_invalid");
-                if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(message));
-                }
-                this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
-            }
-
-            BarrelBlockEntity barrelEntity = BarrelBlock.getBarrelEntity(level, relative, barrelState);
-            if (barrelEntity == null) {
-                this.emptyOpen(level, pos, state);
-                return InteractionResult.SUCCESS;
-            }
-
-            if (barrelEntity.canTapExtract(level, pos, player)) {
-                state = state.setValue(OPEN, true);
-                level.setBlockAndUpdate(pos, state);
-                level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0F, 0.8F);
-
-                // 播放滴水粒子效果
-                if (level.getBlockEntity(pos) instanceof TapBlockEntity tapEntity) {
-                    ParticleOptions particle = ParticleTypes.DRIPPING_DRIPSTONE_WATER;
-                    // 燃烧瓶很特殊
-                    // FIXME: 应该用 tag 来决定粒子的效果？
-                    if (barrelEntity.getOutput().getStackInSlot(0).is(ModItems.MOLOTOV)) {
-                        particle = ParticleTypes.DRIPPING_DRIPSTONE_LAVA;
-                    }
-                    tapEntity.setParticle(particle);
-                    tapEntity.setState(TAKE_DRINK_STATE);
-                }
-
-                // 一定时间后关闭龙头
-                level.scheduleTick(pos, this, TAKE_DRINK_TICKS);
-                return InteractionResult.SUCCESS;
-            }
-            this.emptyOpen(level, pos, state);
+            this.tryOpen(state, level, pos, player);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    private void tryOpen(BlockState state, Level level, BlockPos pos, @Nullable Player player) {
+        Direction tapFacing = state.getValue(FACING);
+        BlockPos sourcePos = pos.relative(tapFacing.getOpposite());
+        BlockState sourceState = level.getBlockState(sourcePos);
+        Block sourceBlock = sourceState.getBlock();
+
+        if (!TapBehaviorManager.contains(sourceBlock)) {
+            this.emptyOpen(level, pos, state);
+            return;
+        }
+
+        BlockPos belowPos = pos.below();
+        BlockState belowState = level.getBlockState(belowPos);
+        ITapBehavior behavior = TapBehaviorManager.get(sourceBlock);
+
+        if (behavior.isMatch(level, player, pos, state, sourceState, belowState)) {
+            ParticleOptions particle = behavior.onStartExtract(level, player, pos, state, sourceState, belowState);
+            if (level.getBlockEntity(pos) instanceof TapBlockEntity tapEntity) {
+                if (particle != null) {
+                    tapEntity.setParticle(particle);
+                }
+                tapEntity.setState(TAKE_DRINK_STATE);
+            }
+            state = state.setValue(OPEN, true);
+            level.setBlockAndUpdate(pos, state);
+            level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 1.0F, 0.8F);
+            level.scheduleTick(pos, this, TAKE_DRINK_TICKS);
+            return;
+        }
+
+        this.emptyOpen(level, pos, state);
     }
 
     /**
@@ -162,34 +163,29 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         }
 
         Direction tapFacing = state.getValue(FACING);
-        BlockPos relative = pos.relative(tapFacing.getOpposite());
-        BlockState barrelState = level.getBlockState(relative);
+        BlockPos sourcePos = pos.relative(tapFacing.getOpposite());
+        BlockState sourceState = level.getBlockState(sourcePos);
+        Block sourceBlock = sourceState.getBlock();
 
-        BarrelBlockEntity barrelEntity = BarrelBlock.getBarrelEntity(level, relative, barrelState);
-        if (barrelEntity == null) {
-            return;
-        }
-        barrelEntity.doTapExtract(level, pos);
-        state = state.setValue(OPEN, false);
-        level.setBlockAndUpdate(pos, state);
-
+        // 先正常进行关闭
+        level.setBlockAndUpdate(pos, state.setValue(OPEN, false));
+        // 关闭音效
+        level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 0.8F);
         if (level.getBlockEntity(pos) instanceof TapBlockEntity tapEntity) {
             tapEntity.setParticle(null);
             tapEntity.setState(DEFAULT_STATE);
         }
 
-        // 播放酒瓶转化效果
-        level.playSound(null, pos.below(), SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 1.0F, 1.0F);
-        level.sendParticles(
-                ParticleTypes.WAX_OFF,
-                pos.getX() + 0.5,
-                pos.getY() - 0.5,
-                pos.getZ() + 0.5,
-                10, 0.25, 0.25, 0.25, 0.1
-        );
+        if (!TapBehaviorManager.contains(sourceBlock)) {
+            return;
+        }
 
-        // 关闭音效
-        level.playSound(null, pos, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 1.0F, 0.8F);
+        BlockPos belowPos = pos.below();
+        BlockState belowState = level.getBlockState(belowPos);
+        ITapBehavior behavior = TapBehaviorManager.get(sourceBlock);
+        if (behavior.isMatch(level, null, pos, state, sourceState, belowState)) {
+            behavior.onEndExtract(level, pos, state, sourceState, belowState);
+        }
     }
 
     @Override
@@ -255,7 +251,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPEN, WATERLOGGED);
+        builder.add(FACING, OPEN, TRIGGERED, WATERLOGGED);
     }
 
     @Override
@@ -283,4 +279,5 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
     }
+
 }

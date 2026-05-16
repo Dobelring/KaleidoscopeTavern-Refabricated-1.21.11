@@ -7,6 +7,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
 public interface TagCommon {
+    TagKey<Item> FRUITS_GRAPES = itemTag("fruits/grapes");
+
+    // 均衡饮食模组
+    TagKey<Item> FRUITS = dietTag("fruits");
+    TagKey<Item> GRAINS = dietTag("grains");
+    TagKey<Item> PROTEINS = dietTag("proteins");
+    TagKey<Item> SUGARS = dietTag("sugars");
+    TagKey<Item> DIET_VEGETABLES = dietTag("vegetables");
 
     // 静谧四季模组
     TagKey<Item> SPRING_CROPS = seasonsItemTag("spring_crops");
@@ -18,6 +26,28 @@ public interface TagCommon {
     TagKey<Block> SUMMER_CROPS_BLOCK = seasonsBlockTag("summer_crops");
     TagKey<Block> AUTUMN_CROPS_BLOCK = seasonsBlockTag("autumn_crops");
     TagKey<Block> WINTER_CROPS_BLOCK = seasonsBlockTag("winter_crops");
+
+    // 节气模组
+    TagKey<Block> DRY_AVERAGE = eclipticSeasonsTag("crops/dry_average");
+    TagKey<Block> AVERAGE_MOIST = eclipticSeasonsTag("crops/average_moist");
+    TagKey<Block> MOIST_HUMID = eclipticSeasonsTag("crops/moist_humid");
+    TagKey<Block> HUMID_HUMID = eclipticSeasonsTag("crops/humid_humid");
+
+    /**
+     * CarryOn 黑名单标签，被此标签包含的方块将无法被 CarryOn 抱起
+     */
+    TagKey<Block> CARRYON_BLOCK_BLACKLIST = TagKey.create(Registries.BLOCK, Identifier.parse("carryon:block_blacklist"));
+
+    static TagKey<Item> itemTag(String name) {
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("c", name));
+    }
+
+    /**
+     * 兼容均衡饮食模组
+     */
+    static TagKey<Item> dietTag(String name) {
+        return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("diet", name));
+    }
 
     /**
      * 静谧四季模组兼容
@@ -31,7 +61,7 @@ public interface TagCommon {
     }
 
     static TagKey<Block> blockTag(String name) {
-        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("c", name));
+        return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("forge", name));
     }
 
     static TagKey<Block> eclipticSeasonsTag(String name) {

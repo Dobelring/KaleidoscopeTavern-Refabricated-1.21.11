@@ -1,11 +1,14 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ItemUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
@@ -35,7 +38,11 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     private final boolean irregular;
 
     public BottleBlock(Properties properties, boolean irregular) {
-        super(properties);
+        super(properties
+                .noOcclusion()
+                .instabreak()
+                .pushReaction(PushReaction.DESTROY)
+                .sound(SoundType.GLASS));
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
@@ -63,6 +70,17 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         this(false);
     }
 
+    @Override
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult blockHitResult) {
+        // 如果是空手，那么可以尝试取回
+        if (level instanceof ServerLevel serverLevel) {
+            getDrops(state, serverLevel, pos, null)
+                    .forEach(stack -> ItemUtils.giveItemToPlayer(player, stack));
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
+            level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
+        }
+        return InteractionResult.SUCCESS;
+    }
 
     @Override
     protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {

@@ -13,7 +13,7 @@ base {
 }
 
 loom {
-	accessWidenerPath.set(file("src/main/resources/kaleidoscope_tavern.accesswidener"))
+	accessWidenerPath.set(file("src/main/resources/kaleidoscope_tavern.accessWidener"))
 }
 
 repositories {
@@ -35,6 +35,10 @@ repositories {
 		name = "ModMaven"
 		url = URI("https://modmaven.dev")
 	}
+	maven {
+		name = "Fuzs Mod Resources"
+		url = URI("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+	}
 }
 
 dependencies {
@@ -49,6 +53,7 @@ dependencies {
 		exclude(group = "net.fabricmc.fabric-api")
 		exclude(group = "eu.pb4")
 	}
+	implementation ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
 	compileOnly("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
 }
 

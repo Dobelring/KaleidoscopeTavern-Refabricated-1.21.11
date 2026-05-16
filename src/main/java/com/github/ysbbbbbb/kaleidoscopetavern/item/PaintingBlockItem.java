@@ -18,6 +18,7 @@ public class PaintingBlockItem extends BlockItem {
         super(block, properties.overrideDescription("block.kaleidoscope_tavern.painting"));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void appendHoverText(@NonNull ItemStack itemStack, @NonNull TooltipContext tooltipContext, @NonNull TooltipDisplay tooltipDisplay, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag tooltipFlag) {
         String desc = Util.makeDescriptionId("tooltip", BuiltInRegistries.ITEM.getKey(this));

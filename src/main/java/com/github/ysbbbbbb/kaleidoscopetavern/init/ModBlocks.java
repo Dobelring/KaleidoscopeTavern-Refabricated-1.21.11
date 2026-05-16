@@ -16,6 +16,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -23,7 +24,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
@@ -112,25 +112,40 @@ public final class ModBlocks {
     public static final Block GREAT_WAVE_PAINTING = paintingReg("great_wave_painting");
     public static final Block MONA_LISA_PAINTING = paintingReg("mona_lisa_painting");
     public static final Block MONDRIAN_PAINTING = paintingReg("mondrian_painting");
-    public static final Block NIGHT_EPIPHANY_PAINTING = paintingReg("night_epiphany_painting");
+    public static final Block NIGHT_EPIPHANY_PAINTING = paintingRegSpecial("night_epiphany_painting");
     // 空瓶
-    public static final Block EMPTY_BOTTLE = commonReg("empty_bottle", p -> new BottleBlock(p, false),
-            BlockBehaviour.Properties.of()
-                    .noOcclusion()
-                    .instabreak()
-                    .pushReaction(PushReaction.DESTROY)
-                    .sound(SoundType.GLASS)
-    );
-
+    public static final Block EMPTY_BOTTLE = commonReg("empty_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    // 杂项的瓶子
+    public static final Block WATER_BOTTLE = commonReg("water_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    public static final Block HONEY_BOTTLE = commonReg("honey_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    public static final Block DRAGON_BREATH_BOTTLE = commonReg("dragon_breath_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    // 桌子
+    public static final Block TABLE = commonReg("table", TableBlock::new, BlockBehaviour.Properties.of());
     // 野生葡萄藤
     public static final Block WILD_GRAPEVINE = commonReg("wild_grapevine", WildGrapevineBlock::new, BlockBehaviour.Properties.of());
     public static final Block WILD_GRAPEVINE_PLANT = commonReg("wild_grapevine_plant", WildGrapevinePlantBlock::new, BlockBehaviour.Properties.of());
     // 藤架
     public static final Block TRELLIS = commonReg("trellis", TrellisBlock::new, BlockBehaviour.Properties.of());
-    // 葡萄藤
-    public static final Block GRAPEVINE_TRELLIS = commonReg("grapevine_trellis", GrapevineTrellisBlock::new, BlockBehaviour.Properties.of());
     // 葡萄
-    public static final Block GRAPE_CROP = commonReg("grape_crop", GrapeCropBlock::new, BlockBehaviour.Properties.of());
+    public static final Block GRAPE_CROP = commonReg("grape_crop", p -> new GrapeCropBlock(
+            p,  (state, level, pos, random) -> 0.25F, () -> new ItemStack(ModItems.GRAPE, 3)
+    ), BlockBehaviour.Properties.of().dynamicShape());
+    public static final Block ICE_GRAPE_CROP = commonReg("ice_grape_crop", p -> new GrapeCropBlock(
+            p,  (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.ICE_GRAPE, 3)
+    ), BlockBehaviour.Properties.of().dynamicShape());
+    public static final Block GOLD_GRAPE_CROP = commonReg("gold_grape_crop", p -> new GrapeCropBlock(
+            p,  (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.GOLD_GRAPE, 3)
+    ), BlockBehaviour.Properties.of().dynamicShape());
+    // 葡萄藤
+    public static final Block GRAPEVINE_TRELLIS = commonReg("grapevine_trellis", p -> new GrapevineTrellisBlock(
+            p, (state, level, pos, random) -> 0.25F, ModBlocks.GRAPE_CROP::defaultBlockState
+    ), BlockBehaviour.Properties.of());
+    public static final Block ICE_GRAPEVINE_TRELLIS = commonReg("ice_grapevine_trellis", p -> new GrapevineTrellisBlock(
+            p, (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, ModBlocks.ICE_GRAPE_CROP::defaultBlockState
+    ), BlockBehaviour.Properties.of());
+    public static final Block GOLD_GRAPEVINE_TRELLIS = commonReg("gold_grapevine_trellis", p -> new GrapevineTrellisBlock(
+            p, (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, ModBlocks.GOLD_GRAPE_CROP::defaultBlockState
+    ), BlockBehaviour.Properties.of());
     // 吧台
     public static final Block BAR_COUNTER = commonReg("bar_counter", BarCounterBlock::new, BlockBehaviour.Properties.of());
     // 人字梯
@@ -170,6 +185,21 @@ public final class ModBlocks {
     public static final Block WHISKEY = wineReg(ModFoods.ModWines.WHISKEY, "whiskey");
     public static final Block ICE_WINE = wineReg(ModFoods.ModWines.ICE_WINE, "ice_wine");
     public static final Block VINEGAR = wineReg(ModFoods.ModWines.VINEGAR, "vinegar");
+    public static final Block POLARIS_SWEET_WHITE = wineReg(ModFoods.ModWines.POLARIS_SWEET_WHITE, "polaris_sweet_white");
+    public static final Block HONEY_WINE = wineReg(ModFoods.ModWines.HONEY_WINE, "honey_wine");
+    public static final Block RED_QUEEN = wineReg(ModFoods.ModWines.RED_QUEEN, "red_queen");
+    public static final Block MINERS_STAR = wineReg(ModFoods.ModWines.MINERS_STAR, "miners_star");
+    public static final Block RUM = wineReg(ModFoods.ModWines.RUM, "rum");
+    public static final Block RIESLING_DRY_WHITE = wineReg(ModFoods.ModWines.RIESLING_DRY_WHITE, "riesling_dry_white");
+    public static final Block SUNSET_GLOW = wineReg(ModFoods.ModWines.SUNSET_GLOW, "sunset_glow");
+    public static final Block MADAME_SHEXIANG = wineReg(ModFoods.ModWines.MADAME_SHEXIANG, "madame_shexiang");
+    public static final Block SWEET_BERRY_WINE = wineReg(ModFoods.ModWines.SWEET_BERRY_WINE, "sweet_berry_wine");
+    public static final Block SHERRY = wineReg(ModFoods.ModWines.SHERRY, "sherry");
+    public static final Block MOTHER_SNOW = wineReg(ModFoods.ModWines.MOTHER_SNOW, "mother_snow");
+    public static final Block LUMINOUS_BRIDE = wineReg(ModFoods.ModWines.LUMINOUS_BRIDE, "luminous_bride");
+    public static final Block GLOWFLOWER_BREW = wineReg(ModFoods.ModWines.GLOWFLOWER_BREW, "glowflower_brew");
+    public static final Block SAUVIGNON_BLANC_DRY_WHITE = wineReg(ModFoods.ModWines.SAUVIGNON_BLANC_DRY_WHITE, "sauvignon_blanc_dry_white");
+    public static final Block WATERMELON_JUICE = wineReg(ModFoods.ModWines.WATERMELON_JUICE, "watermelon_juice");
 
 
     public static final BlockEntityType<SandwichBoardBlockEntity> SANDWICH_BOARD_BE = FabricBlockEntityTypeBuilder.create(SandwichBoardBlockEntity::new,
@@ -216,16 +246,13 @@ public final class ModBlocks {
     ).build();
     public static final BlockEntityType<TapBlockEntity> TAP_BE = FabricBlockEntityTypeBuilder.create(TapBlockEntity::new, TAP).build();
     public static final BlockEntityType<DrinkBlockEntity> DRINK_BE = FabricBlockEntityTypeBuilder.create(DrinkBlockEntity::new,
-            WINE,
-            CHAMPAGNE,
-            VODKA,
-            BRANDY,
-            CARIGNAN,
-            SAKURA_WINE,
-            PLUM_WINE,
-            WHISKEY,
-            ICE_WINE,
-            VINEGAR
+            WINE, CHAMPAGNE, VODKA, BRANDY, CARIGNAN,
+            SAKURA_WINE, PLUM_WINE, WHISKEY, ICE_WINE,
+            POLARIS_SWEET_WHITE, HONEY_WINE, RED_QUEEN, MINERS_STAR,
+            RUM, RIESLING_DRY_WHITE, SUNSET_GLOW, MADAME_SHEXIANG,
+            SWEET_BERRY_WINE, SHERRY, MOTHER_SNOW, LUMINOUS_BRIDE,
+            GLOWFLOWER_BREW, SAUVIGNON_BLANC_DRY_WHITE, VINEGAR,
+            WATERMELON_JUICE
     ).build();
 
 
@@ -266,6 +293,10 @@ public final class ModBlocks {
 
     private static Block paintingReg(String string) {
         return commonReg(string, PaintingBlock::new, BlockBehaviour.Properties.of());
+    }
+
+    private static Block paintingRegSpecial(String string) {
+        return commonReg(string, PaintingBlock::new, BlockBehaviour.Properties.of().overrideDescription("block.kaleidoscope_tavern.painting"));
     }
 
     private static Block wineReg(Block block, String s) {

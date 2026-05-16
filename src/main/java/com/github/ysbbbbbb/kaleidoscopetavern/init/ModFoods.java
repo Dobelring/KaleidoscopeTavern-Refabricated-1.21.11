@@ -21,6 +21,7 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("wine").build();
+
         Block CHAMPAGNE = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 16, 10),
                 Block.box(2, 0, 6, 14, 16, 10),
@@ -30,6 +31,7 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("champagne").build();
+
         Block VODKA = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(4, 0, 4, 12, 15, 12),
                 Block.box(0, 0, 4, 16, 15, 12),
@@ -39,16 +41,19 @@ public interface ModFoods {
                 ),
                 Block.box(0, 0, 0, 16, 16, 16)
         ).setId("vodka").build();
+
         Block BRANDY = DrinkBlock.create().maxCount(3).irregular().shapes(
                 Block.box(3, 0, 6, 13, 13, 10),
                 Block.box(1, 0, 3, 15, 12, 12),
                 Block.box(1, 0, 1, 16, 12, 13)
         ).setId("brandy").build();
+
         Block CARIGNAN = DrinkBlock.create().maxCount(3).irregular().shapes(
                 Block.box(3, 0, 6, 13, 13, 10),
                 Block.box(1, 0, 3, 15, 12, 12),
                 Block.box(1, 0, 1, 16, 12, 13)
-        ).build();
+        ).setId("carignan").build();
+
         Block SAKURA_WINE = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 16, 10),
                 Block.box(2, 0, 6, 14, 16, 10),
@@ -58,6 +63,7 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("sakura_wine").build();
+
         Block PLUM_WINE = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 12, 10),
                 Block.box(3, 0, 6, 13, 12, 10),
@@ -67,6 +73,7 @@ public interface ModFoods {
                 ),
                 Block.box(3, 0, 3, 13, 12, 13)
         ).setId("plum_wine").build();
+
         Block WHISKEY = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 16, 10),
                 Block.box(2, 0, 6, 14, 16, 10),
@@ -76,6 +83,7 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("whiskey").build();
+
         Block ICE_WINE = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 16, 10),
                 Block.box(2, 0, 6, 14, 16, 10),
@@ -85,6 +93,143 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("ice_wine").build();
+
+        Block POLARIS_SWEET_WHITE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("polar_sweet_white").build();
+
+        Block HONEY_WINE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("honey_wine").build();
+
+        Block RED_QUEEN = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("red_queen").build();
+
+        Block MINERS_STAR = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("miners_star").build();
+
+        Block RUM = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("rum").build();
+
+        Block RIESLING_DRY_WHITE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(4, 0, 4, 12, 15, 12),
+                Block.box(0, 0, 4, 16, 15, 12),
+                Shapes.or(
+                        Block.box(0, 0, 8, 16, 15, 16),
+                        Block.box(4, 0, 0, 12, 15, 16)
+                ),
+                Block.box(0, 0, 0, 16, 16, 16)
+        ).setId("riesling_dry_white").build();
+
+        Block SUNSET_GLOW = DrinkBlock.create().maxCount(3).shapes(
+                Block.box(3, 0, 6, 13, 13, 10),
+                Block.box(1, 0, 3, 15, 12, 12),
+                Block.box(1, 0, 1, 16, 12, 13)
+        ).setId("sunset_glow").build();
+
+        Block MADAME_SHEXIANG = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(4, 0, 4, 12, 15, 12),
+                Block.box(0, 0, 4, 16, 15, 12),
+                Shapes.or(
+                        Block.box(0, 0, 8, 16, 15, 16),
+                        Block.box(4, 0, 0, 12, 15, 16)
+                ),
+                Block.box(0, 0, 0, 16, 16, 16)
+        ).setId("madame_shexiang").build();
+
+        Block SWEET_BERRY_WINE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(4, 0, 4, 12, 15, 12),
+                Block.box(0, 0, 4, 16, 15, 12),
+                Shapes.or(
+                        Block.box(0, 0, 8, 16, 15, 16),
+                        Block.box(4, 0, 0, 12, 15, 16)
+                ),
+                Block.box(0, 0, 0, 16, 16, 16)
+        ).setId("sweet_berry_wine").build();
+
+        Block SHERRY = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("sherry").build();
+
+        Block MOTHER_SNOW = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(4, 0, 4, 12, 15, 12),
+                Block.box(0, 0, 4, 16, 15, 12),
+                Shapes.or(
+                        Block.box(0, 0, 8, 16, 15, 16),
+                        Block.box(4, 0, 0, 12, 15, 16)
+                ),
+                Block.box(0, 0, 0, 16, 16, 16)
+        ).setId("mother_snow").build();
+
+        Block LUMINOUS_BRIDE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("luminous_bride").build();
+
+        Block GLOWFLOWER_BREW = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("glowflower_brew").build();
+
+        Block SAUVIGNON_BLANC_DRY_WHITE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("sauvignon_blanc_dry_white").build();
+
         Block VINEGAR = DrinkBlock.create().maxCount(4).shapes(
                 Block.box(6, 0, 6, 10, 16, 10),
                 Block.box(2, 0, 6, 14, 16, 10),
@@ -94,5 +239,15 @@ public interface ModFoods {
                 ),
                 Block.box(2, 0, 2, 14, 16, 14)
         ).setId("vinegar").build();
+
+        Block WATERMELON_JUICE = DrinkBlock.create().maxCount(4).shapes(
+                Block.box(6, 0, 6, 10, 16, 10),
+                Block.box(2, 0, 6, 14, 16, 10),
+                Shapes.or(
+                        Block.box(2, 0, 10, 14, 16, 14),
+                        Block.box(6, 0, 2, 10, 16, 14)
+                ),
+                Block.box(2, 0, 2, 14, 16, 14)
+        ).setId("watermelon_juice").build();
     }
 }

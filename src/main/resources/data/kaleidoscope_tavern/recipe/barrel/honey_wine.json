@@ -1,0 +1,12 @@
+{
+  "type": "kaleidoscope_tavern:barrel",
+  "carrier": "kaleidoscope_tavern:empty_bottle",
+  "fluid": "kaleidoscope_tavern:gold_grape_juice",
+  "ingredients": [
+    "minecraft:honeycomb"
+  ],
+  "result": {
+    "count": 1,
+    "id": "kaleidoscope_tavern:honey_wine"
+  }
+}

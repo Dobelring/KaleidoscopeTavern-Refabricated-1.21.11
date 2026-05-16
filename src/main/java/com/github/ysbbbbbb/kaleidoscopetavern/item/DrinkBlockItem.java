@@ -26,7 +26,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -45,7 +44,6 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
         super(block, properties
                 .stacksTo(16)
                 .useBlockDescriptionPrefix()
-                .component(DataComponents.CONSUMABLE, Consumables.DEFAULT_DRINK)
                 .craftRemainder(ModItems.EMPTY_BOTTLE));
     }
 
@@ -133,10 +131,14 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
             return;
         }
         var effects = effectData.effects();
-        int brewLevel = BottleBlockItem.getBrewLevel(drink);
-        if (brewLevel < IBarrel.BREWING_STARTED || brewLevel > effects.size()) {
+        if (effects.isEmpty()) {
             return;
         }
+        int brewLevel = BottleBlockItem.getBrewLevel(drink);
+        if (brewLevel < IBarrel.BREWING_STARTED) {
+            return;
+        }
+        brewLevel = Math.min(brewLevel, effects.size());
         // brew level 从 1 开始，所以要 -1 来获取对应的效果列表
         for (DrinkEffectData.Entry entry : effects.get(brewLevel - 1)) {
             if (!level.isClientSide() && level.getRandom().nextFloat() < entry.probability()) {
@@ -155,9 +157,14 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
             return;
         }
         var effects = effectData.effects();
-        if (brewLevel < IBarrel.BREWING_STARTED || brewLevel > effects.size()) {
+        if (effects.isEmpty()) {
             return;
         }
+        brewLevel = BottleBlockItem.clampBrewLevel(brewLevel);
+        if (brewLevel < IBarrel.BREWING_STARTED) {
+            return;
+        }
+        brewLevel = Math.min(brewLevel, effects.size());
 
         // brew level 从 1 开始，所以要 -1 来获取对应的效果列表
         List<MobEffectInstance> instances = Lists.newArrayList();

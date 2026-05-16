@@ -3,19 +3,22 @@ package com.github.ysbbbbbb.kaleidoscopetavern.block.plant;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.properties.TrellisType;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.event.EventHooks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -36,6 +39,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
+import java.util.function.Supplier;
+
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.axisHasTrellis;
 import static com.github.ysbbbbbb.kaleidoscopetavern.block.plant.ITrellis.updateType;
 import static com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper.getSlotForHand;
@@ -49,9 +54,10 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
      */
     public static final Direction[] CHECK_DIRECTION = new Direction[]{Direction.UP, Direction.EAST, Direction.WEST, Direction.SOUTH, Direction.NORTH};
 
-    private final float growPerTickProbability;
+    private final GrowPerTickProbability probability;
+    private final Supplier<BlockState> grapeCrop;
 
-    public GrapevineTrellisBlock(Properties properties) {
+    public GrapevineTrellisBlock(Properties properties, GrowPerTickProbability probability, Supplier<BlockState> grapeCrop) {
         super(properties
                 .mapColor(MapColor.WOOD)
                 .instrument(NoteBlockInstrument.GUITAR)
@@ -65,11 +71,21 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
                 .setValue(TYPE, TrellisType.SINGLE)
                 .setValue(AGE, 0)
                 .setValue(WATERLOGGED, false));
-        this.growPerTickProbability = 0.25F;
+        this.probability = probability;
+        this.grapeCrop = grapeCrop;
+    }
+
+    @Deprecated(since = "1.1.0")
+    public GrapevineTrellisBlock(Properties properties) {
+        this(
+                properties,
+                (state, level, pos, random) -> 0.25F,
+                ModBlocks.GRAPE_CROP::defaultBlockState
+        );
     }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+    public @NotNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         // 如果玩家拿的是剪刀，可以剪下葡萄藤
         ItemStack itemInHand = player.getItemInHand(hand);
         if (!itemInHand.is(Items.SHEARS)) {
@@ -88,7 +104,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     @Override
-    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+    protected @NonNull BlockState updateShape(BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
             scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
@@ -103,12 +119,12 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
     @Override
     public boolean sameType(BlockState state) {
-        return state.is(ModBlocks.TRELLIS) || state.is(ModBlocks.GRAPEVINE_TRELLIS);
+        return state.is(ModBlocks.TRELLIS) || state.is(TagMod.GRAPEVINE_TRELLISES);
     }
 
     @Override
     public void randomTick(@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos, RandomSource random) {
-        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.growPerTickProbability)) {
+        if (EventHooks.onCropsGrowPre(level, pos, state, random.nextDouble() < this.probability.getProbability(state, level, pos, random))) {
             this.doGrow(level, pos, state);
         }
     }
@@ -121,23 +137,10 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     }
 
     /**
-     * 葡萄藤下方是否符合生长条件
-     * <p>
-     * 下方要么为满 age 的葡萄藤，要么为泥土类方块
-     */
-    public boolean belowSupportGrow(BlockState belowState) {
-        if (belowState.is(this)) {
-            return isMaxAge(belowState);
-        } else {
-            return belowState.is(BlockTags.SUPPORTS_VEGETATION);
-        }
-    }
-
-    /**
      * 指定位置是否能够生长葡萄藤
      */
     public boolean canGrowInto(BlockState checkState) {
-        return checkState.is(ModBlocks.TRELLIS);
+        return checkState.is(ModBlocks.TRELLIS) && !checkState.getValue(TrellisBlock.WAXED);
     }
 
     /**
@@ -169,11 +172,6 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     public boolean canGrow(LevelReader level, BlockPos pos, BlockState state) {
         // 如果是 single 状态
         if (state.getValue(TYPE) == TrellisType.SINGLE) {
-            // 先检查下方是否满足生长条件
-            BlockState belowState = level.getBlockState(pos.below());
-            if (!belowSupportGrow(belowState)) {
-                return false;
-            }
             // 如果没有达到最大年龄，直接增加年龄
             if (!isMaxAge(state)) {
                 return true;
@@ -201,11 +199,6 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
     public void doGrow(Level level, BlockPos pos, BlockState state) {
         // 如果是 single 状态
         if (state.getValue(TYPE) == TrellisType.SINGLE) {
-            // 先检查下方是否满足生长条件
-            BlockState belowState = level.getBlockState(pos.below());
-            if (!belowSupportGrow(belowState)) {
-                return;
-            }
             // 如果没有达到最大年龄，直接增加年龄
             if (!isMaxAge(state)) {
                 level.setBlockAndUpdate(pos, state.cycle(AGE));
@@ -229,7 +222,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
             // 如果所有方向都检查完了都不能生长，那么检查下方是否有两格空位，生长葡萄
             if (canGrowGrape(level, pos)) {
-                level.setBlockAndUpdate(pos.below(), ModBlocks.GRAPE_CROP.defaultBlockState());
+                level.setBlockAndUpdate(pos.below(), this.grapeCrop.get());
                 EventHooks.onCropsGrowPost(level, pos.below(), state);
             }
         } else {
@@ -271,7 +264,7 @@ public class GrapevineTrellisBlock extends Block implements SimpleWaterloggedBlo
 
     @Override
     protected @NonNull ItemStack getCloneItemStack(@NonNull LevelReader levelReader, @NonNull BlockPos blockPos, @NonNull BlockState blockState, boolean bl) {
-        return  ModItems.GRAPEVINE.getDefaultInstance();
+        return ModItems.GRAPEVINE.getDefaultInstance();
     }
 
     @Override
