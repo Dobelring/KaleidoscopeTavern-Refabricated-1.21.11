@@ -3,19 +3,19 @@
   "category": "misc",
   "key": {
     "B": {
-      "tag": "forge:dyes/blue"
+      "item": "mincraft:blue_dye"
     },
     "F": {
       "item": "minecraft:item_frame"
     },
     "R": {
-      "tag": "forge:dyes/red"
+      "item": "minecraft:red_dye"
     },
     "W": {
-      "tag": "forge:dyes/white"
+      "item": "minecraft:white_dye"
     },
     "Y": {
-      "tag": "forge:dyes/yellow"
+      "item": "minecraft:yellow_dye"
     }
   },
   "pattern": [
