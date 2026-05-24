@@ -14,8 +14,8 @@
     "requireAnnotations": true
   },
   "client": [
-    "client.CameraMixin",
     "client.EntityRendererDispatcherMixin",
+    "client.GameRendererMixin",
     "client.HumanoidMobRendererMixin",
     "client.PlayerRendererMixin"
   ]

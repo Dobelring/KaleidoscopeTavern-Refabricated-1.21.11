@@ -120,12 +120,12 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     }
 
     @Override
-    public BarStoolBlockEntityRenderState createRenderState() {
+    public @NonNull BarStoolBlockEntityRenderState createRenderState() {
         return new BarStoolBlockEntityRenderState();
     }
 
     @Override
-    public void extractRenderState(BarStoolBlockEntity blockEntity, BarStoolBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull BarStoolBlockEntity blockEntity, @NonNull BarStoolBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.color = blockEntity.getColor();
         blockEntityRenderState.cachedRot = blockEntity.getCachedRot();
@@ -133,7 +133,7 @@ public class BarStoolBlockEntityRender implements BlockEntityRenderer<BarStoolBl
     }
 
     @Override
-    public void submit(BarStoolBlockEntityRenderState blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
+    public void submit(@NonNull BarStoolBlockEntityRenderState blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
         float renderRot = this.getRenderRot(blockEntityRenderState);
         Identifier texture = TEXTURE_CACHE.apply(blockEntityRenderState.color);
         poseStack.pushPose();

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoardBlockEntity, SandwichBoardBlockEntityRenderState> {
@@ -61,7 +62,7 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoa
     }
 
     @Override
-    public SandwichBoardBlockEntityRenderState createRenderState() {
+    public @NonNull SandwichBoardBlockEntityRenderState createRenderState() {
         return new SandwichBoardBlockEntityRenderState();
     }
 }

@@ -40,14 +40,14 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
     }
 
     @Override
-    public void extractRenderState(ChalkboardBlockEntity blockEntity, ChalkboardBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull ChalkboardBlockEntity blockEntity, @NonNull ChalkboardBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.large = blockEntity.isLarge();
     }
 
 
     @Override
-    public ChalkboardBlockEntityRenderState createRenderState() {
+    public @NonNull ChalkboardBlockEntityRenderState createRenderState() {
         return new ChalkboardBlockEntityRenderState();
     }
 

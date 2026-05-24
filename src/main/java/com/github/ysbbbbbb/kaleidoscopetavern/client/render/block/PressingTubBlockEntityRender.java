@@ -21,7 +21,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
@@ -38,7 +37,7 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
     }
 
     @Override
-    public void extractRenderState(PressingTubBlockEntity blockEntity, PressingTubBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull PressingTubBlockEntity blockEntity, @NonNull PressingTubBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.items = blockEntity.getItems();
         blockEntityRenderState.facing = blockEntity.getBlockState().getValue(PressingTubBlock.FACING);
@@ -55,7 +54,7 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
 
 
     @Override
-    public PressingTubBlockEntityRenderState createRenderState() {
+    public @NonNull PressingTubBlockEntityRenderState createRenderState() {
         return new PressingTubBlockEntityRenderState();
     }
 

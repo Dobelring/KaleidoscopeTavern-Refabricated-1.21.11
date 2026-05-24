@@ -34,5 +34,8 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"forgeconfigapiport": "*"
+	},
+	"suggests": {
+		"jei": "*"
 	}
 }

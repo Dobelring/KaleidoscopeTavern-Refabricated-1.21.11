@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -19,7 +18,6 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
@@ -34,7 +32,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
     }
 
     @Override
-    public void extractRenderState(BarCabinetBlockEntity blockEntity, BarCabinetBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull BarCabinetBlockEntity blockEntity, @NonNull BarCabinetBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.leftItem = blockEntity.getLeftItem();
         blockEntityRenderState.rightItem = blockEntity.getRightItem();
@@ -43,7 +41,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
     }
 
     @Override
-    public BarCabinetBlockEntityRenderState createRenderState() {
+    public @NonNull BarCabinetBlockEntityRenderState createRenderState() {
         return new BarCabinetBlockEntityRenderState();
     }
 
@@ -67,7 +65,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
                 BlockStateModel blockStateModel = this.blockRender.getBlockModel(state);
                 submitNodeCollector.submitBlockModel(
                         poseStack,
-                        Sheets.solidBlockSheet(),
+                        Sheets.cutoutBlockSheet(),
                         blockStateModel,
                         1.0F,
                         1.0F,
@@ -90,7 +88,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
                 BlockStateModel blockStateModel = this.blockRender.getBlockModel(state);
                 submitNodeCollector.submitBlockModel(
                         poseStack,
-                        Sheets.solidBlockSheet(),
+                        Sheets.cutoutBlockSheet(),
                         blockStateModel,
                         1.0F,
                         1.0F,
@@ -113,7 +111,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
                 BlockStateModel blockStateModel = this.blockRender.getBlockModel(state);
                 submitNodeCollector.submitBlockModel(
                         poseStack,
-                        Sheets.solidBlockSheet(),
+                        Sheets.cutoutBlockSheet(),
                         blockStateModel,
                         1.0F,
                         1.0F,

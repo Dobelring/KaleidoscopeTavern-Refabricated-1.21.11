@@ -50,7 +50,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
     }
 
     @Override
-    public void extractRenderState(BarrelBlockEntity blockEntity, BarrelBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull BarrelBlockEntity blockEntity, @NonNull BarrelBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.facing = blockEntity.getBlockState().getValue(BarrelBlock.FACING);
         blockEntityRenderState.isOpen = blockEntity.isOpen();
@@ -144,12 +144,12 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
     }
 
     @Override
-    public BarrelBlockEntityRenderState createRenderState() {
+    public @NonNull BarrelBlockEntityRenderState createRenderState() {
         return new BarrelBlockEntityRenderState();
     }
 
     @Override
-    public void submit(BarrelBlockEntityRenderState barrel, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
+    public void submit(@NonNull BarrelBlockEntityRenderState barrel, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
         // 本体渲染
         this.renderBody(barrel, poseStack, submitNodeCollector);
         // 开盖后才会渲染下面部分
