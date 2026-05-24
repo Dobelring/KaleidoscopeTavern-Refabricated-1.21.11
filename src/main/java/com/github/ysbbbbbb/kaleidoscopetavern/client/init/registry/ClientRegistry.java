@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.trinkets.init.TrinketsCompactClient;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
@@ -102,5 +103,6 @@ public final class ClientRegistry {
 
     public static void modCompatClient() {
         PonderCompat.init();
+        TrinketsCompactClient.init();
     }
 }
