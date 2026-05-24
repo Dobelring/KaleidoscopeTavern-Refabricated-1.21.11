@@ -39,6 +39,10 @@ repositories {
 		name = "Fuzs Mod Resources"
 		url = URI("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
 	}
+	maven {
+		name = "Nucleoid"
+		url = URI("https://maven.nucleoid.xyz/releases")
+	}
 }
 
 dependencies {
@@ -55,6 +59,7 @@ dependencies {
 	}
 	implementation ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
 	compileOnly("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
+	implementation("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
 }
 
 tasks.processResources {

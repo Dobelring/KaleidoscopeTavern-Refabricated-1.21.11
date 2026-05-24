@@ -31,7 +31,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
     }
 
     @Override
-    public void extractRenderState(BarCabinetBlockEntity blockEntity, BarCabinetBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull BarCabinetBlockEntity blockEntity, @NonNull BarCabinetBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.facing = blockEntity.getBlockState().getValue(BarCabinetBlock.FACING);
         blockEntityRenderState.isSingle = blockEntity.isSingle();
@@ -47,7 +47,7 @@ public class BarCabinetBlockEntityRender implements BlockEntityRenderer<BarCabin
     }
 
     @Override
-    public BarCabinetBlockEntityRenderState createRenderState() {
+    public @NonNull BarCabinetBlockEntityRenderState createRenderState() {
         return new BarCabinetBlockEntityRenderState();
     }
 

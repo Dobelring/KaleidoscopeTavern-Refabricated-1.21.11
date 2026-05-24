@@ -36,5 +36,9 @@
 	},
 	"breaks": {
 		"rrv": "<8.0.0"
+	},
+	"suggests": {
+		"jei": "*",
+		"trinkets": "*"
 	}
 }
