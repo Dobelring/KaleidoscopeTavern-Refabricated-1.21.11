@@ -19,9 +19,6 @@ loom {
 repositories {
 	maven { url = URI("https://api.modrinth.com/maven") }
 	maven {
-		url = URI("https://cursemaven.com")
-	}
-	maven {
 		name = "cassian's maven"
 		url = URI("https://maven.cassian.cc")
 	}
@@ -48,7 +45,7 @@ repositories {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
-	implementation ("curse.maven:create-fly-1346281:7752013")
+	implementation ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
 	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	// Fabric API. This is technically optional, but you probably want it anyway.
