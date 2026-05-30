@@ -59,6 +59,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
                 .setValue(WATERLOGGED, false));
     }
 
+    @SuppressWarnings("unused")
     public DrinkBlock(int maxCount, VoxelShape... shapes) {
         this(false, maxCount, shapes);
     }
@@ -78,12 +79,8 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
                                           @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
-        // 如果是空手，那么可以尝试取回
-        if (!player.getItemInHand(hand).isEmpty()) {
-            return super.use(state, level, pos, player, hand, hitResult);
-        }
 
         // 尝试给玩家物品
         if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
