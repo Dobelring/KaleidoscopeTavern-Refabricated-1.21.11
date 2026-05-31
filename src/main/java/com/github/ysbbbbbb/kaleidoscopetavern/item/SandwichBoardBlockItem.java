@@ -24,8 +24,7 @@ public class SandwichBoardBlockItem extends BlockItem {
     @Override
     public void appendHoverText(@NonNull ItemStack itemStack, @NonNull TooltipContext tooltipContext, @NonNull TooltipDisplay tooltipDisplay, @NonNull Consumer<Component> consumer, @NonNull TooltipFlag tooltipFlag) {
         if (!this.transformItems.isEmpty()) {
-            consumer.accept(transformItems.getFirst().getName().copy().withStyle(ChatFormatting.GRAY));
+            consumer.accept(transformItems.getFirst().getDefaultInstance().getStyledHoverName().copy().withStyle(ChatFormatting.GRAY));
         }
-
     }
 }
