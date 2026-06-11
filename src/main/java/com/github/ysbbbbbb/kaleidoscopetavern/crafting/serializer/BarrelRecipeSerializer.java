@@ -29,7 +29,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     public static final int MAX_INGREDIENTS = 4;
 
     @Override
-    public @NotNull BarrelRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public @NotNull BarrelRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
         // ingredients 字段可能不存在
         JsonArray ingredientsJson = GsonHelper.getAsJsonArray(json, "ingredients", new JsonArray());
         NonNullList<Ingredient> ingredients = NonNullList.withSize(MAX_INGREDIENTS, Ingredient.EMPTY);
@@ -69,7 +69,7 @@ public class BarrelRecipeSerializer implements RecipeSerializer<BarrelRecipe> {
     }
 
     @Override
-    public @NotNull BarrelRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public @NotNull BarrelRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
         int size = Math.min(MAX_INGREDIENTS, buffer.readVarInt());
         NonNullList<Ingredient> ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
         for (int i = 0; i < size; i++) {

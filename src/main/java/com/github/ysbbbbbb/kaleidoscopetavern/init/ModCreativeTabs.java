@@ -38,6 +38,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.PRESSING_TUB);
                     output.accept(ModItems.BARREL);
                     output.accept(ModItems.TAP);
+                    output.accept(ModItems.SHAKER);
 
                     output.accept(ModItems.GRAPE_BUCKET);
                     output.accept(ModItems.ICE_GRAPE_BUCKET);
@@ -47,6 +48,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.GLOW_BERRIES_BUCKET);
 
                     output.accept(ModItems.EMPTY_BOTTLE);
+                    output.accept(ModItems.EMPTY_GLASSWARE);
                     output.accept(ModItems.MOLOTOV);
                     output.accept(ModItems.WATERMELON_JUICE);
 
@@ -88,6 +90,22 @@ public final class ModCreativeTabs {
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.VODKA));
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.WHISKEY));
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RUM));
+
+                    // 鸡尾酒
+                    output.accept(ModItems.ORDINARY_COCKTAIL);
+                    output.accept(ModItems.MYSTERY_COCKTAIL);
+                    output.accept(ModItems.WHITE_LADY);
+                    output.accept(ModItems.EMERALD);
+                    output.accept(ModItems.BRASS_HEART);
+                    output.accept(ModItems.GODFATHER);
+                    output.accept(ModItems.GRASSHOPPER);
+                    output.accept(ModItems.SCREWDRIVER);
+                    output.accept(ModItems.MOJITO);
+                    output.accept(ModItems.ALLIUM_GARDEN);
+                    output.accept(ModItems.DEPTH_CHARGE);
+                    output.accept(ModItems.NETHER_SPECIAL);
+                    output.accept(ModItems.BLOODY_MARY);
+                    output.accept(ModItems.SCULK_SPECIAL);
                 }).build());
 
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAVERN_DECO_TAB, FabricItemGroup.builder()
@@ -96,6 +114,10 @@ public final class ModCreativeTabs {
                 .displayItems((par, output) -> {
                     output.accept(ModItems.BAR_CABINET);
                     output.accept(ModItems.GLASS_BAR_CABINET);
+                    output.accept(ModItems.CELLAR_CABINET);
+                    output.accept(ModItems.TILTED_RACK);
+                    output.accept(ModItems.CIRCULAR_RACK);
+                    output.accept(ModItems.HOLDER);
                     output.accept(ModItems.BAR_COUNTER);
                     output.accept(ModItems.STEPLADDER);
 

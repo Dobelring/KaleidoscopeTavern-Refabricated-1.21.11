@@ -19,6 +19,10 @@ public final class ClientSetupEvent {
         BlockEntityRenderers.register(ModBlocks.PRESSING_TUB_BE, PressingTubBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.BARREL_BE, BarrelBlockEntityRender::new);
         BlockEntityRenderers.register(ModBlocks.BAR_STOOL_BE, BarStoolBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.TILTED_RACK_BE, TiltedRackBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.CIRCULAR_RACK_BE, CircularRackBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.CELLAR_CABINET_BE, CellarCabinetBlockEntityRender::new);
+        BlockEntityRenderers.register(ModBlocks.HOLDER_BE, HolderBlockEntityRender::new);
         EntityRendererRegistry.register(ThrownMolotovEntity.TYPE, ThrownMolotovRenderer::new);
     }
 }

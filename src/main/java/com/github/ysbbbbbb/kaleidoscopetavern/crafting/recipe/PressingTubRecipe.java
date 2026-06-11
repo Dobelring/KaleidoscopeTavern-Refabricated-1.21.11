@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.SingleItemRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class PressingTubRecipe extends SingleItemRecipe {
     /**
@@ -29,7 +30,7 @@ public class PressingTubRecipe extends SingleItemRecipe {
     }
 
     @Override
-    public boolean matches(Container inv, Level level) {
+    public boolean matches(Container inv, @NotNull Level level) {
         return this.ingredient.test(inv.getItem(0));
     }
 

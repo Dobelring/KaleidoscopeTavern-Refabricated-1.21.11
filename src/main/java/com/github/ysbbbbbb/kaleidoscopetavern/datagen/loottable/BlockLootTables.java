@@ -46,6 +46,22 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.MAGENTA_SOFA);
         dropSelf(ModBlocks.PINK_SOFA);
 
+        // 鸡尾酒
+        dropSelf(ModBlocks.ORDINARY_COCKTAIL);
+        dropSelf(ModBlocks.MYSTERY_COCKTAIL);
+        dropSelf(ModBlocks.WHITE_LADY);
+        dropSelf(ModBlocks.EMERALD);
+        dropSelf(ModBlocks.BRASS_HEART);
+        dropSelf(ModBlocks.GODFATHER);
+        dropSelf(ModBlocks.GRASSHOPPER);
+        dropSelf(ModBlocks.SCREWDRIVER);
+        dropSelf(ModBlocks.MOJITO);
+        dropSelf(ModBlocks.ALLIUM_GARDEN);
+        dropSelf(ModBlocks.DEPTH_CHARGE);
+        dropSelf(ModBlocks.NETHER_SPECIAL);
+        dropSelf(ModBlocks.BLOODY_MARY);
+        dropSelf(ModBlocks.SCULK_SPECIAL);
+
         // 高脚凳
         dropSelf(ModBlocks.WHITE_BAR_STOOL);
         dropSelf(ModBlocks.LIGHT_GRAY_BAR_STOOL);

@@ -22,7 +22,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     public static final int DEFAULT_FLUID_AMOUNT = IPressingTub.MAX_FLUID_AMOUNT / 8;
 
     @Override
-    public @NotNull PressingTubRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public @NotNull PressingTubRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
         Ingredient ingredient;
         if (GsonHelper.isArrayNode(json, "ingredient")) {
             ingredient = Ingredient.fromJson(getAsJsonArray(json, "ingredient"), false);
@@ -39,7 +39,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     }
 
     @Override
-    public @NotNull PressingTubRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public @NotNull PressingTubRecipe fromNetwork(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
         Ingredient ingredient = Ingredient.fromNetwork(buffer);
         ResourceLocation fluidId = buffer.readResourceLocation();
         Fluid fluid = Objects.requireNonNull(BuiltInRegistries.FLUID.get(fluidId));
@@ -48,7 +48,7 @@ public class PressingTubRecipeSerializer implements RecipeSerializer<PressingTub
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, PressingTubRecipe recipe) {
+    public void toNetwork(@NotNull FriendlyByteBuf buffer, PressingTubRecipe recipe) {
         recipe.getIngredient().toNetwork(buffer);
         ResourceLocation fluidId = Objects.requireNonNull(BuiltInRegistries.FLUID.getKey(recipe.getFluid()));
         buffer.writeResourceLocation(fluidId);

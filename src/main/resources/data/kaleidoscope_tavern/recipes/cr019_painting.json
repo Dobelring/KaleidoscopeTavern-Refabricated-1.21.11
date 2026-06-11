@@ -6,7 +6,7 @@
       "item": "minecraft:item_frame"
     },
     {
-      "item": "minecraft:red_dye"
+      "tag": "forge:dyes/red"
     }
   ],
   "result": {

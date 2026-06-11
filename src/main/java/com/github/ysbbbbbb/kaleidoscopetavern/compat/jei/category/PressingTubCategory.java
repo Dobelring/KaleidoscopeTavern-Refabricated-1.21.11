@@ -59,7 +59,7 @@ public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
     }
 
     @Override
-    public void draw(PressingTubRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(PressingTubRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         this.bgDraw.draw(guiGraphics);
 
         int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / recipe.getFluidAmount();
@@ -77,7 +77,7 @@ public class PressingTubCategory implements IRecipeCategory<PressingTubRecipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, PressingTubRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, PressingTubRecipe recipe, @NotNull IFocusGroup focuses) {
         int needPressCount = IPressingTub.MAX_FLUID_AMOUNT / recipe.getFluidAmount();
         if (needPressCount * recipe.getFluidAmount() < IPressingTub.MAX_FLUID_AMOUNT) {
             needPressCount++;

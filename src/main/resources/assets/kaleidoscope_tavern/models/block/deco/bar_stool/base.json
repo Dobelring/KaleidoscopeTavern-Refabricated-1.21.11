@@ -4,7 +4,6 @@
 	"render_type": "cutout",
 	"texture_size": [32, 32],
 	"textures": {
-		"texture": "kaleidoscope_tavern:block/deco/bar_stool/base",
 		"particle": "#texture"
 	},
 	"elements": [

@@ -56,12 +56,12 @@ public class BarrelRecipeCategory implements IRecipeCategory<BarrelRecipe> {
     }
 
     @Override
-    public void draw(BarrelRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(@NotNull BarrelRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         this.bgDraw.draw(guiGraphics);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BarrelRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, BarrelRecipe recipe, @NotNull IFocusGroup focuses) {
         int offsetX = 0;
         for (Ingredient input : recipe.getIngredients()) {
             List<ItemStack> list = Arrays.stream(input.getItems())

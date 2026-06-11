@@ -43,6 +43,47 @@ public interface TagMod {
      */
     TagKey<Block> GRASS_STEALTH_PLANTS = blockTag("grass_stealth_plants");
 
+    /**
+     * 酒柜异形酒瓶名单，这种类型的酒只允许放入一瓶
+     */
+    TagKey<Item> BAR_CABINET_IRREGULAR = itemTag("bar_cabinet_irregular");
+    /**
+     * 窖藏酒柜黑名单，即不允许放入窖藏酒柜的酒
+     */
+    TagKey<Item> CELLAR_CABINET_BLOCKLIST = itemTag("cellar_cabinet_blocklist");
+    /**
+     * 倾斜酒架黑名单，即不允许放入倾斜酒架的酒
+     */
+    TagKey<Item> TILTED_RACK_BLOCKLIST = itemTag("tilted_rack_blocklist");
+    /**
+     * 圆周酒架黑名单，即不允许放入圆周酒架的酒
+     */
+    TagKey<Item> CIRCULAR_RACK_BLOCKLIST = itemTag("circular_rack_blocklist");
+    /**
+     * 单体酒架黑名单，即不允许放入单体酒架的酒
+     */
+    TagKey<Item> HOLDER_BLOCKLIST = itemTag("holder_blocklist");
+
+    /**
+     * 鸡尾酒原料
+     */
+    TagKey<Item> COCKTAIL_INGREDIENT_BLACK = itemTag("cocktail_ingredient_black");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_BLUE = itemTag("cocktail_ingredient_dark_blue");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_GREEN = itemTag("cocktail_ingredient_dark_green");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_AQUA = itemTag("cocktail_ingredient_dark_aqua");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_RED = itemTag("cocktail_ingredient_dark_red");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_PURPLE = itemTag("cocktail_ingredient_dark_purple");
+    TagKey<Item> COCKTAIL_INGREDIENT_GOLD = itemTag("cocktail_ingredient_gold");
+    TagKey<Item> COCKTAIL_INGREDIENT_GRAY = itemTag("cocktail_ingredient_gray");
+    TagKey<Item> COCKTAIL_INGREDIENT_DARK_GRAY = itemTag("cocktail_ingredient_dark_gray");
+    TagKey<Item> COCKTAIL_INGREDIENT_BLUE = itemTag("cocktail_ingredient_blue");
+    TagKey<Item> COCKTAIL_INGREDIENT_GREEN = itemTag("cocktail_ingredient_green");
+    TagKey<Item> COCKTAIL_INGREDIENT_AQUA = itemTag("cocktail_ingredient_aqua");
+    TagKey<Item> COCKTAIL_INGREDIENT_RED = itemTag("cocktail_ingredient_red");
+    TagKey<Item> COCKTAIL_INGREDIENT_LIGHT_PURPLE = itemTag("cocktail_ingredient_light_purple");
+    TagKey<Item> COCKTAIL_INGREDIENT_YELLOW = itemTag("cocktail_ingredient_yellow");
+    TagKey<Item> COCKTAIL_INGREDIENT_WHITE = itemTag("cocktail_ingredient_white");
+
     static TagKey<Item> itemTag(String name) {
         return TagKey.create(Registries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name));
     }

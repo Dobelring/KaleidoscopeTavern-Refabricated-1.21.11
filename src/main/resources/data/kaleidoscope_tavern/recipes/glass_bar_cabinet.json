@@ -6,7 +6,7 @@
       "item": "kaleidoscope_tavern:grapevine"
     },
     "P": {
-      "item": "minecraft:glass_pane"
+      "tag": "forge:glass_panes"
     }
   },
   "pattern": [

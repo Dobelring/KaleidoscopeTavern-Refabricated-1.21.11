@@ -12,6 +12,8 @@ public final class ModSounds {
 
     public static final SoundEvent EFFECT_VISION = registerSound("effect.vision");
 
+    public static final SoundEvent HOLDER_POP = registerSound("block.holder.pop");
+
     private static SoundEvent registerSound(String name) {
         return Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name), SoundEvent.createFixedRangeEvent(new ResourceLocation(KaleidoscopeTavern.MOD_ID, name), 16.0F));
     }

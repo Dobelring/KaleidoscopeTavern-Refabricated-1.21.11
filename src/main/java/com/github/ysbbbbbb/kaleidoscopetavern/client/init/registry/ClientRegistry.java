@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.event.ViewportEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.model.baked.GlasswareModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.trinkets.init.TrinketsCompactClient;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
@@ -25,6 +26,7 @@ public final class ClientRegistry {
         ModEntitiesRender.init();
         ModFluids.registerFluidRenderers();
         ParticleFactoryRegistry.init();
+        GlasswareModelLoading.init();
         modCompatClient();
     }
 
@@ -97,7 +99,21 @@ public final class ClientRegistry {
                 CYAN_BAR_STOOL,
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
-                LIGHT_GRAY_BAR_STOOL
+                LIGHT_GRAY_BAR_STOOL,
+                ORDINARY_COCKTAIL,
+                MYSTERY_COCKTAIL,
+                WHITE_LADY,
+                EMERALD,
+                BRASS_HEART,
+                GODFATHER,
+                GRASSHOPPER,
+                SCREWDRIVER,
+                MOJITO,
+                ALLIUM_GARDEN,
+                DEPTH_CHARGE,
+                NETHER_SPECIAL,
+                BLOODY_MARY,
+                SCULK_SPECIAL
         );
     }
 
