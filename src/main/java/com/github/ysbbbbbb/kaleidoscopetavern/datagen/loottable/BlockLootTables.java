@@ -47,7 +47,7 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.PINK_SOFA);
 
         // 鸡尾酒
-        dropSelf(ModBlocks.ORDINARY_COCKTAIL);
+        dropSelf(ModBlocks.SIGNATURE_COCKTAIL);
         dropSelf(ModBlocks.MYSTERY_COCKTAIL);
         dropSelf(ModBlocks.WHITE_LADY);
         dropSelf(ModBlocks.EMERALD);

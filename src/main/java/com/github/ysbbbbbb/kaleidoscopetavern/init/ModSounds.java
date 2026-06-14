@@ -14,6 +14,10 @@ public final class ModSounds {
 
     public static final SoundEvent HOLDER_POP = registerSound("block.holder.pop");
 
+    public static final SoundEvent SHAKER_END = registerSound("item.shaker.end");
+
+    public static final SoundEvent SHAKER_SHAKING = registerSound("item.shaker.shaking");
+
     private static SoundEvent registerSound(String name) {
         return Registry.register(BuiltInRegistries.SOUND_EVENT, new ResourceLocation(KaleidoscopeTavern.MOD_ID, name), SoundEvent.createFixedRangeEvent(new ResourceLocation(KaleidoscopeTavern.MOD_ID, name), 16.0F));
     }

@@ -3,6 +3,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.game.grape;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlantGrapeEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.TrellisBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -24,7 +25,7 @@ public class IceGrapePlant {
         BlockState state = event.state();
 
         BlockState belowState = level.getBlockState(pos.below());
-        if (belowState.is(BlockTags.ICE) || belowState.is(Blocks.SNOW_BLOCK)) {
+        if (belowState.is(TagMod.CAN_GROW_ICE_GRAPE)) {
             BlockState plantedState = ModBlocks.ICE_GRAPEVINE_TRELLIS
                     .defaultBlockState()
                     .setValue(TrellisBlock.WATERLOGGED, state.getValue(TrellisBlock.WATERLOGGED));

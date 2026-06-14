@@ -1,14 +1,19 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.ViewportEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.animation.ShakerAnimation;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.event.LeftClickEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.model.baked.GlasswareModelLoading;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.trinkets.init.TrinketsCompactClient;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import io.github.fabricators_of_create.porting_lib.event.client.ColorHandlersCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -20,18 +25,26 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
 public final class ClientRegistry {
     public static void init() {
         NetworkHandler.Clientside.init();
+        ShakerAnimation.trigger();
         renderType();
         events();
+        color();
         ClientSetupEvent.init();
-        ModEntitiesRender.init();
+        ShakerOverlay.register();
         ModFluids.registerFluidRenderers();
         ParticleFactoryRegistry.init();
-        GlasswareModelLoading.init();
+        CommonModelLoading.init();
         modCompatClient();
+    }
+
+    public static void color() {
+        ColorHandlersCallback.BLOCK.register(t -> t.register(new SignatureCocktailColor.Block(), SIGNATURE_COCKTAIL));
+        ColorHandlersCallback.ITEM.register((t, k) -> t.register(new SignatureCocktailColor.Item(), ModItems.SIGNATURE_COCKTAIL));
     }
 
     public static void events() {
         ViewportEvent.ComputeCameraAngles.register();
+        LeftClickEvent.register();
     }
 
     public static void renderType() {
@@ -100,7 +113,7 @@ public final class ClientRegistry {
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
                 LIGHT_GRAY_BAR_STOOL,
-                ORDINARY_COCKTAIL,
+                SIGNATURE_COCKTAIL,
                 MYSTERY_COCKTAIL,
                 WHITE_LADY,
                 EMERALD,

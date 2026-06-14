@@ -12,6 +12,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class TapDripParticle extends DripParticle {
@@ -35,7 +36,7 @@ public class TapDripParticle extends DripParticle {
         @Override
         @SuppressWarnings("unused")
         public TextureSheetParticle createParticle(
-                SimpleParticleType pType, ClientLevel level,
+                @NotNull SimpleParticleType pType, @NotNull ClientLevel level,
                 double pX, double pY, double pZ,
                 double pXSpeed, double pYSpeed, double pZSpeed
         ) {
@@ -58,7 +59,7 @@ public class TapDripParticle extends DripParticle {
         @Override
         @SuppressWarnings("unused")
         public TextureSheetParticle createParticle(
-                SimpleParticleType type, ClientLevel level,
+                @NotNull SimpleParticleType type, @NotNull ClientLevel level,
                 double pX, double pY, double pZ,
                 double pXSpeed, double pYSpeed, double pZSpeed
         ) {

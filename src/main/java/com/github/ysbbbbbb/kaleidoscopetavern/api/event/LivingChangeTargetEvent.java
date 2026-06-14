@@ -19,6 +19,10 @@ public class LivingChangeTargetEvent extends CancellableEvent {
         this.targetType = targetType;
     }
 
+    public LivingEntity getEntity() {
+        return entity;
+    }
+
     public LivingEntity getNewTarget()
     {
         return newTarget;

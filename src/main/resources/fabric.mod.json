@@ -33,7 +33,8 @@
 		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*",
-		"forgeconfigapiport": "*"
+		"forgeconfigapiport": "*",
+		"reach-entity-attributes": ">=2.4.0"
 	},
 	"suggests": {
 		"jei": "*",

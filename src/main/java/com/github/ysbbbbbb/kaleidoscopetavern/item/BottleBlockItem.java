@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.data.DrinkEffectData;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.ColorUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -28,6 +29,11 @@ import java.util.List;
 public class BottleBlockItem extends BlockItem {
     public static final String BREW_LEVEL_KEY = "BrewLevel";
 
+    /**
+     * 调酒所需的最低酿造等级（优质，即等级 4 以上）。
+     */
+    public static final int MIN_BREW_LEVEL_FOR_SHAKER = 4;
+
     public BottleBlockItem(Block block) {
         this(block, new Properties()
                 .stacksTo(16));
@@ -41,6 +47,17 @@ public class BottleBlockItem extends BlockItem {
         ItemStack stack = item.getDefaultInstance();
         setBrewLevel(stack, IBarrel.BREWING_FINISHED);
         return stack;
+    }
+
+    /**
+     * 判断酒瓶物品是否满足调酒品质要求（brewLevel >= {@link #MIN_BREW_LEVEL_FOR_SHAKER}）。
+     * 非 BottleBlockItem 的物品直接返回 true（药水等其他原料不受此限制）。
+     */
+    public static boolean isValidForShaker(ItemStack stack) {
+        if (!(stack.getItem() instanceof BottleBlockItem)) {
+            return true;
+        }
+        return getBrewLevel(stack) >= MIN_BREW_LEVEL_FOR_SHAKER;
     }
 
     public @NotNull InteractionResult placeForDispenser(@NotNull BlockPlaceContext placeContext, DispenserBlockEntity entity) {
@@ -85,6 +102,12 @@ public class BottleBlockItem extends BlockItem {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+        // 添加颜色说明
+        ChatFormatting applied = ColorUtils.ITEM_COLOR_CACHE.apply(stack.getItem());
+        if (applied != ChatFormatting.RESET) {
+            String key = "color.kaleidoscope_tavern.%s".formatted(applied.getName());
+            tooltip.add(Component.translatable(key).withStyle(applied));
+        }
         int brewLevel = getBrewLevel(stack);
         if (0 < brewLevel) {
             Component brewLevelText = Component.translatable("message.kaleidoscope_tavern.barrel.brew_level.%d".formatted(brewLevel));

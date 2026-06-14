@@ -92,7 +92,7 @@ public final class ModCreativeTabs {
                     output.accept(BottleBlockItem.getMaxLevelDrink(ModItems.RUM));
 
                     // 鸡尾酒
-                    output.accept(ModItems.ORDINARY_COCKTAIL);
+                    output.accept(ModItems.SIGNATURE_COCKTAIL);
                     output.accept(ModItems.MYSTERY_COCKTAIL);
                     output.accept(ModItems.WHITE_LADY);
                     output.accept(ModItems.EMERALD);
@@ -118,6 +118,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.TILTED_RACK);
                     output.accept(ModItems.CIRCULAR_RACK);
                     output.accept(ModItems.HOLDER);
+                    output.accept(ModItems.GLASSWARE_HOLDER);
                     output.accept(ModItems.BAR_COUNTER);
                     output.accept(ModItems.STEPLADDER);
 
@@ -140,6 +141,10 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.STRING_LIGHTS_PURPLE);
                     output.accept(ModItems.STRING_LIGHTS_MAGENTA);
                     output.accept(ModItems.STRING_LIGHTS_PINK);
+
+                    output.accept(ModItems.BELL_PENDANT_LAMP);
+                    output.accept(ModItems.YELLOW_PENDANT_LAMP);
+                    output.accept(ModItems.BLUE_PENDANT_LAMP);
 
                     output.accept(ModItems.WHITE_SOFA);
                     output.accept(ModItems.LIGHT_GRAY_SOFA);
@@ -206,6 +211,16 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.MONDRIAN_PAINTING);
 
                     output.accept(ModItems.CHALKBOARD);
+
+                    // 香薰
+                    output.accept(ModItems.SAKURA_INCENSE);
+                    output.accept(ModItems.PINE_INCENSE);
+                    output.accept(ModItems.GINKGO_INCENSE);
+                    output.accept(ModItems.SPORE_INCENSE);
+                    output.accept(ModItems.CATNIP_INCENSE);
+                    output.accept(ModItems.SNOW_INCENSE);
+                    output.accept(ModItems.BUTTERFLY_INCENSE);
+                    output.accept(ModItems.FIREFLY_INCENSE);
                 }).build());
     }
 }

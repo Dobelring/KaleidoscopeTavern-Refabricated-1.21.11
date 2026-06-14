@@ -3,14 +3,14 @@ package com.github.ysbbbbbb.kaleidoscopetavern.init;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.mixology.CocktailBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.mixology.GlasswareBlock;
-import com.github.ysbbbbbb.kaleidoscopetavern.block.mixology.ShakerBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.mixology.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.mixology.ShakerBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.mixology.SignatureCocktailBlockEntity;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -118,9 +118,11 @@ public final class ModBlocks {
     // 空瓶
     public static final Block EMPTY_BOTTLE = new BottleBlock();
     public static final Block EMPTY_GLASSWARE = new GlasswareBlock();
+    // 酒杯架
+    public static final Block GLASSWARE_HOLDER = new GlasswareHolderBlock();
     // 鸡尾酒
-    public static final Block ORDINARY_COCKTAIL = new CocktailBlock();
-    public static final Block MYSTERY_COCKTAIL = new CocktailBlock();
+    public static final Block SIGNATURE_COCKTAIL = new SignatureCocktailBlock();
+    public static final Block MYSTERY_COCKTAIL = new MysteryCocktailBlock();
     public static final Block WHITE_LADY = new CocktailBlock();
     public static final Block EMERALD = new CocktailBlock();
     public static final Block BRASS_HEART = new CocktailBlock();
@@ -193,6 +195,43 @@ public final class ModBlocks {
     public static final Block STEPLADDER = new StepladderBlock();
     // 黑板
     public static final Block CHALKBOARD = new ChalkboardBlock();
+    // 垂灯
+    public static final Block BELL_PENDANT_LAMP = new PendantLampBlock();
+    public static final Block YELLOW_PENDANT_LAMP = new PendantLampBlock();
+    public static final Block BLUE_PENDANT_LAMP = new PendantLampBlock();
+    // 香薰
+    public static final Block SAKURA_INCENSE = new IncenseBlock(
+            () -> ModParticles.SAKURA_INCENSE_PARTICLE, () -> ParticleTypes.CHERRY_LEAVES
+    );
+
+    public static final Block PINE_INCENSE = new IncenseBlock(
+            () -> ModParticles.PINE_INCENSE_PARTICLE, () -> ModParticles.PINE_INCENSE_LARGE_PARTICLE
+    );
+
+    public static final Block GINKGO_INCENSE = new IncenseBlock(
+            () -> ModParticles.GINKGO_INCENSE_PARTICLE, () -> ModParticles.GINKGO_INCENSE_LARGE_PARTICLE
+    );
+
+    public static final Block SPORE_INCENSE = new IncenseBlock(
+            () -> ModParticles.SPORE_INCENSE_PARTICLE, () -> ParticleTypes.SPORE_BLOSSOM_AIR
+    );
+
+    public static final Block CATNIP_INCENSE = new IncenseBlock(
+            () -> ModParticles.CATNIP_INCENSE_PARTICLE, () -> ModParticles.CATNIP_INCENSE_LARGE_PARTICLE
+    );
+
+    public static final Block SNOW_INCENSE = new IncenseBlock(
+            () -> ModParticles.SNOW_INCENSE_PARTICLE, () -> ModParticles.SNOW_INCENSE_LARGE_PARTICLE
+    );
+
+    public static final Block BUTTERFLY_INCENSE = new IncenseBlock(
+            () -> ModParticles.BUTTERFLY_INCENSE_PARTICLE, () -> ModParticles.BUTTERFLY_INCENSE_LARGE_PARTICLE
+    );
+
+    public static final Block FIREFLY_INCENSE = new IncenseBlock(
+            () -> ModParticles.FIREFLY_INCENSE_PARTICLE, () -> ModParticles.FIREFLY_INCENSE_LARGE_PARTICLE,
+            -0.67, 5.33
+    );
     // 酒
     public static final Block WINE = DrinkBlock.create().maxCount(4).shapes(
             Block.box(6, 0, 6, 10, 16, 10),
@@ -473,22 +512,29 @@ public final class ModBlocks {
     public static final BlockEntityType<BarrelBlockEntity> BARREL_BE = BlockEntityType.Builder.of(BarrelBlockEntity::new, BARREL).build(null);
     public static final BlockEntityType<TapBlockEntity> TAP_BE = BlockEntityType.Builder.of(TapBlockEntity::new, TAP).build(null);
     public static final BlockEntityType<ShakerBlockEntity> SHAKER_BE = BlockEntityType.Builder.of(ShakerBlockEntity::new, SHAKER).build(null);
+    public static final BlockEntityType<IncenseBlockEntity> INCENSE_BE = BlockEntityType.Builder.of(IncenseBlockEntity::new,
+            SAKURA_INCENSE, PINE_INCENSE, GINKGO_INCENSE, SPORE_INCENSE,
+            CATNIP_INCENSE, SNOW_INCENSE, BUTTERFLY_INCENSE, FIREFLY_INCENSE
+            ).build(null);
     public static final BlockEntityType<BarCabinetBlockEntity> BAR_CABINET_BE = BlockEntityType.Builder.of(BarCabinetBlockEntity::new,
             BAR_CABINET,
             GLASS_BAR_CABINET
     ).build(null);
-
+    public static final BlockEntityType<SignatureCocktailBlockEntity> SIGNATURE_COCKTAIL_BE = BlockEntityType.Builder.of(SignatureCocktailBlockEntity::new,
+            SIGNATURE_COCKTAIL
+    ).build(null);
     public static final BlockEntityType<CellarCabinetBlockEntity> CELLAR_CABINET_BE = BlockEntityType.Builder.of(CellarCabinetBlockEntity::new,
             CELLAR_CABINET
     ).build(null);
     public static final BlockEntityType<TiltedRackBlockEntity> TILTED_RACK_BE = BlockEntityType.Builder.of(TiltedRackBlockEntity::new,
             TILTED_RACK
     ).build(null);
-
+    public static final BlockEntityType<GlasswareHolderBlockEntity> GLASSWARE_HOLDER_BE = BlockEntityType.Builder.of(GlasswareHolderBlockEntity::new,
+            GLASSWARE_HOLDER
+    ).build(null);
     public static final BlockEntityType<CircularRackBlockEntity> CIRCULAR_RACK_BE = BlockEntityType.Builder.of(CircularRackBlockEntity::new,
             CIRCULAR_RACK
     ).build(null);
-
     public static final BlockEntityType<HolderBlockEntity> HOLDER_BE = BlockEntityType.Builder.of(HolderBlockEntity::new,
             HOLDER
     ).build(null);
@@ -585,8 +631,9 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_glassware"), EMPTY_GLASSWARE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glassware_holder"), GLASSWARE_HOLDER);
 
-        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ordinary_cocktail"), ORDINARY_COCKTAIL);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "signature_cocktail"), SIGNATURE_COCKTAIL);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mystery_cocktail"), MYSTERY_COCKTAIL );
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "white_lady"), WHITE_LADY);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "emerald"), EMERALD);
@@ -627,6 +674,17 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_counter"), BAR_COUNTER);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "stepladder"), STEPLADDER);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bell_pendant_lamp"), BELL_PENDANT_LAMP);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "yellow_pendant_lamp"), YELLOW_PENDANT_LAMP);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "blue_pendant_lamp"), BLUE_PENDANT_LAMP);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "sakura_incense"), SAKURA_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pine_incense"), PINE_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "ginkgo_incense"), GINKGO_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "spore_incense"), SPORE_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "catnip_incense"), CATNIP_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "snow_incense"), SNOW_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "butterfly_incense"), BUTTERFLY_INCENSE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "firefly_incense"), FIREFLY_INCENSE);
 
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "wine"), WINE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "champagne"), CHAMPAGNE);
@@ -661,9 +719,12 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tap"), TAP_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "incense"), INCENSE_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "signature_cocktail"), SIGNATURE_COCKTAIL_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "cellar_cabinet"), CELLAR_CABINET_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tilted_rack"), TILTED_RACK_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "glassware_holder"), GLASSWARE_HOLDER_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "circular_rack"), CIRCULAR_RACK_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "holder"), HOLDER_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "drink"), DRINK_BE);

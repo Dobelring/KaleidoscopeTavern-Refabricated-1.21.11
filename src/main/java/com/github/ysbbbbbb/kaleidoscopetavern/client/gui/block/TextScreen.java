@@ -13,6 +13,7 @@ import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class TextScreen extends Screen {
@@ -97,7 +98,7 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
     }
@@ -108,7 +109,7 @@ public class TextScreen extends Screen {
     }
 
     @Override
-    public void resize(Minecraft mc, int pWidth, int pHeight) {
+    public void resize(@NotNull Minecraft mc, int pWidth, int pHeight) {
         String customSettingValue = this.customSetting.getValue();
         super.resize(mc, pWidth, pHeight);
         this.customSetting.setValue(customSettingValue);

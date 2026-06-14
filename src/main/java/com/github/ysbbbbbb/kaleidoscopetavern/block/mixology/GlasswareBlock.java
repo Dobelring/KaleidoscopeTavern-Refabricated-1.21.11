@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.mixology;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAfterBake;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("deprecation")
-public class GlasswareBlock extends Block implements SimpleWaterloggedBlock {
+public class GlasswareBlock extends Block implements SimpleWaterloggedBlock, IModelModifyRotationAfterBake<IntegerProperty> {
     public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -58,7 +59,7 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock {
             return InteractionResult.PASS;
         }
         if (level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, null)
+            getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
                     .forEach(stack -> ItemHandlerHelper.giveItemToPlayer(player, stack));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
             level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
@@ -128,5 +129,10 @@ public class GlasswareBlock extends Block implements SimpleWaterloggedBlock {
     public @NotNull BlockState mirror(BlockState pState, Mirror pMirror) {
         int max = RotationSegment.getMaxSegmentIndex() + 1;
         return pState.setValue(ROTATION, pMirror.mirror(pState.getValue(ROTATION), max));
+    }
+
+    @Override
+    public IntegerProperty getRotationProperty() {
+        return ROTATION;
     }
 }

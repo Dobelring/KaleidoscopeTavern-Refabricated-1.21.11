@@ -1,7 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.brew;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.util.forge.ItemHandlerHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -30,8 +35,8 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
      * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
      * @deprecated 现在通过 Item Tag 来决定了，不应当再使用此 tag
      */
+    @Deprecated(forRemoval = true)
     private final boolean irregular = false;
-
 
     public BottleBlock(Properties properties) {
         super(properties);
@@ -58,10 +63,20 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         this();
     }
 
-
     @Override
-    public float getShadeBrightness(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
-        return 1.0F;
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, Player player,
+                                          @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        // 如果是空手，那么可以尝试取回
+        if (player.getItemInHand(hand).isEmpty()) {
+            if (level instanceof ServerLevel serverLevel) {
+                getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
+                        .forEach(stack -> ItemHandlerHelper.giveItemToPlayer(player, stack));
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
+                level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -108,6 +123,11 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos, @NotNull CollisionContext pContext) {
         return SHAPE;
+    }
+
+    @Override
+    public float getShadeBrightness(@NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
+        return 1.0F;
     }
 
     /**

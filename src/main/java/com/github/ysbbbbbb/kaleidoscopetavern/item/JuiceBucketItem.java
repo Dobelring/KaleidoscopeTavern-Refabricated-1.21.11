@@ -1,6 +1,10 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -11,6 +15,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class JuiceBucketItem extends BucketItem implements IHasContainer {
     public JuiceBucketItem(Fluid fluid) {
@@ -52,6 +59,12 @@ public class JuiceBucketItem extends BucketItem implements IHasContainer {
         if (player.isShiftKeyDown())
             return super.use(level, player, hand);
         return ItemUtils.startUsingInstantly(level, player, hand);
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level pLevel, List<Component> components, @NotNull TooltipFlag pIsAdvanced) {
+        String tooltipKey = Util.makeDescriptionId("tooltip", BuiltInRegistries.ITEM.getKey(this));
+        components.add(Component.translatable(tooltipKey).withStyle(ChatFormatting.GRAY));
     }
 
     @Override

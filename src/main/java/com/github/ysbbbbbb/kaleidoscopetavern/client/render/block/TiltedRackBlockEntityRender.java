@@ -4,6 +4,8 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.TiltedRackBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TiltedRackBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -12,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+@Environment(EnvType.CLIENT)
 public class TiltedRackBlockEntityRender extends StorageBlockEntityRender<TiltedRackBlockEntity> {
     public TiltedRackBlockEntityRender(BlockEntityRendererProvider.Context context) {
         super(context);

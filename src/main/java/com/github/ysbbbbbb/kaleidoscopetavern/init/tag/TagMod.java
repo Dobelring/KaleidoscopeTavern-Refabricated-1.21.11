@@ -11,6 +11,26 @@ import net.minecraft.world.level.block.Block;
 
 public interface TagMod {
     /**
+     * 摸金校尉可卸装的实体
+     */
+    TagKey<EntityType<?>> TOMB_RAIDER_DISARMABLE = entityTag("tomb_raider_disarmable");
+    /**
+     * 醇热效果可破坏的石头
+     */
+    TagKey<Block> ARDENT_HEAT_BREAKABLE = blockTag("ardent_heat_breakable");
+    /**
+     * 可以种植普通葡萄的方块
+     */
+    TagKey<Block> CAN_GROW_GRAPE = blockTag("can_grow_grape");
+    /**
+     * 可以种植冰葡萄的方块
+     */
+    TagKey<Block> CAN_GROW_ICE_GRAPE = blockTag("can_grow_ice_grape");
+    /**
+     * 可以种植黄金葡萄的方块
+     */
+    TagKey<Block> CAN_GROW_GOLD_GRAPE = blockTag("can_grow_gold_grape");
+    /**
      * 沙发
      */
     TagKey<Block> SOFA = blockTag("sofa");
@@ -63,6 +83,7 @@ public interface TagMod {
      * 单体酒架黑名单，即不允许放入单体酒架的酒
      */
     TagKey<Item> HOLDER_BLOCKLIST = itemTag("holder_blocklist");
+    TagKey<Item> COCKTAIL_INGREDIENT = itemTag("cocktail_ingredient");
 
     /**
      * 鸡尾酒原料

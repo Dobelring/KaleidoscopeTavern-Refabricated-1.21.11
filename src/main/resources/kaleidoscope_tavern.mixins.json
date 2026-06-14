@@ -16,6 +16,8 @@
   "client": [
     "client.EntityRendererDispatcherMixin",
     "client.GameRendererMixin",
+    "client.HumanoidModelMixin",
+    "client.ItemInHandMixin",
     "client.PlayerRendererMixin"
   ]
 }
