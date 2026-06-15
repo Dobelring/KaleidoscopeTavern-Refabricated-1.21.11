@@ -48,6 +48,22 @@ public final class ClientRegistry {
     }
 
     public static void renderType() {
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
+                SIGNATURE_COCKTAIL,
+                MYSTERY_COCKTAIL,
+                WHITE_LADY,
+                EMERALD,
+                BRASS_HEART,
+                GODFATHER,
+                GRASSHOPPER,
+                SCREWDRIVER,
+                MOJITO,
+                ALLIUM_GARDEN,
+                DEPTH_CHARGE,
+                NETHER_SPECIAL,
+                BLOODY_MARY,
+                SCULK_SPECIAL
+                );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 PRESSING_TUB,
                 BARREL,
@@ -112,21 +128,7 @@ public final class ClientRegistry {
                 CYAN_BAR_STOOL,
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
-                LIGHT_GRAY_BAR_STOOL,
-                SIGNATURE_COCKTAIL,
-                MYSTERY_COCKTAIL,
-                WHITE_LADY,
-                EMERALD,
-                BRASS_HEART,
-                GODFATHER,
-                GRASSHOPPER,
-                SCREWDRIVER,
-                MOJITO,
-                ALLIUM_GARDEN,
-                DEPTH_CHARGE,
-                NETHER_SPECIAL,
-                BLOODY_MARY,
-                SCULK_SPECIAL
+                LIGHT_GRAY_BAR_STOOL
         );
     }
 
