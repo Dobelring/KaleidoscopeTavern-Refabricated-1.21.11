@@ -21,7 +21,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import org.joml.Matrix4f;
 
 @Environment(EnvType.CLIENT)
 public class RenderUtils {
@@ -65,9 +64,9 @@ public class RenderUtils {
         public static void renderSurface(PoseStack poseStack, SubmitNodeCollector collector, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y)
         {
-            Matrix4f matrix = poseStack.last().pose();
             int tintedColor = ensureAlpha(color);
             collector.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), (pose, vertexConsumer) -> {
+                var matrix = pose.pose();
                 // 贴图的位置和大小
                 int margin = (16 - size) / 2;
                 float min = margin / 16f, max = 1 - margin / 16f;
