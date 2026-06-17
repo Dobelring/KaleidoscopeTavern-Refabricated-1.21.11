@@ -136,9 +136,12 @@ public final class ModBlocks {
     public static final Block BLOODY_MARY = new CocktailBlock();
     public static final Block SCULK_SPECIAL = new CocktailBlock();
     // 杂项的瓶子
-    public static final Block WATER_BOTTLE = new BottleBlock();
-    public static final Block HONEY_BOTTLE = new BottleBlock();
-    public static final Block DRAGON_BREATH_BOTTLE = new BottleBlock();
+    public static final Block WATER_BOTTLE = BottleBlock.simpleBottle();
+    public static final Block HONEY_BOTTLE = BottleBlock.simpleBottle();
+    public static final Block DRAGON_BREATH_BOTTLE = BottleBlock.simpleBottle();
+    public static final Block POTION_BOTTLE = new PotionBottleBlock();
+    public static final Block XP_BOTTLE = BottleBlock.simpleBottle();
+
     // 酒桶
     public static final Block BARREL = new BarrelBlock();
     // 酒柜
@@ -512,6 +515,7 @@ public final class ModBlocks {
     public static final BlockEntityType<BarrelBlockEntity> BARREL_BE = BlockEntityType.Builder.of(BarrelBlockEntity::new, BARREL).build(null);
     public static final BlockEntityType<TapBlockEntity> TAP_BE = BlockEntityType.Builder.of(TapBlockEntity::new, TAP).build(null);
     public static final BlockEntityType<ShakerBlockEntity> SHAKER_BE = BlockEntityType.Builder.of(ShakerBlockEntity::new, SHAKER).build(null);
+    public static final BlockEntityType<PotionBottleBlockEntity> POTION_BOTTLE_BE = BlockEntityType.Builder.of(PotionBottleBlockEntity::new, POTION_BOTTLE).build(null);
     public static final BlockEntityType<IncenseBlockEntity> INCENSE_BE = BlockEntityType.Builder.of(IncenseBlockEntity::new,
             SAKURA_INCENSE, PINE_INCENSE, GINKGO_INCENSE, SPORE_INCENSE,
             CATNIP_INCENSE, SNOW_INCENSE, BUTTERFLY_INCENSE, FIREFLY_INCENSE
@@ -651,6 +655,8 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "water_bottle"), WATER_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "honey_bottle"), HONEY_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "dragon_breath_bottle"), DRAGON_BREATH_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "potion_bottle"), POTION_BOTTLE);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "xp_bottle"), XP_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "table"), TABLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET);
@@ -719,6 +725,7 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "tap"), TAP_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "potion_bottle"), POTION_BOTTLE_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "incense"), INCENSE_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "signature_cocktail"), SIGNATURE_COCKTAIL_BE);

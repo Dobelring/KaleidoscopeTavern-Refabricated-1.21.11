@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.PotionBottleColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.create.ponder.init.PonderCompat;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.trinkets.init.TrinketsCompactClient;
@@ -40,6 +41,8 @@ public final class ClientRegistry {
     public static void color() {
         ColorHandlersCallback.BLOCK.register(t -> t.register(new SignatureCocktailColor.Block(), SIGNATURE_COCKTAIL));
         ColorHandlersCallback.ITEM.register((t, k) -> t.register(new SignatureCocktailColor.Item(), ModItems.SIGNATURE_COCKTAIL));
+
+        ColorHandlersCallback.BLOCK.register(t -> t.register(new PotionBottleColor(), POTION_BOTTLE));
     }
 
     public static void events() {

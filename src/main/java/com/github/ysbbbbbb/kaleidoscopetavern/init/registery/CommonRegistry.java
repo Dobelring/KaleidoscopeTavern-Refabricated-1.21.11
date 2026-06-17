@@ -7,6 +7,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockE
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.EffectEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.VanillaBottlePlaceEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.impl.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -47,6 +48,7 @@ public final class CommonRegistry {
         PlantGrapeEvent.register();
         LivingChangeTargetEvent.register();
         EffectEvent.register();
+        VanillaBottlePlaceEvent.register();
     }
 
     public static void fuelRegistry() {
