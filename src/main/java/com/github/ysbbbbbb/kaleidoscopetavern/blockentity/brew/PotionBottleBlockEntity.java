@@ -5,6 +5,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +21,7 @@ public class PotionBottleBlockEntity extends BaseBlockEntity {
     public void load(@NotNull CompoundTag tag) {
         super.load(tag);
         this.potionStack = ItemStack.of(tag.getCompound(ITEM_KEY));
+        this.refreshClientRendering();
     }
 
     @Override
@@ -35,5 +37,13 @@ public class PotionBottleBlockEntity extends BaseBlockEntity {
     public void setPotionStack(ItemStack stack) {
         this.potionStack = stack.copyWithCount(1);
         this.refresh();
+        this.refreshClientRendering();
+    }
+
+    private void refreshClientRendering() {
+        if (this.level != null && this.level.isClientSide) {
+            BlockState state = this.getBlockState();
+            this.level.sendBlockUpdated(this.worldPosition, state, state, Block.UPDATE_IMMEDIATE);
+        }
     }
 }
