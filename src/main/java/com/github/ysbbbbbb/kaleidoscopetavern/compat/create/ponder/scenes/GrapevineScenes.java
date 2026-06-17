@@ -59,7 +59,7 @@ public class GrapevineScenes {
         scene.idle(5);
         scene.world().destroyBlock(vine.pos);
         scene.world().setBlock(vine.pos.above(), ModBlocks.WILD_GRAPEVINE.defaultBlockState(), false);
-        ElementLink<EntityElement> itemLink = scene.world().createItemEntity(vine.pos.getCenter(), Vec3.ZERO, vineStack.copy());
+        ElementLink<EntityElement> itemLink = scene.world().createItemEntity(Vec3.atCenterOf(vine.pos), Vec3.ZERO, vineStack.copy());
         scene.idle(50);
 
         scene.addKeyframe();
@@ -201,14 +201,14 @@ public class GrapevineScenes {
         scene.overlay().showControls(util.vector().blockSurface(grape, Direction.DOWN), Pointing.UP, 25).leftClick();
         scene.idle(5);
         scene.world().destroyBlock(grape);
-        scene.world().createItemEntity(grape.getCenter(), Vec3.ZERO, new ItemStack(ModItems.GRAPE));
+        scene.world().createItemEntity(Vec3.atCenterOf(grape), Vec3.ZERO, new ItemStack(ModItems.GRAPE));
         scene.idle(45);
         scene.overlay().showText(35).text("").pointAt(util.vector().blockSurface(grape1, Direction.WEST)).placeNearTarget();
         scene.idle(5);
         scene.overlay().showControls(util.vector().blockSurface(grape1, Direction.DOWN), Pointing.UP, 25).leftClick().withItem(new ItemStack(Items.SHEARS));
         scene.idle(5);
         scene.world().destroyBlock(grape1);
-        scene.world().createItemEntity(grape1.getCenter(), Vec3.ZERO, new ItemStack(ModItems.GRAPE, 3));
+        scene.world().createItemEntity(Vec3.atCenterOf(grape1), Vec3.ZERO, new ItemStack(ModItems.GRAPE, 3));
         scene.idle(45);
     }
 

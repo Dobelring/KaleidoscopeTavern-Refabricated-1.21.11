@@ -18,9 +18,10 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.animal.pig.Pig;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -57,9 +58,7 @@ public class PressingTubScenes {
         scene.idle(5);
         scene.overlay().showControls(tub.blockSurface(Direction.UP), Pointing.DOWN, 25).rightClick().withItem(grape.copy());
         scene.idle(5);
-        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-            be.addIngredient(grape.copyWithCount(16));
-        });
+        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.addIngredient(grape.copyWithCount(16)));
         scene.idle(50);
         scene.addKeyframe();
         scene.idle(15);
@@ -96,7 +95,7 @@ public class PressingTubScenes {
         if (level == null) {
             return;
         }
-        Pig pig = new Pig(EntityType.PIG, level);
+        Pig pig = new Pig(EntityTypes.PIG, level);
 
         scene.title("pressing_tub_pressing", "");
         scene.configureBasePlate(0, 0, 5);
@@ -118,9 +117,7 @@ public class PressingTubScenes {
         scene.overlay().showText(35).text("").pointAt(tub.blockSurface(Direction.WEST)).placeNearTarget();
         scene.overlay().showControls(tub.blockSurface(Direction.UP), Pointing.DOWN, 25).rightClick().withItem(grape.copy());
         scene.idle(5);
-        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-            be.addIngredient(grape.copyWithCount(8));
-        });
+        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.addIngredient(grape.copyWithCount(8)));
         scene.idle(45);
 
         scene.addKeyframe();
@@ -169,10 +166,8 @@ public class PressingTubScenes {
             });
         }
 
-        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-            be.press(pig, 2);
-        });
-        emitParticles(tub.pos.getCenter(), grape.copy(), scene, 10, 0.05, level.getRandom());
+        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.press(pig, 2));
+        emitParticles(Vec3.atCenterOf(tub.pos), grape.copy(), scene, 10, 0.05, level.getRandom());
 
         for (int x = 0; x < 7; x++) {
             scene.idle(1);
@@ -201,10 +196,8 @@ public class PressingTubScenes {
                 });
             }
 
-            tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-                be.press(pig, 1);
-            });
-            emitParticles(tub.pos.getCenter(), grape.copy(), scene, 10, 0.05, level.getRandom());
+            tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.press(pig, 1));
+            emitParticles(Vec3.atCenterOf(tub.pos), grape.copy(), scene, 10, 0.05, level.getRandom());
             scene.world().modifyEntity(slime, (e) -> {
                 e.setYBodyRot(180);
                 e.setYHeadRot(180);
@@ -268,9 +261,7 @@ public class PressingTubScenes {
         scene.idle(5);
         scene.overlay().showControls(tub.blockSurface(Direction.UP), Pointing.DOWN, 25).rightClick().withItem(diamond.copy());
         scene.idle(5);
-        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-            be.addIngredient(diamond.copyWithCount(12));
-        });
+        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.addIngredient(diamond.copyWithCount(12)));
         scene.idle(40);
 
         speed.set(0D);
@@ -361,9 +352,7 @@ public class PressingTubScenes {
         scene.overlay().showText(40).text("").pointAt(tub.blockSurface(Direction.WEST)).placeNearTarget();
         scene.overlay().showControls(tub.blockSurface(Direction.UP), Pointing.DOWN, 25).rightClick().withItem(grape.copy());
         scene.idle(5);
-        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> {
-            be.addIngredient(grape.copyWithCount(8));
-        });
+        tub.modifyBlockEntity(PressingTubBlockEntity.class, (be) -> be.addIngredient(grape.copyWithCount(8)));
         scene.idle(50);
 
         scene.addKeyframe();
@@ -542,11 +531,11 @@ public class PressingTubScenes {
     private static ElementLink<EntityElement> initSlime(SceneBuilder scene, SceneBuildingUtil util, double y) {
         return scene.world().createEntity(
                 (l) -> {
-                    Slime e = new Slime(EntityType.SLIME, l);
+                    Slime e = new Slime(EntityTypes.SLIME, l);
                     e.setYRot(180);
                     e.setYBodyRot(180);
                     e.setYHeadRot(180);
-                    Vec3 vec3 = util.grid().at(2, 1, 3).getCenter();
+                    Vec3 vec3 = Vec3.atCenterOf(util.grid().at(2, 1, 3));
                     e.setPos(vec3.x, vec3.y + y, vec3.z);
                     return e;
                 });

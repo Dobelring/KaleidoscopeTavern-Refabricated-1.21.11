@@ -8,9 +8,6 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.material.Fluid;
 
-import java.util.Collections;
-import java.util.List;
-
 @Environment(EnvType.CLIENT)
 public class PressingTubBlockEntityRenderState extends BlockEntityRenderState {
     public ItemStackHandler items;

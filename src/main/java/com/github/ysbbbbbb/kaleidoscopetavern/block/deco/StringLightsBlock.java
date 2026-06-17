@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class StringLightsBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<StringLightsBlock> CODEC = simpleCodec(p -> new StringLightsBlock(p, Items.WHITE_DYE));
+    public static final MapCodec<StringLightsBlock> CODEC = simpleCodec(p -> new StringLightsBlock(p, Items.DYE.white()));
     public static final Map<Item, StringLightsBlock> TRANSFORM_MAP = Maps.newHashMap();
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;

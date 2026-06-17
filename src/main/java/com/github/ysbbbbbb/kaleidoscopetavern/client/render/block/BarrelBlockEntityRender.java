@@ -14,7 +14,6 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -95,7 +94,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         poseStack.popPose();
     }
 
-    private void renderFluid(BarrelBlockEntityRenderState barrel, PoseStack poseStack, MultiBufferSource buffer) {
+    private void renderFluid(BarrelBlockEntityRenderState barrel, PoseStack poseStack, SubmitNodeCollector collector) {
         CustomFluidTank fluidTank = barrel.fluidTank;
         int fluidAmount = fluidTank.getFluidAmountMb();
         if (fluidAmount > 0) {
@@ -105,7 +104,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
             float y = percent * 0.65f;
             Fluid fluid = fluidTank.getFluid();
-            RenderUtils.renderFluid(fluid, minecraft.level, barrel.blockPos, poseStack, buffer, barrel.lightCoords, 16, y);
+            RenderUtils.renderFluid(fluid, minecraft.level, barrel.blockPos, poseStack, collector, barrel.lightCoords, 16, y);
             poseStack.popPose();
         }
     }
@@ -149,9 +148,8 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
         this.renderBody(barrel, poseStack, submitNodeCollector);
         // 开盖后才会渲染下面部分
         if (barrel.isOpen) {
-            MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
             // 如果有流体，渲染流体
-            this.renderFluid(barrel, poseStack, buffer);
+            this.renderFluid(barrel, poseStack, submitNodeCollector);
             // 渲染物品
             this.renderItems(barrel, poseStack, submitNodeCollector);
         }

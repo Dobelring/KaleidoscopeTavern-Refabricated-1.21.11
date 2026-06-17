@@ -58,7 +58,7 @@ public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
             if (textBlock.playerIsTooFarAwayToEdit(player.getUUID())) {
                 return;
             }
-            mc.setScreen(new TextScreen(textBlock));
+            mc.gui.setScreen(new TextScreen(textBlock));
         }
     }
 

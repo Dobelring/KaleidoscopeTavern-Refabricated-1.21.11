@@ -1,7 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
@@ -9,7 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.impl.client.rendering.fluid.FluidRenderingRegistryImpl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.block.FluidModel;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -33,73 +32,74 @@ public class RenderUtils {
      *
      * @param fluid     要渲染的流体
      * @param poseStack PoseStack
-     * @param buffer    MultiBufferSource
+     * @param collector SubmitNodeCollector
      * @param light     PackedLight
      * @param size      流体平面贴图的大小（0-16），可以根据实际需要调整
      * @param y         流体平面贴图的高度，根据实际流体显示高度调整
      */
-    public static void renderFluid(Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
-        renderFluid(fluid, null, null, poseStack, buffer, light, size, y);
+    public static void renderFluid(Fluid fluid, PoseStack poseStack, SubmitNodeCollector collector, int light, int size, float y) {
+        renderFluid(fluid, null, null, poseStack, collector, light, size, y);
     }
 
-    public static void renderFluid(Fluid fluid, BlockAndTintGetter level, BlockPos pos, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
+    public static void renderFluid(Fluid fluid, BlockAndTintGetter level, BlockPos pos, PoseStack poseStack, SubmitNodeCollector collector, int light, int size, float y) {
         TextureAtlasSprite sprite = getStillFluidSprite(fluid);
         int color = getFluidColor(level, pos, fluid);
-        renderSurface(poseStack, buffer, sprite, color, light, Mth.clamp(size, 1, 16), y);
+        renderSurface(poseStack, collector, sprite, color, light, Mth.clamp(size, 1, 16), y);
     }
 
-    public static void renderWaterFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, MultiBufferSource buffer, int light, int size, float y) {
-        renderFluid(fluid, level, pos, poseStack, buffer, light, size, y);
+    public static void renderWaterFluid(BlockAndTintGetter level, BlockPos pos, Fluid fluid, PoseStack poseStack, SubmitNodeCollector collector, int light, int size, float y) {
+        renderFluid(fluid, level, pos, poseStack, collector, light, size, y);
     }
 
     /**
      * 工具方法，用于渲染流体贴图
      *
      * @param poseStack PoseStack
-     * @param buffer    MultiBufferSource
+     * @param collector SubmitNodeCollector
      * @param sprite    TextureAtlasSprite
      * @param color     流体附加着色
      * @param light     PackedLight
      * @param size      流体平面贴图的大小（0-16）
      * @param y         流体平面贴图的高度
      */
-    public static void renderSurface(PoseStack poseStack, MultiBufferSource buffer, TextureAtlasSprite sprite,
-                                     int color, int light, int size, float y) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderTypes.cutoutMovingBlock());
-        Matrix4f matrix = poseStack.last().pose();
-        int tintedColor = ensureAlpha(color);
+        public static void renderSurface(PoseStack poseStack, SubmitNodeCollector collector, TextureAtlasSprite sprite,
+                                     int color, int light, int size, float y)
+        {
+            Matrix4f matrix = poseStack.last().pose();
+            int tintedColor = ensureAlpha(color);
+            collector.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), (pose, vertexConsumer) -> {
+                // 贴图的位置和大小
+                int margin = (16 - size) / 2;
+                float min = margin / 16f, max = 1 - margin / 16f;
+                float spriteSize = size / 16f;
 
-        // 贴图的位置和大小
-        int margin = (16 - size) / 2;
-        float min = margin / 16f, max = 1 - margin / 16f;
-        float spriteSize = size / 16f;
-
-        // 渲染一个平面
-        vertexConsumer.addVertex(matrix, min, y, min)
-                .setColor(tintedColor)
-                .setUv(sprite.getU0(), sprite.getV0())
-                .setOverlay(0)
-                .setLight(light)
-                .setNormal(0, 1, 0);
-        vertexConsumer.addVertex(matrix, min, y, max)
-                .setColor(tintedColor)
-                .setUv(sprite.getU0(), sprite.getV(spriteSize))
-                .setOverlay(0)
-                .setLight(light)
-                .setNormal(0, 1, 0);
-        vertexConsumer.addVertex(matrix, max, y, max)
-                .setColor(tintedColor)
-                .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
-                .setOverlay(0)
-                .setLight(light)
-                .setNormal(0, 1, 0);
-        vertexConsumer.addVertex(matrix, max, y, min)
-                .setColor(tintedColor)
-                .setUv(sprite.getU(spriteSize), sprite.getV0())
-                .setOverlay(0)
-                .setLight(light)
-                .setNormal(0, 1, 0);
-    }
+                // 渲染一个平面
+                vertexConsumer.addVertex(matrix, min, y, min)
+                        .setColor(tintedColor)
+                        .setUv(sprite.getU0(), sprite.getV0())
+                        .setOverlay(0)
+                        .setLight(light)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(matrix, min, y, max)
+                        .setColor(tintedColor)
+                        .setUv(sprite.getU0(), sprite.getV(spriteSize))
+                        .setOverlay(0)
+                        .setLight(light)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(matrix, max, y, max)
+                        .setColor(tintedColor)
+                        .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
+                        .setOverlay(0)
+                        .setLight(light)
+                        .setNormal(pose, 0, 1, 0);
+                vertexConsumer.addVertex(matrix, max, y, min)
+                        .setColor(tintedColor)
+                        .setUv(sprite.getU(spriteSize), sprite.getV0())
+                        .setOverlay(0)
+                        .setLight(light)
+                        .setNormal(pose, 0, 1, 0);
+            });
+        }
 
     /**
      * 基于方块坐标、物品索引和通道号生成稳定的伪随机浮点数，范围 [-1, 1]。

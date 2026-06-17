@@ -10,7 +10,6 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -106,14 +105,13 @@ public class PressingTubBlockEntityRender implements BlockEntityRenderer<Pressin
                 poseStack.popPose();
             }
         }
-        MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
         // 如果有流体，渲染流体
         int fluidAmount = blockEntityRenderState.fluidAmount;
         if (fluidAmount > 0 && !blockEntityRenderState.tilt) {
             float percent = fluidAmount / (float) IPressingTub.MAX_FLUID_AMOUNT;
             float y = 0.125f + percent * 0.25f;
             Fluid fluid = blockEntityRenderState.fluid;
-            RenderUtils.renderFluid(fluid, Minecraft.getInstance().level, blockEntityRenderState.blockPos, poseStack, buffer, blockEntityRenderState.lightCoords, 12, y);
+            RenderUtils.renderFluid(fluid, Minecraft.getInstance().level, blockEntityRenderState.blockPos, poseStack, submitNodeCollector, blockEntityRenderState.lightCoords, 12, y);
         }
     }
 }

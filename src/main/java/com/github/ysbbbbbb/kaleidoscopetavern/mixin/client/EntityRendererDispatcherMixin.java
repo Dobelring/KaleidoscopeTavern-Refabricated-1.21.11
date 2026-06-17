@@ -8,10 +8,10 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.PlayerModelType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,7 +37,7 @@ public class EntityRendererDispatcherMixin {
             renderer.addLayer(new StringLightsLayer<>(renderer));
         }
 
-        var armorStandRenderer = this.renderers.get(EntityType.ARMOR_STAND);
+        var armorStandRenderer = this.renderers.get(EntityTypes.ARMOR_STAND);
         if (armorStandRenderer instanceof LivingEntityRenderer livingEntityRenderer) {
             livingEntityRenderer.addLayer(new StringLightsLayer<>(livingEntityRenderer));
         }

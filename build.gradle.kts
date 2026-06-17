@@ -5,36 +5,23 @@ plugins {
 	`maven-publish`
 }
 
-version = providers.gradleProperty("mod_version").get()
-group = providers.gradleProperty("maven_group").get()
-
 base {
 	archivesName = providers.gradleProperty("archives_base_name")
 }
 
-loom {
-	accessWidenerPath.set(file("src/main/resources/kaleidoscope_tavern.accessWidener"))
-}
+version = providers.gradleProperty("mod_version").get()
+group = providers.gradleProperty("maven_group").get()
 
 repositories {
-	maven { url = URI("https://api.modrinth.com/maven") }
 	maven {
-		name = "cassian's maven"
-		url = URI("https://maven.cassian.cc")
+		name = "Fuzs Mod Resources"
+		url = URI("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
 	}
+	maven { url = URI("https://api.modrinth.com/maven") }
 	maven {
 		// location of the maven that hosts JEI files since January 2023
 		name = "Jared's maven"
 		url = URI("https://maven.blamejared.com/")
-	}
-	maven {
-		// location of a maven mirror for JEI files, as a fallback
-		name = "ModMaven"
-		url = URI("https://modmaven.dev")
-	}
-	maven {
-		name = "Fuzs Mod Resources"
-		url = URI("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
 	}
 	maven {
 		name = "Nucleoid"
@@ -42,24 +29,29 @@ repositories {
 	}
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/kaleidoscope_tavern.accessWidener")
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
-	implementation ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
-	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
-	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
+	implementation("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
 	implementation("maven.modrinth:rrv:${providers.gradleProperty("rrv_version").get()}") {
 		exclude(group = "net.fabricmc.fabric-api")
 		exclude(group = "eu.pb4")
 	}
+	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
 	implementation ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
+	runtimeOnly (files("lib/ForgeConfigAPIPort-v26.1.4-mc26.2.x-Fabric.jar"))
+	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
+	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	compileOnly("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
 	implementation("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
 }
 
 tasks.processResources {
+	val version = version
 	inputs.property("version", version)
 
 	filesMatching("fabric.mod.json") {
@@ -82,10 +74,11 @@ java {
 }
 
 tasks.jar {
-	inputs.property("archivesName", base.archivesName)
+	val projectName = project.name
+	inputs.property("projectName", projectName)
 
 	from("LICENSE") {
-		rename { "${it}_${base.archivesName.get()}" }
+		rename { "${it}_$projectName" }
 	}
 }
 
@@ -93,7 +86,6 @@ tasks.jar {
 publishing {
 	publications {
 		register<MavenPublication>("mavenJava") {
-			artifactId = base.archivesName.get()
 			from(components["java"])
 		}
 	}

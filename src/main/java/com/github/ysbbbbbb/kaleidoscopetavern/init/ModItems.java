@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-@SuppressWarnings("all")
 public final class ModItems {
     // 桌子
     public static final Item TABLE = registerItem("table", p -> new BlockItem(ModBlocks.TABLE, p.useBlockDescriptionPrefix()));
