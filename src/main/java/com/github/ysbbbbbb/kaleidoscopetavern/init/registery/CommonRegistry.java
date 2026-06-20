@@ -4,6 +4,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.event.LivingChangeTargetEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.PlantGrapeEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispenseBehavior;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.event.LeftClickEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.EffectEvent;
@@ -49,6 +50,7 @@ public final class CommonRegistry {
         LivingChangeTargetEvent.register();
         EffectEvent.register();
         VanillaBottlePlaceEvent.register();
+        LeftClickEvent.register();
     }
 
     public static void fuelRegistry() {

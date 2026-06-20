@@ -1,5 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.particle;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -9,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 蝴蝶香薰大型粒子：动态帧播放，不做代码着色。
  */
+@Environment(EnvType.CLIENT)
 public class ButterflyIncenseLargeParticle extends TextureSheetParticle {
     private final SpriteSet sprites;
 

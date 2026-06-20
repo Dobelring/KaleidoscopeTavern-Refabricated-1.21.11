@@ -37,6 +37,7 @@ public class NetworkHandler {
     public static class Clientside {
         public static void init() {
             ClientPlayNetworking.registerGlobalReceiver(TextOpenS2CMessage.TYPE, TextOpenS2CMessage::receive);
+            ClientPlayNetworking.registerGlobalReceiver(DrinkEffectSyncS2CMessage.TYPE, DrinkEffectSyncS2CMessage::onHandle);
         }
     }
 }

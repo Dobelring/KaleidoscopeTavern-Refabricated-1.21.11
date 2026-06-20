@@ -7,7 +7,9 @@ import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -52,16 +54,9 @@ public class DrinkEffectSyncS2CMessage implements FabricPacket {
         return new DrinkEffectSyncS2CMessage(buf);
     }
 
-//    public static void handle(DrinkEffectSyncS2CMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-//        NetworkEvent.Context context = contextSupplier.get();
-//        if (context.getDirection().getReceptionSide().isClient()) {
-//            context.enqueueWork(() -> onHandle(message));
-//        }
-//        context.setPacketHandled(true);
-//    }
-
+    @SuppressWarnings("unused")
     @Environment(EnvType.CLIENT)
-    private static void onHandle(DrinkEffectSyncS2CMessage message) {
+    public static void onHandle(DrinkEffectSyncS2CMessage message, LocalPlayer localPlayer, PacketSender packetSender) {
         DrinkEffectDataReloadListener.INSTANCE.clear();
         ListTag entries = message.data.getList(ENTRIES, Tag.TAG_COMPOUND);
         for (int i = 0; i < entries.size(); i++) {

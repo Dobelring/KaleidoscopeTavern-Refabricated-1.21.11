@@ -34,6 +34,7 @@ public record TextOpenS2CMessage(BlockPos pos) implements FabricPacket {
         return TYPE;
     }
 
+    @SuppressWarnings("unused")
     @Environment(EnvType.CLIENT)
     public static void receive(TextOpenS2CMessage message, LocalPlayer localPlayer, PacketSender packetSender) {
         Minecraft mc = Minecraft.getInstance();

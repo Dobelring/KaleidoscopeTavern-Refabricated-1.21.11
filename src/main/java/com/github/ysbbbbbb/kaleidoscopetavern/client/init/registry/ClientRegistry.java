@@ -2,10 +2,9 @@ package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.ViewportEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.animation.ShakerAnimation;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.event.LeftClickEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ParticleFactoryRegistry;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.PotionBottleColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
@@ -33,7 +32,7 @@ public final class ClientRegistry {
         ClientSetupEvent.init();
         ShakerOverlay.register();
         ModFluids.registerFluidRenderers();
-        ParticleFactoryRegistry.init();
+        ModParticleFactoryRegistry.init();
         CommonModelLoading.init();
         modCompatClient();
     }
@@ -47,7 +46,6 @@ public final class ClientRegistry {
 
     public static void events() {
         ViewportEvent.ComputeCameraAngles.register();
-        LeftClickEvent.register();
     }
 
     public static void renderType() {

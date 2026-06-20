@@ -1,5 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.particle;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -9,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 香薰大型悬浮粒子：行为类似原版 SporeBlossomAirProvider，但不做代码着色。
  */
+@Environment(EnvType.CLIENT)
 public class IncenseSuspendedParticle extends TextureSheetParticle {
     protected IncenseSuspendedParticle(ClientLevel level, SpriteSet sprites,
                                        double x, double y, double z,

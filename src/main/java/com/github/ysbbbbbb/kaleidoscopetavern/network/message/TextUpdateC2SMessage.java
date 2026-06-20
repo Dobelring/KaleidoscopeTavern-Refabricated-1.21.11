@@ -32,6 +32,7 @@ public record TextUpdateC2SMessage(BlockPos pos, String text,
         return TYPE;
     }
 
+    @SuppressWarnings("unused")
     public static void receive(TextUpdateC2SMessage message, ServerPlayer sender, PacketSender packetSender) {
         if (sender == null) {
             return;

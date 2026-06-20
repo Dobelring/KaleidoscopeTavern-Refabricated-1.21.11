@@ -6,11 +6,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.impl.client.particle.ParticleFactoryRegistryImpl;
 import net.minecraft.client.particle.CherryParticle;
-import net.minecraft.client.particle.SuspendedParticle;
 
 @SuppressWarnings("UnstableApiUsage")
 @Environment(EnvType.CLIENT)
-public final class ParticleFactoryRegistry {
+public final class ModParticleFactoryRegistry {
 
     public static void init() {
         // 龙头粒子

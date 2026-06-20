@@ -24,6 +24,7 @@ public record ClearShakerC2SMessage() implements FabricPacket {
 
     }
 
+    @SuppressWarnings("unused")
     public static void receive(ClearShakerC2SMessage message, ServerPlayer sender, PacketSender packetSender) {
         if (sender == null) {
             return;
