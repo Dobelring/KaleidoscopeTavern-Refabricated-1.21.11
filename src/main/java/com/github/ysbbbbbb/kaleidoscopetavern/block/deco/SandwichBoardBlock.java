@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.block.deco;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.client.IModelModifyRotationAfterBake;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.google.common.collect.Maps;
@@ -40,11 +41,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, IModelModifyRotationAfterBake<IntegerProperty> {
     public static final MapCodec<SandwichBoardBlock> CODEC = simpleCodec(p -> new SandwichBoardBlock());
     public static final Map<Item, SandwichBoardBlock> TRANSFORM_MAP = Maps.newHashMap();
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final IntegerProperty ROTATION = BlockStateProperties.ROTATION_16;
     public static final EnumProperty<Half> HALF = BlockStateProperties.HALF;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -66,7 +67,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
                 .noOcclusion()
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
+                .setValue(ROTATION, 0)
                 .setValue(HALF, Half.BOTTOM)
                 .setValue(WATERLOGGED, false));
         this.transformItems = List.of(transformItems);
@@ -84,7 +85,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
             if (TRANSFORM_MAP.containsKey(item) && !transformItems.contains(item)) {
                 BlockState transform = TRANSFORM_MAP.get(item)
                         .defaultBlockState()
-                        .setValue(FACING, state.getValue(FACING))
+                        .setValue(ROTATION, state.getValue(ROTATION))
                         .setValue(HALF, Half.BOTTOM)
                         .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
 
@@ -128,7 +129,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         if (direction.getAxis() == Direction.Axis.Y && (isBottom || isTop)) {
             // 这里要用 instanceof，因为拿花切换种类时会触发此段
             if (neighborState.getBlock() instanceof SandwichBoardBlock && neighborState.getValue(HALF) != half) {
-                return state.setValue(FACING, neighborState.getValue(FACING));
+                return state.setValue(ROTATION, neighborState.getValue(ROTATION));
             }
             return Blocks.AIR.defaultBlockState();
         }
@@ -160,7 +161,7 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HALF, WATERLOGGED);
+        builder.add(ROTATION, HALF, WATERLOGGED);
     }
 
     @Override
@@ -169,8 +170,9 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
         if (pos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockState(pos.above()).canBeReplaced(context)) {
+            int rotation = RotationSegment.convertToSegment(context.getRotation());
             return this.defaultBlockState()
-                    .setValue(FACING, context.getHorizontalDirection().getOpposite())
+                    .setValue(ROTATION, rotation)
                     .setValue(HALF, Half.BOTTOM)
                     .setValue(WATERLOGGED, level.isWaterAt(pos));
         }
@@ -209,13 +211,15 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     }
 
     @Override
-    public @NotNull BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    public @NotNull BlockState rotate(BlockState state, Rotation rotation) {
+        int max = RotationSegment.getMaxSegmentIndex() + 1;
+        return state.setValue(ROTATION, rotation.rotate(state.getValue(ROTATION), max));
     }
 
     @Override
-    public @NotNull BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    public @NotNull BlockState mirror(BlockState pState, Mirror pMirror) {
+        int max = RotationSegment.getMaxSegmentIndex() + 1;
+        return pState.setValue(ROTATION, pMirror.mirror(pState.getValue(ROTATION), max));
     }
 
     public List<Item> getTransformItems() {
@@ -242,5 +246,10 @@ public class SandwichBoardBlock extends BaseEntityBlock implements SimpleWaterlo
     @Override
     protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
         return CODEC;
+    }
+
+    @Override
+    public IntegerProperty getRotationProperty() {
+        return ROTATION;
     }
 }

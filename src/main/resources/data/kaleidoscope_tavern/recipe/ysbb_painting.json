@@ -6,7 +6,7 @@
       "item": "minecraft:item_frame"
     },
     {
-      "item": "minecraft:lime_dye"
+      "tag": "c:dyes/lime"
     }
   ],
   "result": {

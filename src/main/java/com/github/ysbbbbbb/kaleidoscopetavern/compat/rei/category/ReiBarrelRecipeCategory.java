@@ -77,7 +77,7 @@ public class ReiBarrelRecipeCategory implements DisplayCategory<DefaultCustomDis
         });
 
         widgets.add(Widgets.createSlot(new Point(startX + 152, startY + 86))
-                .entries(display.getOutputEntries().get(0))
+                .entries(display.getOutputEntries().getFirst())
                 .disableBackground()
                 .markOutput());
 

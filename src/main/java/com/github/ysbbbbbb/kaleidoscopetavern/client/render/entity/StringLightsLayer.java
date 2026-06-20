@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.entity;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.item.StringLightsBlockItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -23,7 +24,15 @@ public class StringLightsLayer<T extends LivingEntity, M extends EntityModel<T>>
     public void render(@NotNull PoseStack poseStack, @NotNull MultiBufferSource buffer, int packedLight, T entity,
                        float limbSwing, float limbSwingAmount, float partialTick,
                        float ageInTicks, float netHeadYaw, float headPitch) {
-        ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack stack = getStringLightsStack(entity);
         StringLightsRenderer.render(stack, this.getParentModel(), entity, poseStack, buffer, packedLight);
+    }
+
+    private ItemStack getStringLightsStack(T entity) {
+        ItemStack chestStack = entity.getItemBySlot(EquipmentSlot.CHEST);
+        if (chestStack.getItem() instanceof StringLightsBlockItem) {
+            return chestStack;
+        }
+        return ItemStack.EMPTY;
     }
 }

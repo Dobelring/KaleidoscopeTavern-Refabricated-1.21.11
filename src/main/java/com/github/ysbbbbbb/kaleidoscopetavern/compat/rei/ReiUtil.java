@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ReiUtil {
     public static EntryIngredient ofIngredient(Ingredient ingredient) {
         return EntryIngredient.of(Arrays.stream(ingredient.getItems()).map(EntryStacks::of).toList());

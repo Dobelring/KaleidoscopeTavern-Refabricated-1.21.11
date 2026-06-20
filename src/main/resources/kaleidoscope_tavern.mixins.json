@@ -5,14 +5,18 @@
   "mixins": [
     "LivingEntityMixin",
     "MobMixin",
+    "PlayerMixin",
     "RedStoneWireBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "client.GameRendererMixin",
     "client.EntityRendererDispatcherMixin",
+    "client.GameRendererMixin",
+    "client.HumanoidModelMixin",
+    "client.ItemInHandMixin",
+    "client.LeftClickMixin",
     "client.PlayerRendererMixin"
   ],
   "overwrites": {

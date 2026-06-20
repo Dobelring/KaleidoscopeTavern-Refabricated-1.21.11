@@ -2,7 +2,7 @@ package com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BarrelBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.BarrelBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModPlugin;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +51,6 @@ public enum BarrelComponentProvider implements IBlockComponentProvider {
 
     @Override
     public ResourceLocation getUid() {
-        return ModJadePlugin.BARREL;
+        return ModPlugin.BARREL;
     }
 }

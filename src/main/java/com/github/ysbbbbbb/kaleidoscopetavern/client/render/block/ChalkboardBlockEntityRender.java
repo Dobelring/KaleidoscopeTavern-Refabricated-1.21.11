@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
@@ -12,8 +13,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.AABB;
 
 @Environment(EnvType.CLIENT)
 public class ChalkboardBlockEntityRender extends TextBlockEntityRender<ChalkboardBlockEntity> {
@@ -35,7 +38,9 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
     @Override
     protected void renderModel(ChalkboardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
-                               int packedLight, int packedOverlay, Direction facing) {
+                               int packedLight, int packedOverlay) {
+        Direction facing = textBlock.getBlockState().getValue(ChalkboardBlock.FACING);
+
         poseStack.pushPose();
 
         poseStack.translate(0.5, 1.5, 0.5);
@@ -55,7 +60,9 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
     @Override
     protected void renderText(ChalkboardBlockEntity textBlock, PoseStack poseStack, MultiBufferSource buffer,
-                              int packedLight, int packedOverlay, Direction facing) {
+                              int packedLight, int packedOverlay) {
+        Direction facing = textBlock.getBlockState().getValue(ChalkboardBlock.FACING);
+
         poseStack.pushPose();
 
         if (facing == Direction.EAST) {
@@ -75,5 +82,16 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
                 maxWidth, TEXT_SCALE, MAX_LINES, LINE_HEIGHT);
 
         poseStack.popPose();
+    }
+
+
+    public AABB getRenderBoundingBox(ChalkboardBlockEntity blockEntity) {
+        BlockPos pos = blockEntity.getBlockPos();
+        if (blockEntity.isLarge()) {
+            return new AABB(pos.getX() - 1, pos.getY(), pos.getZ() - 1,
+                    pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
+        }
+        return new AABB(pos.getX(), pos.getY(), pos.getZ(),
+                pos.getX() + 1, pos.getY() + 2, pos.getZ() + 1);
     }
 }

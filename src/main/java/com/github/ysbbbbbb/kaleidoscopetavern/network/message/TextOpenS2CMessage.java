@@ -62,7 +62,7 @@ public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
         }
     }
 
-
+    @SuppressWarnings("unused")
     public static void receive(TextOpenS2CMessage textOpenS2CMessage, ClientPlayNetworking.Context context) {
         onHandle(textOpenS2CMessage);
     }

@@ -1,15 +1,21 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.init.registry;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.event.ViewportEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.animation.ShakerAnimation;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.gui.overlay.ShakerOverlay;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ClientSetupEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModEntitiesRender;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.init.CommonModelLoading;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.init.ModParticleFactoryRegistry;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.PotionBottleColor;
+import com.github.ysbbbbbb.kaleidoscopetavern.client.render.misc.SignatureCocktailColor;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.trinkets.init.TrinketsCompactClient;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids;
+import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.renderer.RenderType;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks.*;
@@ -20,11 +26,22 @@ public final class ClientRegistry {
         NetworkHandler.Clientside.init();
         renderType();
         events();
+        color();
+        ShakerAnimation.trigger();
         ClientSetupEvent.init();
-        ModEntitiesRender.init();
+        CommonModelLoading.init();
+        ShakerOverlay.register();
         ModFluids.registerFluidRenderers();
         ModParticleFactoryRegistry.init();
         modCompatClient();
+    }
+
+    public static void color() {
+        ColorProviderRegistry.BLOCK.register(new SignatureCocktailColor.Block(), SIGNATURE_COCKTAIL);
+
+        ColorProviderRegistry.ITEM.register(new SignatureCocktailColor.Item(), ModItems.SIGNATURE_COCKTAIL);
+
+        ColorProviderRegistry.BLOCK.register(new PotionBottleColor(), POTION_BOTTLE);
     }
 
     public static void events() {
@@ -32,6 +49,25 @@ public final class ClientRegistry {
     }
 
     public static void renderType() {
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
+                SIGNATURE_COCKTAIL,
+                MYSTERY_COCKTAIL,
+                WHITE_LADY,
+                EMERALD,
+                BRASS_HEART,
+                GODFATHER,
+                GRASSHOPPER,
+                SCREWDRIVER,
+                MOJITO,
+                ALLIUM_GARDEN,
+                DEPTH_CHARGE,
+                NETHER_SPECIAL,
+                BLOODY_MARY,
+                SCULK_SPECIAL,
+                BELL_PENDANT_LAMP,
+                YELLOW_PENDANT_LAMP,
+                BLUE_PENDANT_LAMP
+        );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 PRESSING_TUB,
                 BARREL,
@@ -96,7 +132,15 @@ public final class ClientRegistry {
                 CYAN_BAR_STOOL,
                 MAGENTA_BAR_STOOL,
                 GRAY_BAR_STOOL,
-                LIGHT_GRAY_BAR_STOOL
+                LIGHT_GRAY_BAR_STOOL,
+                SAKURA_INCENSE,
+                PINE_INCENSE,
+                GINKGO_INCENSE,
+                SPORE_INCENSE,
+                CATNIP_INCENSE,
+                SNOW_INCENSE,
+                BUTTERFLY_INCENSE,
+                FIREFLY_INCENSE
         );
     }
 

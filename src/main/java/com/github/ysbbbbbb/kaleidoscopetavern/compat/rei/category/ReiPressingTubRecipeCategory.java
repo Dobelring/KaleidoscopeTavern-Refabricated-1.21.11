@@ -1,6 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.category;
 
-
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ReiUtil;

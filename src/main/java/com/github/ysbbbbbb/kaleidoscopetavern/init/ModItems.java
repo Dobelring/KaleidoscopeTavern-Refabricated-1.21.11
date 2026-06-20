@@ -27,6 +27,23 @@ public final class ModItems {
     public static final Item GREEN_GRAPE_BUCKET = new JuiceBucketItem(GREEN_GRAPE_JUICE);
     // 空瓶
     public static final Item EMPTY_BOTTLE = new BottleBlockItem(ModBlocks.EMPTY_BOTTLE);
+    public static final Item EMPTY_GLASSWARE = new GlasswareBlockItem(ModBlocks.EMPTY_GLASSWARE);
+
+    // 鸡尾酒
+    public static final Item SIGNATURE_COCKTAIL = new SignatureCocktailBlockItem(ModBlocks.SIGNATURE_COCKTAIL);
+    public static final Item MYSTERY_COCKTAIL = new CocktailBlockItem(ModBlocks.MYSTERY_COCKTAIL);
+    public static final Item WHITE_LADY = new CocktailBlockItem(ModBlocks.WHITE_LADY);
+    public static final Item EMERALD = new CocktailBlockItem(ModBlocks.EMERALD);
+    public static final Item BRASS_HEART = new CocktailBlockItem(ModBlocks.BRASS_HEART);
+    public static final Item GODFATHER = new CocktailBlockItem(ModBlocks.GODFATHER);
+    public static final Item GRASSHOPPER = new CocktailBlockItem(ModBlocks.GRASSHOPPER);
+    public static final Item SCREWDRIVER = new CocktailBlockItem(ModBlocks.SCREWDRIVER);
+    public static final Item MOJITO = new CocktailBlockItem(ModBlocks.MOJITO);
+    public static final Item ALLIUM_GARDEN = new CocktailBlockItem(ModBlocks.ALLIUM_GARDEN);
+    public static final Item DEPTH_CHARGE = new CocktailBlockItem(ModBlocks.DEPTH_CHARGE);
+    public static final Item NETHER_SPECIAL = new CocktailBlockItem(ModBlocks.NETHER_SPECIAL);
+    public static final Item BLOODY_MARY = new CocktailBlockItem(ModBlocks.BLOODY_MARY);
+    public static final Item SCULK_SPECIAL = new CocktailBlockItem(ModBlocks.SCULK_SPECIAL);
 
     // 沙发
     public static final Item WHITE_SOFA = new SofaBlockItem(ModBlocks.WHITE_SOFA);
@@ -63,9 +80,23 @@ public final class ModItems {
     public static final Item PURPLE_BAR_STOOL = new BarStoolBlockItem(ModBlocks.PURPLE_BAR_STOOL);
     public static final Item MAGENTA_BAR_STOOL = new BarStoolBlockItem(ModBlocks.MAGENTA_BAR_STOOL);
     public static final Item PINK_BAR_STOOL = new BarStoolBlockItem(ModBlocks.PINK_BAR_STOOL);
-
+    // 垂灯
+    public static final Item BELL_PENDANT_LAMP = new BlockItem(ModBlocks.BELL_PENDANT_LAMP, new Item.Properties());
+    public static final Item YELLOW_PENDANT_LAMP = new BlockItem(ModBlocks.YELLOW_PENDANT_LAMP, new Item.Properties());
+    public static final Item BLUE_PENDANT_LAMP = new BlockItem(ModBlocks.BLUE_PENDANT_LAMP, new Item.Properties());
     // 黑板
     public static final Item CHALKBOARD = new BlockItem(ModBlocks.CHALKBOARD, new Item.Properties());
+    // 香薰
+    public static final Item SAKURA_INCENSE = new BlockItem(ModBlocks.SAKURA_INCENSE, new Item.Properties());
+    public static final Item PINE_INCENSE = new BlockItem(ModBlocks.PINE_INCENSE, new Item.Properties());
+    public static final Item GINKGO_INCENSE = new BlockItem(ModBlocks.GINKGO_INCENSE, new Item.Properties());
+    public static final Item SPORE_INCENSE = new BlockItem(ModBlocks.SPORE_INCENSE, new Item.Properties());
+    public static final Item CATNIP_INCENSE = new BlockItem(ModBlocks.CATNIP_INCENSE, new Item.Properties());
+    public static final Item SNOW_INCENSE = new BlockItem(ModBlocks.SNOW_INCENSE, new Item.Properties());
+    public static final Item BUTTERFLY_INCENSE = new BlockItem(ModBlocks.BUTTERFLY_INCENSE, new Item.Properties());
+    public static final Item FIREFLY_INCENSE = new BlockItem(ModBlocks.FIREFLY_INCENSE, new Item.Properties());
+    // 桌子
+    public static final Item TABLE = new BlockItem(ModBlocks.TABLE, new Item.Properties());
 
     // 展板
     public static final Item BASE_SANDWICH_BOARD = new SandwichBoardBlockItem(ModBlocks.BASE_SANDWICH_BOARD);
@@ -123,8 +154,6 @@ public final class ModItems {
     public static final Item BAR_COUNTER = new BlockItem(ModBlocks.BAR_COUNTER, new Item.Properties());
     // 人字梯
     public static final Item STEPLADDER = new BlockItem(ModBlocks.STEPLADDER, new Item.Properties());
-    // 桌子
-    public static final Item TABLE = new BlockItem(ModBlocks.TABLE, new Item.Properties());
     // 藤架
     public static final Item TRELLIS = new BlockItem(ModBlocks.TRELLIS, new Item.Properties());
     // 果盆
@@ -138,6 +167,15 @@ public final class ModItems {
     // 酒柜
     public static final Item BAR_CABINET = new BlockItem(ModBlocks.BAR_CABINET, new Item.Properties());
     public static final Item GLASS_BAR_CABINET = new BlockItem(ModBlocks.GLASS_BAR_CABINET, new Item.Properties());
+    public static final Item CELLAR_CABINET = new BlockItem(ModBlocks.CELLAR_CABINET, new Item.Properties());
+    // 酒架
+    public static final Item TILTED_RACK = new BlockItem(ModBlocks.TILTED_RACK, new Item.Properties());
+    public static final Item CIRCULAR_RACK = new BlockItem(ModBlocks.CIRCULAR_RACK, new Item.Properties());
+    public static final Item HOLDER = new BlockItem(ModBlocks.HOLDER, new Item.Properties());
+    // 雪克杯
+    public static final Item SHAKER = new ShakerItem();
+    // 酒杯架
+    public static final Item GLASSWARE_HOLDER = new BlockItem(ModBlocks.GLASSWARE_HOLDER, new Item.Properties());
     // 酒
     public static final Item WINE = new DrinkBlockItem(ModBlocks.WINE);
     public static final Item CHAMPAGNE = new DrinkBlockItem(ModBlocks.CHAMPAGNE);
@@ -171,7 +209,6 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "ice_grape"), ICE_GRAPE);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "gold_grape"), GOLD_GRAPE);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "green_grape"), GREEN_GRAPE);
-
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "grapevine"), GRAPEVINE);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "grape_bucket"), GRAPE_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sweet_berries_bucket"), SWEET_BERRIES_BUCKET);
@@ -180,7 +217,22 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "gold_grape_bucket"), GOLD_GRAPE_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "green_grape_bucket"), GREEN_GRAPE_BUCKET);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "table"), TABLE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "empty_glassware"), EMPTY_GLASSWARE);
+
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "signature_cocktail"), SIGNATURE_COCKTAIL);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "mystery_cocktail"), MYSTERY_COCKTAIL );
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "white_lady"), WHITE_LADY);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "emerald"), EMERALD);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "brass_heart"), BRASS_HEART);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "godfather"), GODFATHER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "grasshopper"), GRASSHOPPER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "screwdriver"), SCREWDRIVER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "mojito"), MOJITO);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "allium_garden"), ALLIUM_GARDEN);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "depth_charge"), DEPTH_CHARGE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "nether_special"), NETHER_SPECIAL);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "bloody_mary"), BLOODY_MARY);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sculk_special"), SCULK_SPECIAL);
 
         // 沙发
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "white_sofa"), WHITE_SOFA);
@@ -217,9 +269,23 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "purple_bar_stool"), PURPLE_BAR_STOOL);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "magenta_bar_stool"), MAGENTA_BAR_STOOL);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pink_bar_stool"), PINK_BAR_STOOL);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "bell_pendant_lamp"), BELL_PENDANT_LAMP);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "yellow_pendant_lamp"), YELLOW_PENDANT_LAMP);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "blue_pendant_lamp"), BLUE_PENDANT_LAMP);
 
         // 黑板
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD);
+        // 香薰
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "sakura_incense"), SAKURA_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pine_incense"), PINE_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "ginkgo_incense"), GINKGO_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "spore_incense"), SPORE_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "catnip_incense"), CATNIP_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "snow_incense"), SNOW_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "butterfly_incense"), BUTTERFLY_INCENSE);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "firefly_incense"), FIREFLY_INCENSE);
+        // 桌子
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "table"), TABLE);
 
         // 展板
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "base_sandwich_board"), BASE_SANDWICH_BOARD);
@@ -283,6 +349,12 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "molotov"), MOLOTOV);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "glass_bar_cabinet"), GLASS_BAR_CABINET);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "cellar_cabinet"), CELLAR_CABINET);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tilted_rack"), TILTED_RACK);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "circular_rack"), CIRCULAR_RACK);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "holder"), HOLDER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER);
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "glassware_holder"), GLASSWARE_HOLDER);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "wine"), WINE);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "champagne"), CHAMPAGNE);
         Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "vodka"), VODKA);

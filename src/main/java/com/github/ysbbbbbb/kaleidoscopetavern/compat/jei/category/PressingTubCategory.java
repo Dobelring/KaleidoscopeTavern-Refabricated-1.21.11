@@ -1,6 +1,5 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.category;
 
-
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IPressingTub;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.PressingTubRecipe;
