@@ -66,6 +66,11 @@ public final class ShakerRecipe implements Recipe<SimpleInput> {
     }
 
     @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
+    @Override
     public @NotNull RecipeType<?> getType() {
         return ModRecipes.SHAKER_RECIPE;
     }
