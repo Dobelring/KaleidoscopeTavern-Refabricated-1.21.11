@@ -66,7 +66,9 @@ public final class ClientRegistry {
                 SCULK_SPECIAL,
                 BELL_PENDANT_LAMP,
                 YELLOW_PENDANT_LAMP,
-                BLUE_PENDANT_LAMP
+                BLUE_PENDANT_LAMP,
+                POTION_BOTTLE,
+                XP_BOTTLE
         );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 PRESSING_TUB,

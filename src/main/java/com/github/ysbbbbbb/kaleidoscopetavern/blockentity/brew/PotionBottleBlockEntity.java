@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PotionBottleBlockEntity extends BaseBlockEntity {
@@ -20,12 +21,20 @@ public class PotionBottleBlockEntity extends BaseBlockEntity {
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         this.potionStack = ItemStack.parseOptional(registries, tag.getCompound(ITEM_KEY));
+        this.refreshClientRendering();
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.put(ITEM_KEY, this.potionStack.saveOptional(registries));
+    }
+
+    private void refreshClientRendering() {
+        if (this.level != null && this.level.isClientSide) {
+            BlockState state = this.getBlockState();
+            this.level.sendBlockUpdated(this.worldPosition, state, state, Block.UPDATE_IMMEDIATE);
+        }
     }
 
     public ItemStack getPotionStack() {
@@ -35,5 +44,6 @@ public class PotionBottleBlockEntity extends BaseBlockEntity {
     public void setPotionStack(ItemStack stack) {
         this.potionStack = stack.copyWithCount(1);
         this.refresh();
+        this.refreshClientRendering();
     }
 }
