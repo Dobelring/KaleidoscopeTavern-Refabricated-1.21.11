@@ -27,17 +27,47 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Objects;
+
 public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
-    public static final MapCodec<BottleBlock> CODEC = simpleCodec(p -> new BottleBlock());
+    public static final MapCodec<BottleBlock> CODEC = simpleCodec(BottleBlock::simpleBottle);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 14, 11);
+    public static final VoxelShape SIMPLE_BOTTLE_SHAPE = Block.box(5, 0, 5, 11, 10, 11);
 
     /**
      * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
+     * @deprecated 现在通过 Item Tag 来决定了，不应当再使用此 tag
      */
-    private final boolean irregular;
+    @SuppressWarnings("all")
+    @Deprecated(forRemoval = true)
+    private final boolean irregular = false;
 
-    public BottleBlock(Properties properties, boolean irregular) {
+    private @Nullable VoxelShape shape;
+
+    public BottleBlock(String id, @Nullable VoxelShape shape) {
+        this.shape = shape;
+        this(id);
+    }
+
+    public BottleBlock(String id) {
+        super(Properties.of()
+                .noOcclusion()
+                .instabreak()
+                .pushReaction(PushReaction.DESTROY)
+                .setId(PortHelper.createBlockId(id))
+                .sound(SoundType.GLASS));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(WATERLOGGED, false));
+    }
+
+    public BottleBlock(Properties properties, @Nullable VoxelShape shape) {
+        this.shape = shape;
+        this(properties);
+    }
+
+    public BottleBlock(Properties properties) {
         super(properties
                 .noOcclusion()
                 .instabreak()
@@ -46,35 +76,23 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false));
-        this.irregular = irregular;
     }
 
-    public BottleBlock(String id, boolean irregular) {
-        this(Properties.of()
-                .noOcclusion()
-                .instabreak()
-                .pushReaction(PushReaction.DESTROY)
-                .setId(PortHelper.createBlockId(id))
-                .sound(SoundType.GLASS), irregular);
+
+    @Deprecated(forRemoval = true)
+    public BottleBlock(Properties properties, boolean irregular) {
+        this(properties, null);
     }
 
-    public BottleBlock(boolean irregular) {
-        this(Properties.of()
-                .noOcclusion()
-                .instabreak()
-                .pushReaction(PushReaction.DESTROY)
-                .sound(SoundType.GLASS), irregular);
-    }
-
-    public BottleBlock() {
-        this(false);
+    public static BottleBlock simpleBottle(Properties properties) {
+        return new BottleBlock(properties, SIMPLE_BOTTLE_SHAPE);
     }
 
     @Override
     protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull BlockHitResult blockHitResult) {
         // 如果是空手，那么可以尝试取回
         if (level instanceof ServerLevel serverLevel) {
-            getDrops(state, serverLevel, pos, null)
+            getDrops(state, serverLevel, pos, level.getBlockEntity(pos))
                     .forEach(stack -> ItemUtils.giveItemToPlayer(player, stack));
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS | Block.UPDATE_ALL);
             level.playSound(null, pos, SoundType.STONE.getPlaceSound(), player.getSoundSource(), 1.0F, 1.0F);
@@ -123,13 +141,20 @@ public class BottleBlock extends HorizontalDirectionalBlock implements SimpleWat
     }
 
     @Override
+    public float getShadeBrightness(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos) {
+        return 1.0F;
+    }
+
+    @Override
     public @NotNull VoxelShape getShape(@NonNull BlockState pState, @NonNull BlockGetter pLevel, @NonNull BlockPos pPos, @NonNull CollisionContext pContext) {
-        return SHAPE;
+        return Objects.requireNonNullElse(this.shape, SHAPE);
     }
 
     /**
      * 是否为异形酒瓶，这决定了酒柜中可以放入一瓶还是两瓶
+     * @deprecated 现在通过 Item Tag 来决定了，不应当再使用此 tag
      */
+    @Deprecated(forRemoval = true)
     public boolean irregular() {
         return this.irregular;
     }

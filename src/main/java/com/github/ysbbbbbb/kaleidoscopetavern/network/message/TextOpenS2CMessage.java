@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<TextOpenS2CMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_open"));
+    public static final Type<TextOpenS2CMessage> TYPE = new Type<>(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_open"));
 
     public static final StreamCodec<FriendlyByteBuf, TextOpenS2CMessage> STREAM_CODEC = new StreamCodec<>() {
         @Override
@@ -62,7 +62,7 @@ public record TextOpenS2CMessage(BlockPos pos) implements CustomPacketPayload {
         }
     }
 
-
+    @SuppressWarnings("unused")
     public static void receive(TextOpenS2CMessage textOpenS2CMessage, ClientPlayNetworking.Context context) {
         onHandle(textOpenS2CMessage);
     }

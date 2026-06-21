@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.LargeChalkboardModel;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.model.deco.SmallChalkboardModel;
@@ -43,6 +44,7 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
     public void extractRenderState(@NonNull ChalkboardBlockEntity blockEntity, @NonNull ChalkboardBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
         blockEntityRenderState.large = blockEntity.isLarge();
+        blockEntityRenderState.facing = blockEntity.getBlockState().getValue(ChalkboardBlock.FACING);
     }
 
 
@@ -52,12 +54,12 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
     }
 
     @Override
-    protected void renderModel(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
+    protected void renderModel(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction) {
         poseStack.pushPose();
 
         poseStack.translate(0.5, 1.5, 0.5);
         poseStack.mulPose(Axis.ZN.rotationDegrees(180));
-        poseStack.mulPose(Axis.YN.rotationDegrees(180 - facing.get2DDataValue() * 90));
+        poseStack.mulPose(Axis.YN.rotationDegrees(180 - textBlockRenderState.facing.get2DDataValue() * 90));
 
         if (textBlockRenderState.large) {
             submitNodeCollector.submitModel(large, new SmallChalkboardModel.State(), poseStack, RenderTypes.entitySolid(LARGE_TEXTURE), textBlockRenderState.lightCoords, OverlayTexture.NO_OVERLAY, 0, null);
@@ -68,7 +70,8 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
     }
 
     @Override
-    protected void renderText(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
+    protected void renderText(ChalkboardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction) {
+        Direction facing = textBlockRenderState.facing;
         poseStack.pushPose();
         if (facing == Direction.EAST) {
             poseStack.translate(0.08, 1.535, 0.5);

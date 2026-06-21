@@ -9,6 +9,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataR
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.EffectEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.PlayerSitEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.VanillaBottlePlaceEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.impl.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
@@ -49,6 +50,7 @@ public final class CommonRegistry {
         AddFeaturesEvent.addFeatures();
         PlayerSitEvent.register();
         EffectEvent.register();
+        VanillaBottlePlaceEvent.register();
         PlantGrapeEvent.register();
         LivingChangeTargetEvent.register();
     }

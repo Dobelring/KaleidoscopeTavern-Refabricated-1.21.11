@@ -6,10 +6,13 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 @Environment(EnvType.CLIENT)
 public class TextBlockEntityRenderState extends BlockEntityRenderState {
+    @Deprecated(forRemoval = true)
     public Direction facing = Direction.NORTH;
+    public int direction;
     public String text = "";
     public DyeColor color = DyeColor.WHITE;
     public boolean glowing = false;

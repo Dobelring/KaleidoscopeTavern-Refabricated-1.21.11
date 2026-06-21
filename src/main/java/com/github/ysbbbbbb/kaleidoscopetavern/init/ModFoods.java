@@ -42,13 +42,13 @@ public interface ModFoods {
                 Block.box(0, 0, 0, 16, 16, 16)
         ).setId("vodka").build();
 
-        Block BRANDY = DrinkBlock.create().maxCount(3).irregular().shapes(
+        Block BRANDY = DrinkBlock.create().maxCount(3).shapes(
                 Block.box(3, 0, 6, 13, 13, 10),
                 Block.box(1, 0, 3, 15, 12, 12),
                 Block.box(1, 0, 1, 16, 12, 13)
         ).setId("brandy").build();
 
-        Block CARIGNAN = DrinkBlock.create().maxCount(3).irregular().shapes(
+        Block CARIGNAN = DrinkBlock.create().maxCount(3).shapes(
                 Block.box(3, 0, 6, 13, 13, 10),
                 Block.box(1, 0, 3, 15, 12, 12),
                 Block.box(1, 0, 1, 16, 12, 13)

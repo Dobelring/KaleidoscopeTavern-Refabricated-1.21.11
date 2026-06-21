@@ -7,6 +7,7 @@ import cc.cassian.rrv.client.recipe.ClientRecipeManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.barrel.BarrelViewRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.pressing_tub.PressingTubViewRecipe;
+import com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.shaker.ShakerViewRecipe;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModRecipes;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,6 +22,7 @@ public class ModRRVPlugin implements ReliableRecipeViewerClientPlugin {
         ItemView.addClientRecipeProvider(recipeList -> {
             addBarrelRecipes(recipeList);
             addPressingTubRecipes(recipeList);
+            addShakerRecipes(recipeList);
         });
     }
 
@@ -38,6 +40,13 @@ public class ModRRVPlugin implements ReliableRecipeViewerClientPlugin {
         ClientRecipeManager.INSTANCE.getRecipesForType(ModRecipes.PRESSING_TUB_RECIPE).forEach(holder -> {
             var recipe = holder.value();
             recipeList.add(new PressingTubViewRecipe(holder.id().identifier(), ItemStackTemplate.fromNonEmptyStack(recipe.getResult()), recipe.getIngredient()));
+        });
+    }
+
+    private static void addShakerRecipes(List<ReliableClientRecipe> recipeList) {
+        ClientRecipeManager.INSTANCE.getRecipesForType(ModRecipes.SHAKER_RECIPE).forEach(holder -> {
+            var recipe = holder.value();
+            recipeList.add(new ShakerViewRecipe(holder.id().identifier(), recipe.result(), recipe.ingredients()));
         });
     }
 }
