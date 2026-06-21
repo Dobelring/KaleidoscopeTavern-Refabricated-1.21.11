@@ -12,6 +12,7 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class ShakerModel extends HierarchicalModel<Entity> {
@@ -38,7 +39,7 @@ public class ShakerModel extends HierarchicalModel<Entity> {
     }
 
     @Override
-    public ModelPart root() {
+    public @NotNull ModelPart root() {
         return this.root;
     }
 
