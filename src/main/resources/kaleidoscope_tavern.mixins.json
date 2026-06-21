@@ -1,4 +1,5 @@
 {
+  "plugin": "com.github.ysbbbbbb.kaleidoscopetavern.mixin.plugin.KaleidoscopeTavernMixinPlugin",
   "required": true,
   "package": "com.github.ysbbbbbb.kaleidoscopetavern.mixin",
   "compatibilityLevel": "JAVA_17",
@@ -18,6 +19,8 @@
     "client.GameRendererMixin",
     "client.HumanoidModelMixin",
     "client.ItemInHandMixin",
+    "client.ItemRendererMixin",
+    "client.ModelBakeryMixin",
     "client.PlayerRendererMixin"
   ]
 }
