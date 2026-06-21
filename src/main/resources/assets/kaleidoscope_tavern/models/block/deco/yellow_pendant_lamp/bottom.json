@@ -4,7 +4,7 @@
 	"render_type": "translucent",
 	"textures": {
 		"2": "kaleidoscope_tavern:block/deco/yellow_pendant_lamp",
-		"particle": "block/chain"
+		"particle": "block/iron_chain"
 	},
 	"elements": [
 		{

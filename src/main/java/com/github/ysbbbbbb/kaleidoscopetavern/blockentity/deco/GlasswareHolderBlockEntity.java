@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import org.jspecify.annotations.NonNull;
 
 public class GlasswareHolderBlockEntity extends BaseBlockEntity {
@@ -37,5 +38,10 @@ public class GlasswareHolderBlockEntity extends BaseBlockEntity {
 
     public ItemStackHandler getItems() {
         return this.items;
+    }
+
+    public AABB getRenderBoundingBox() {
+        BlockPos pos = this.getBlockPos();
+        return new AABB(pos);
     }
 }

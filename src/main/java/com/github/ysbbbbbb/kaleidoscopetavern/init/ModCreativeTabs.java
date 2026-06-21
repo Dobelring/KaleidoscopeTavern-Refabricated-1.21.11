@@ -115,14 +115,13 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.BAR_CABINET);
                     output.accept(ModItems.GLASS_BAR_CABINET);
                     output.accept(ModItems.CELLAR_CABINET);
+                    output.accept(ModItems.BAR_COUNTER);
+                    output.accept(ModItems.TABLE);
                     output.accept(ModItems.TILTED_RACK);
                     output.accept(ModItems.CIRCULAR_RACK);
                     output.accept(ModItems.HOLDER);
                     output.accept(ModItems.GLASSWARE_HOLDER);
-                    output.accept(ModItems.BAR_COUNTER);
                     output.accept(ModItems.STEPLADDER);
-
-                    output.accept(ModItems.TABLE);
 
                     output.accept(ModItems.STRING_LIGHTS_COLORLESS);
                     output.accept(ModItems.STRING_LIGHTS_WHITE);
