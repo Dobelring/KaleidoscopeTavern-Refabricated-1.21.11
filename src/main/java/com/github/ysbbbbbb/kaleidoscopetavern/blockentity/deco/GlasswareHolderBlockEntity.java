@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public class GlasswareHolderBlockEntity extends BaseBlockEntity {
     private static final String ITEMS = "items";
@@ -38,5 +39,10 @@ public class GlasswareHolderBlockEntity extends BaseBlockEntity {
 
     public ItemStackHandler getItems() {
         return this.items;
+    }
+
+    public AABB getRenderBoundingBox() {
+        BlockPos pos = this.getBlockPos();
+        return new AABB(pos);
     }
 }
