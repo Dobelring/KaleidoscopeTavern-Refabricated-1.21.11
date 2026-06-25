@@ -42,12 +42,15 @@ Grow grapes on trellises or find wild grapevines in the world. Crush your harves
 
 Your brew's quality evolves over time through 7 levels:
 
-1 Undrinkable  
-2 Inferior  
-3 Common 4 Fine  
-5 Crafted  
-6 Exquisite  
-7 Vintage
+| Level   | Desc   |
+|:---------|:----------:|
+| 1     | Undrinkable |
+| 2     | Inferior |
+| 3     | Common |
+| 4     | Fine |
+| 5     | Crafted |
+| 6     | Exquisite |
+| 7     | Vintage |
 
 Once ready, attach a Tap to your barrel and extract the finished drink into a bottle.
 
