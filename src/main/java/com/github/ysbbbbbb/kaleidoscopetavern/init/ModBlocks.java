@@ -3,14 +3,16 @@ package com.github.ysbbbbbb.kaleidoscopetavern.init;
 import com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavern;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.mixology.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.plant.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.*;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.BarStoolBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.ChalkboardBlockEntity;
-import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.SandwichBoardBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.*;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.mixology.ShakerBlockEntity;
+import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.mixology.SignatureCocktailBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.PortHelper;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -114,11 +116,31 @@ public final class ModBlocks {
     public static final Block MONDRIAN_PAINTING = paintingReg("mondrian_painting");
     public static final Block NIGHT_EPIPHANY_PAINTING = paintingRegSpecial("night_epiphany_painting");
     // 空瓶
-    public static final Block EMPTY_BOTTLE = commonReg("empty_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    public static final Block EMPTY_BOTTLE = commonReg("empty_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
+    public static final Block EMPTY_GLASSWARE = commonReg("empty_glassware", GlasswareBlock::new, BlockBehaviour.Properties.of());
+    // 酒杯架
+    public static final Block GLASSWARE_HOLDER = commonReg("glassware_holder", GlasswareHolderBlock::new, BlockBehaviour.Properties.of());
+    // 鸡尾酒
+    public static final Block SIGNATURE_COCKTAIL = commonReg("signature_cocktail", SignatureCocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block MYSTERY_COCKTAIL = commonReg("mystery_cocktail", MysteryCocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block WHITE_LADY = commonReg("white_lady", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block EMERALD = commonReg("emerald", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block BRASS_HEART = commonReg("brass_heart", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block GODFATHER = commonReg("godfather", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block GRASSHOPPER = commonReg("grasshopper", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block SCREWDRIVER = commonReg("screwdriver", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block MOJITO = commonReg("mojito", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block ALLIUM_GARDEN = commonReg("allium_garden", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block DEPTH_CHARGE = commonReg("depth_charge", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block NETHER_SPECIAL = commonReg("nether_special", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block BLOODY_MARY = commonReg("bloody_mary", CocktailBlock::new, BlockBehaviour.Properties.of());
+    public static final Block SCULK_SPECIAL = commonReg("sculk_special", CocktailBlock::new, BlockBehaviour.Properties.of());
     // 杂项的瓶子
-    public static final Block WATER_BOTTLE = commonReg("water_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
-    public static final Block HONEY_BOTTLE = commonReg("honey_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
-    public static final Block DRAGON_BREATH_BOTTLE = commonReg("dragon_breath_bottle", p -> new BottleBlock(p, false), BlockBehaviour.Properties.of());
+    public static final Block WATER_BOTTLE = commonReg("water_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
+    public static final Block HONEY_BOTTLE = commonReg("honey_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
+    public static final Block DRAGON_BREATH_BOTTLE = commonReg("dragon_breath_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
+    public static final Block POTION_BOTTLE = commonReg("potion_bottle", PotionBottleBlock::new, BlockBehaviour.Properties.of());
+    public static final Block XP_BOTTLE = commonReg("xp_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
     // 桌子
     public static final Block TABLE = commonReg("table", TableBlock::new, BlockBehaviour.Properties.of());
     // 野生葡萄藤
@@ -128,23 +150,23 @@ public final class ModBlocks {
     public static final Block TRELLIS = commonReg("trellis", TrellisBlock::new, BlockBehaviour.Properties.of());
     // 葡萄
     public static final Block GRAPE_CROP = commonReg("grape_crop", p -> new GrapeCropBlock(
-            p,  (state, level, pos, random) -> 0.25F, () -> new ItemStack(ModItems.GRAPE, 3)
+            p,  (_, _, _, _) -> 0.25F, () -> new ItemStack(ModItems.GRAPE, 3)
     ), BlockBehaviour.Properties.of().dynamicShape());
     public static final Block ICE_GRAPE_CROP = commonReg("ice_grape_crop", p -> new GrapeCropBlock(
-            p,  (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.ICE_GRAPE, 3)
+            p,  (_, level, pos, _) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.ICE_GRAPE, 3)
     ), BlockBehaviour.Properties.of().dynamicShape());
     public static final Block GOLD_GRAPE_CROP = commonReg("gold_grape_crop", p -> new GrapeCropBlock(
-            p,  (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.GOLD_GRAPE, 3)
+            p,  (_, level, pos, _) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, () -> new ItemStack(ModItems.GOLD_GRAPE, 3)
     ), BlockBehaviour.Properties.of().dynamicShape());
     // 葡萄藤
     public static final Block GRAPEVINE_TRELLIS = commonReg("grapevine_trellis", p -> new GrapevineTrellisBlock(
-            p, (state, level, pos, random) -> 0.25F, ModBlocks.GRAPE_CROP::defaultBlockState
+            p, (_, _, _, _) -> 0.25F, ModBlocks.GRAPE_CROP::defaultBlockState
     ), BlockBehaviour.Properties.of());
     public static final Block ICE_GRAPEVINE_TRELLIS = commonReg("ice_grapevine_trellis", p -> new GrapevineTrellisBlock(
-            p, (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, ModBlocks.ICE_GRAPE_CROP::defaultBlockState
+            p, (_, level, pos, _) -> level.getBiome(pos).value().getBaseTemperature() < 0.15F ? 0.8F : 0.25F, ModBlocks.ICE_GRAPE_CROP::defaultBlockState
     ), BlockBehaviour.Properties.of());
     public static final Block GOLD_GRAPEVINE_TRELLIS = commonReg("gold_grapevine_trellis", p -> new GrapevineTrellisBlock(
-            p, (state, level, pos, random) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, ModBlocks.GOLD_GRAPE_CROP::defaultBlockState
+            p, (_, level, pos, _) -> level.getBiome(pos).value().getBaseTemperature() > 1.0F ? 0.8F : 0.25F, ModBlocks.GOLD_GRAPE_CROP::defaultBlockState
     ), BlockBehaviour.Properties.of());
     // 吧台
     public static final Block BAR_COUNTER = commonReg("bar_counter", BarCounterBlock::new, BlockBehaviour.Properties.of());
@@ -152,6 +174,34 @@ public final class ModBlocks {
     public static final Block STEPLADDER = commonReg("stepladder", StepladderBlock::new, BlockBehaviour.Properties.of());
     // 黑板
     public static final Block CHALKBOARD = commonReg("chalkboard", ChalkboardBlock::new, BlockBehaviour.Properties.of());
+    public static final Block BELL_PENDANT_LAMP = commonReg("bell_pendant_lamp", PendantLampBlock::new, BlockBehaviour.Properties.of());
+    public static final Block YELLOW_PENDANT_LAMP = commonReg("yellow_pendant_lamp", PendantLampBlock::new, BlockBehaviour.Properties.of());
+    public static final Block BLUE_PENDANT_LAMP = commonReg("blue_pendant_lamp", PendantLampBlock::new, BlockBehaviour.Properties.of());
+    // 熏香
+    public static final Block SAKURA_INCENSE = commonReg("sakura_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.SAKURA_INCENSE_PARTICLE, () -> ParticleTypes.CHERRY_LEAVES),
+            BlockBehaviour.Properties.of());
+    public static final Block PINE_INCENSE = commonReg("pine_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.PINE_INCENSE_PARTICLE, () -> ModParticles.PINE_INCENSE_LARGE_PARTICLE),
+            BlockBehaviour.Properties.of());
+    public static final Block GINKGO_INCENSE = commonReg("ginkgo_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.GINKGO_INCENSE_PARTICLE, () -> ModParticles.GINKGO_INCENSE_LARGE_PARTICLE),
+            BlockBehaviour.Properties.of());
+    public static final Block SPORE_INCENSE = commonReg("spore_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.SPORE_INCENSE_PARTICLE, () -> ParticleTypes.SPORE_BLOSSOM_AIR),
+            BlockBehaviour.Properties.of());
+    public static final Block CATNIP_INCENSE = commonReg("catnip_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.CATNIP_INCENSE_PARTICLE, () -> ModParticles.CATNIP_INCENSE_LARGE_PARTICLE),
+            BlockBehaviour.Properties.of());
+    public static final Block SNOW_INCENSE = commonReg("snow_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.SNOW_INCENSE_PARTICLE, () -> ModParticles.SNOW_INCENSE_LARGE_PARTICLE),
+            BlockBehaviour.Properties.of());
+    public static final Block BUTTERFLY_INCENSE = commonReg("butterfly_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.BUTTERFLY_INCENSE_PARTICLE, () -> ModParticles.BUTTERFLY_INCENSE_LARGE_PARTICLE),
+            BlockBehaviour.Properties.of());
+    public static final Block FIREFLY_INCENSE = commonReg("firefly_incense",
+            p -> new IncenseBlock(p, () -> ModParticles.FIREFLY_INCENSE_PARTICLE, () -> ModParticles.FIREFLY_INCENSE_LARGE_PARTICLE, -0.67, 5.33),
+            BlockBehaviour.Properties.of());
 
     // 龙头
     public static final Block TAP = commonReg("tap", TapBlock::new, BlockBehaviour.Properties.of());
@@ -162,6 +212,11 @@ public final class ModBlocks {
     // 酒柜
     public static final Block BAR_CABINET = commonReg("bar_cabinet", BarCabinetBlock::new, BlockBehaviour.Properties.of());
     public static final Block GLASS_BAR_CABINET = commonReg("glass_bar_cabinet", BarCabinetBlock::new, BlockBehaviour.Properties.of());
+    public static final Block CELLAR_CABINET = commonReg("cellar_cabinet", CellarCabinetBlock::new, BlockBehaviour.Properties.of());
+    public static final Block TILTED_RACK = commonReg("tilted_rack", TiltedRackBlock::new, BlockBehaviour.Properties.of());
+    public static final Block CIRCULAR_RACK = commonReg("circular_rack", CircularRackBlock::new, BlockBehaviour.Properties.of());
+    public static final Block HOLDER = commonReg("holder", HolderBlock::new, BlockBehaviour.Properties.of());
+    public static final Block SHAKER = commonReg("shaker", ShakerBlock::new, BlockBehaviour.Properties.of());
 
     // 酒桶
     public static final Block BARREL = commonReg("barrel", BarrelBlock::new, BlockBehaviour.Properties.of());
@@ -244,6 +299,24 @@ public final class ModBlocks {
             BAR_CABINET,
             GLASS_BAR_CABINET
     ).build();
+    public static final BlockEntityType<CellarCabinetBlockEntity> CELLAR_CABINET_BE = FabricBlockEntityTypeBuilder.create(CellarCabinetBlockEntity::new, CELLAR_CABINET).build();
+    public static final BlockEntityType<TiltedRackBlockEntity> TILTED_RACK_BE = FabricBlockEntityTypeBuilder.create(TiltedRackBlockEntity::new, TILTED_RACK).build();
+    public static final BlockEntityType<GlasswareHolderBlockEntity> GLASSWARE_HOLDER_BE = FabricBlockEntityTypeBuilder.create(GlasswareHolderBlockEntity::new, GLASSWARE_HOLDER).build();
+    public static final BlockEntityType<CircularRackBlockEntity> CIRCULAR_RACK_BE = FabricBlockEntityTypeBuilder.create(CircularRackBlockEntity::new, CIRCULAR_RACK).build();
+    public static final BlockEntityType<HolderBlockEntity> HOLDER_BE = FabricBlockEntityTypeBuilder.create(HolderBlockEntity::new, HOLDER).build();
+    public static final BlockEntityType<ShakerBlockEntity> SHAKER_BE = FabricBlockEntityTypeBuilder.create(ShakerBlockEntity::new, SHAKER).build();
+    public static final BlockEntityType<PotionBottleBlockEntity> POTION_BOTTLE_BE = FabricBlockEntityTypeBuilder.create(PotionBottleBlockEntity::new, POTION_BOTTLE).build();
+    public static final BlockEntityType<IncenseBlockEntity> INCENSE_BE = FabricBlockEntityTypeBuilder.create(IncenseBlockEntity::new,
+            SAKURA_INCENSE,
+            PINE_INCENSE,
+            GINKGO_INCENSE,
+            SPORE_INCENSE,
+            CATNIP_INCENSE,
+            SNOW_INCENSE,
+            BUTTERFLY_INCENSE,
+            FIREFLY_INCENSE
+    ).build();
+    public static final BlockEntityType<SignatureCocktailBlockEntity> SIGNATURE_COCKTAIL_BE = FabricBlockEntityTypeBuilder.create(SignatureCocktailBlockEntity::new, SIGNATURE_COCKTAIL).build();
     public static final BlockEntityType<TapBlockEntity> TAP_BE = FabricBlockEntityTypeBuilder.create(TapBlockEntity::new, TAP).build();
     public static final BlockEntityType<DrinkBlockEntity> DRINK_BE = FabricBlockEntityTypeBuilder.create(DrinkBlockEntity::new,
             WINE, CHAMPAGNE, VODKA, BRANDY, CARIGNAN,
@@ -261,6 +334,15 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "barrel"), BARREL_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "bar_cabinet"), BAR_CABINET_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "cellar_cabinet"), CELLAR_CABINET_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tilted_rack"), TILTED_RACK_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "glassware_holder"), GLASSWARE_HOLDER_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "circular_rack"), CIRCULAR_RACK_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "holder"), HOLDER_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "shaker"), SHAKER_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "potion_bottle"), POTION_BOTTLE_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "incense"), INCENSE_BE);
+        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "signature_cocktail"), SIGNATURE_COCKTAIL_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "drink"), DRINK_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "tap"), TAP_BE);
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "chalkboard"), CHALKBOARD_BE);

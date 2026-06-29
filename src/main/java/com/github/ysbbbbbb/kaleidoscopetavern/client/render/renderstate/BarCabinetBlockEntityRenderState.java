@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

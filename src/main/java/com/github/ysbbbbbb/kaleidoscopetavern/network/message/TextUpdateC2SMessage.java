@@ -17,7 +17,7 @@ public record TextUpdateC2SMessage(
         BlockPos pos, String text,
         TextAlignment textAlignment
 ) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<TextUpdateC2SMessage> TYPE = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_update"));
+    public static final Type<TextUpdateC2SMessage> TYPE = new Type<>(Identifier.fromNamespaceAndPath(KaleidoscopeTavern.MOD_ID, "text_update"));
 
     public static final StreamCodec<FriendlyByteBuf, TextUpdateC2SMessage> STREAM_CODEC = new StreamCodec<>() {
         @Override

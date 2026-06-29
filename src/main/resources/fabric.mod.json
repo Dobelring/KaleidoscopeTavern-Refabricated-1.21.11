@@ -21,6 +21,8 @@
 		"client": ["com.github.ysbbbbbb.kaleidoscopetavern.KaleidoscopeTavernClient"],
 		"jade": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jade.ModJadePlugin"],
 		"jei_mod_plugin": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.jei.ModJeiPlugin"],
+		"rei_common": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREICommonPlugin"],
+		"rei_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rei.ModREIClientPlugin"],
 		"rrv": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVCommonPlugin"],
 		"rrv_client": ["com.github.ysbbbbbb.kaleidoscopetavern.compat.rrv.ModRRVPlugin"]
 	},
@@ -29,16 +31,15 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.18",
-		"minecraft": "~26.2-",
+		"minecraft": "~26.2",
 		"java": ">=25",
-		"fabric-api": "*",
+		"fabric-api": ">=0.153",
 		"forgeconfigapiport": "*"
 	},
 	"breaks": {
 		"rrv": "<8.0.0"
 	},
 	"suggests": {
-		"jei": "*",
-		"trinkets": "*"
+		"trinkets_updated": "*"
 	}
 }

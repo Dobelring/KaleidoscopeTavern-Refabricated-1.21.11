@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+@SuppressWarnings("all")
 public final class ModItems {
     // 桌子
     public static final Item TABLE = registerItem("table", p -> new BlockItem(ModBlocks.TABLE, p.useBlockDescriptionPrefix()));
@@ -105,6 +106,21 @@ public final class ModItems {
     public static final Item MONDRIAN_PAINTING = registerItem("mondrian_painting", p -> new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING, p));
     // 空瓶
     public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE, BottleBlockItem::new);
+    public static final Item EMPTY_GLASSWARE = registerItemViaBlock(ModBlocks.EMPTY_GLASSWARE, GlasswareBlockItem::new);
+    public static final Item SIGNATURE_COCKTAIL = registerItemViaBlock(ModBlocks.SIGNATURE_COCKTAIL, SignatureCocktailBlockItem::new);
+    public static final Item MYSTERY_COCKTAIL = registerItemViaBlock(ModBlocks.MYSTERY_COCKTAIL, CocktailBlockItem::new);
+    public static final Item WHITE_LADY = registerItemViaBlock(ModBlocks.WHITE_LADY, CocktailBlockItem::new);
+    public static final Item EMERALD = registerItemViaBlock(ModBlocks.EMERALD, CocktailBlockItem::new);
+    public static final Item BRASS_HEART = registerItemViaBlock(ModBlocks.BRASS_HEART, CocktailBlockItem::new);
+    public static final Item GODFATHER = registerItemViaBlock(ModBlocks.GODFATHER, CocktailBlockItem::new);
+    public static final Item GRASSHOPPER = registerItemViaBlock(ModBlocks.GRASSHOPPER, CocktailBlockItem::new);
+    public static final Item SCREWDRIVER = registerItemViaBlock(ModBlocks.SCREWDRIVER, CocktailBlockItem::new);
+    public static final Item MOJITO = registerItemViaBlock(ModBlocks.MOJITO, CocktailBlockItem::new);
+    public static final Item ALLIUM_GARDEN = registerItemViaBlock(ModBlocks.ALLIUM_GARDEN, CocktailBlockItem::new);
+    public static final Item DEPTH_CHARGE = registerItemViaBlock(ModBlocks.DEPTH_CHARGE, CocktailBlockItem::new);
+    public static final Item NETHER_SPECIAL = registerItemViaBlock(ModBlocks.NETHER_SPECIAL, CocktailBlockItem::new);
+    public static final Item BLOODY_MARY = registerItemViaBlock(ModBlocks.BLOODY_MARY, CocktailBlockItem::new);
+    public static final Item SCULK_SPECIAL = registerItemViaBlock(ModBlocks.SCULK_SPECIAL, CocktailBlockItem::new);
     // 葡萄
     public static final Item GRAPE = registerItem("grape", p -> new Item(p.food(ModFoods.GRAPE)));
     public static final Item ICE_GRAPE = registerItem("ice_grape", p -> new Item(p.food(ModFoods.GRAPE)));
@@ -112,9 +128,20 @@ public final class ModItems {
 
     public static final Item GREEN_GRAPE = registerItem("green_grape", p -> new Item(p.food(ModFoods.GRAPE)));
     // 野生葡萄藤
-    public static final Item GRAPEVINE = registerItem("grapevine", createBlockItemWithCustomItemName(ModBlocks.WILD_GRAPEVINE));
+    public static final Item GRAPEVINE = registerItem("grapevine", GrapevineItem::new);
     // 黑板
     public static final Item CHALKBOARD = registerItem("chalkboard", p -> new BlockItem(ModBlocks.CHALKBOARD, p.useBlockDescriptionPrefix()));
+    public static final Item BELL_PENDANT_LAMP = registerItem("bell_pendant_lamp", p -> new BlockItem(ModBlocks.BELL_PENDANT_LAMP, p.useBlockDescriptionPrefix()));
+    public static final Item YELLOW_PENDANT_LAMP = registerItem("yellow_pendant_lamp", p -> new BlockItem(ModBlocks.YELLOW_PENDANT_LAMP, p.useBlockDescriptionPrefix()));
+    public static final Item BLUE_PENDANT_LAMP = registerItem("blue_pendant_lamp", p -> new BlockItem(ModBlocks.BLUE_PENDANT_LAMP, p.useBlockDescriptionPrefix()));
+    public static final Item SAKURA_INCENSE = registerItem("sakura_incense", p -> new BlockItem(ModBlocks.SAKURA_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item PINE_INCENSE = registerItem("pine_incense", p -> new BlockItem(ModBlocks.PINE_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item GINKGO_INCENSE = registerItem("ginkgo_incense", p -> new BlockItem(ModBlocks.GINKGO_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item SPORE_INCENSE = registerItem("spore_incense", p -> new BlockItem(ModBlocks.SPORE_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item CATNIP_INCENSE = registerItem("catnip_incense", p -> new BlockItem(ModBlocks.CATNIP_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item SNOW_INCENSE = registerItem("snow_incense", p -> new BlockItem(ModBlocks.SNOW_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item BUTTERFLY_INCENSE = registerItem("butterfly_incense", p -> new BlockItem(ModBlocks.BUTTERFLY_INCENSE, p.useBlockDescriptionPrefix()));
+    public static final Item FIREFLY_INCENSE = registerItem("firefly_incense", p -> new BlockItem(ModBlocks.FIREFLY_INCENSE, p.useBlockDescriptionPrefix()));
     // 燃烧瓶
     public static final Item MOLOTOV = registerItem("molotov", p -> new MolotovBlockItem(ModBlocks.MOLOTOV, p.useBlockDescriptionPrefix()));
     // 吧台
@@ -132,6 +159,12 @@ public final class ModItems {
     // 酒柜
     public static final Item BAR_CABINET =registerItem("bar_cabinet", p -> new BlockItem(ModBlocks.BAR_CABINET, p.useBlockDescriptionPrefix()));
     public static final Item GLASS_BAR_CABINET = registerItem("glass_bar_cabinet", p -> new BlockItem(ModBlocks.GLASS_BAR_CABINET, p.useBlockDescriptionPrefix()));
+    public static final Item CELLAR_CABINET = registerItem("cellar_cabinet", p -> new BlockItem(ModBlocks.CELLAR_CABINET, p.useBlockDescriptionPrefix()));
+    public static final Item TILTED_RACK = registerItem("tilted_rack", p -> new BlockItem(ModBlocks.TILTED_RACK, p.useBlockDescriptionPrefix()));
+    public static final Item CIRCULAR_RACK = registerItem("circular_rack", p -> new BlockItem(ModBlocks.CIRCULAR_RACK, p.useBlockDescriptionPrefix()));
+    public static final Item HOLDER = registerItem("holder", p -> new BlockItem(ModBlocks.HOLDER, p.useBlockDescriptionPrefix()));
+    public static final Item SHAKER = registerItem("shaker", ShakerItem::new);
+    public static final Item GLASSWARE_HOLDER = registerItem("glassware_holder", p -> new BlockItem(ModBlocks.GLASSWARE_HOLDER, p.useBlockDescriptionPrefix()));
     // 酒
     public static final Item WINE = registerItem("wine", p -> new DrinkBlockItem(ModBlocks.WINE, p));
     public static final Item CHAMPAGNE = registerItem("champagne", p -> new DrinkBlockItem(ModBlocks.CHAMPAGNE, p));

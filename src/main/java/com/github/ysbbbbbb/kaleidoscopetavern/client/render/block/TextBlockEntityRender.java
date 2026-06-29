@@ -1,6 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.client.render.block;
 
-import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.ChalkboardBlock;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.deco.SandwichBoardBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.deco.TextBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.client.render.renderstate.TextBlockEntityRenderState;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.TextAlignment;
@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.FormattedCharSequence;
@@ -40,12 +39,12 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     }
 
     @Override
-    public abstract M createRenderState();
+    public abstract @NonNull M createRenderState();
 
     @Override
-    public void extractRenderState(T blockEntity, M blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
+    public void extractRenderState(@NonNull T blockEntity, @NonNull M blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
-        blockEntityRenderState.facing = blockEntity.getBlockState().getValue(ChalkboardBlock.FACING);
+        blockEntityRenderState.direction = blockEntity.getBlockState().getValue(SandwichBoardBlock.ROTATION);
         blockEntityRenderState.text = blockEntity.getText();
         blockEntityRenderState.color = blockEntity.getColor();
         blockEntityRenderState.glowing = blockEntity.isGlowing();
@@ -53,14 +52,14 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     }
 
     @Override
-    public final void submit(M blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
+    public final void submit(@NonNull M blockEntityRenderState, @NonNull PoseStack poseStack, @NonNull SubmitNodeCollector submitNodeCollector, @NonNull CameraRenderState cameraRenderState) {
         // 渲染模型本体
-        this.renderModel(blockEntityRenderState, poseStack, submitNodeCollector, blockEntityRenderState.facing);
+        this.renderModel(blockEntityRenderState, poseStack, submitNodeCollector, blockEntityRenderState.direction);
 
         // 渲染文本
         if (cameraRenderState.pos.distanceTo(Vec3.atCenterOf(blockEntityRenderState.blockPos)) <= 48) {
             if (StringUtils.isNotBlank(blockEntityRenderState.text)) {
-                this.renderText(blockEntityRenderState, poseStack, submitNodeCollector, blockEntityRenderState.facing);
+                this.renderText(blockEntityRenderState, poseStack, submitNodeCollector, blockEntityRenderState.direction);
             }
         }
     }
@@ -68,12 +67,12 @@ public abstract class TextBlockEntityRender<T extends TextBlockEntity, M extends
     /**
      * 渲染模型本体，子类需要实现这个方法来渲染具体的模型
      */
-    protected abstract void renderModel(M textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing);
+    protected abstract void renderModel(M textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction);
 
     /**
      * 渲染文字，子类需要实现这个方法来渲染具体的文字
      */
-    protected abstract void renderText(M textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing);
+    protected abstract void renderText(M textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction);
 
     /**
      * 渲染文字的辅助方法，涉及到文字的旋转、缩放、颜色计算和分行等逻辑，子类可以调用这个方法来简化文字渲染的实现

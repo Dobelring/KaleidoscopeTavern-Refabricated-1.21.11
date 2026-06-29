@@ -11,5 +11,6 @@ public class ModRRVCommonPlugin implements ReliableRecipeViewerPlugin {
         KaleidoscopeTavern.LOGGER.info("Registering RRV recipe synchronization");
         ServerRecipeManager.INSTANCE.synchronizeRecipeType(ModRecipes.BARREL_SERIALIZER, ModRecipes.BARREL_RECIPE);
         ServerRecipeManager.INSTANCE.synchronizeRecipeType(ModRecipes.PRESSING_TUB_SERIALIZER, ModRecipes.PRESSING_TUB_RECIPE);
+        ServerRecipeManager.INSTANCE.synchronizeRecipeType(ModRecipes.SHAKER_SERIALIZER, ModRecipes.SHAKER_RECIPE);
     }
 }

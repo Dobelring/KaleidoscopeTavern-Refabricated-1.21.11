@@ -61,44 +61,44 @@ public class RenderUtils {
      * @param size      流体平面贴图的大小（0-16）
      * @param y         流体平面贴图的高度
      */
-        public static void renderSurface(PoseStack poseStack, SubmitNodeCollector collector, TextureAtlasSprite sprite,
+    public static void renderSurface(PoseStack poseStack, SubmitNodeCollector collector, TextureAtlasSprite sprite,
                                      int color, int light, int size, float y)
-        {
-            int tintedColor = ensureAlpha(color);
-            collector.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), (pose, vertexConsumer) -> {
-                var matrix = pose.pose();
-                // 贴图的位置和大小
-                int margin = (16 - size) / 2;
-                float min = margin / 16f, max = 1 - margin / 16f;
-                float spriteSize = size / 16f;
+    {
+        int tintedColor = ensureAlpha(color);
+        collector.submitCustomGeometry(poseStack, RenderTypes.cutoutMovingBlock(), (pose, vertexConsumer) -> {
+            var matrix = pose.pose();
+            // 贴图的位置和大小
+            int margin = (16 - size) / 2;
+            float min = margin / 16f, max = 1 - margin / 16f;
+            float spriteSize = size / 16f;
 
-                // 渲染一个平面
-                vertexConsumer.addVertex(matrix, min, y, min)
-                        .setColor(tintedColor)
-                        .setUv(sprite.getU0(), sprite.getV0())
-                        .setOverlay(0)
-                        .setLight(light)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(matrix, min, y, max)
-                        .setColor(tintedColor)
-                        .setUv(sprite.getU0(), sprite.getV(spriteSize))
-                        .setOverlay(0)
-                        .setLight(light)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(matrix, max, y, max)
-                        .setColor(tintedColor)
-                        .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
-                        .setOverlay(0)
-                        .setLight(light)
-                        .setNormal(pose, 0, 1, 0);
-                vertexConsumer.addVertex(matrix, max, y, min)
-                        .setColor(tintedColor)
-                        .setUv(sprite.getU(spriteSize), sprite.getV0())
-                        .setOverlay(0)
-                        .setLight(light)
-                        .setNormal(pose, 0, 1, 0);
-            });
-        }
+            // 渲染一个平面
+            vertexConsumer.addVertex(matrix, min, y, min)
+                    .setColor(tintedColor)
+                    .setUv(sprite.getU0(), sprite.getV0())
+                    .setOverlay(0)
+                    .setLight(light)
+                    .setNormal(pose, 0, 1, 0);
+            vertexConsumer.addVertex(matrix, min, y, max)
+                    .setColor(tintedColor)
+                    .setUv(sprite.getU0(), sprite.getV(spriteSize))
+                    .setOverlay(0)
+                    .setLight(light)
+                    .setNormal(pose, 0, 1, 0);
+            vertexConsumer.addVertex(matrix, max, y, max)
+                    .setColor(tintedColor)
+                    .setUv(sprite.getU(spriteSize), sprite.getV(spriteSize))
+                    .setOverlay(0)
+                    .setLight(light)
+                    .setNormal(pose, 0, 1, 0);
+            vertexConsumer.addVertex(matrix, max, y, min)
+                    .setColor(tintedColor)
+                    .setUv(sprite.getU(spriteSize), sprite.getV0())
+                    .setOverlay(0)
+                    .setLight(light)
+                    .setNormal(pose, 0, 1, 0);
+        });
+    }
 
     /**
      * 基于方块坐标、物品索引和通道号生成稳定的伪随机浮点数，范围 [-1, 1]。

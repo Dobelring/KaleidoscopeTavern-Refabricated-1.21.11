@@ -8,7 +8,6 @@ import com.zurrtum.create.client.ponder.foundation.PonderIndex;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resources.Identifier;
-import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class TavernPonderPlugin implements PonderPlugin {
@@ -17,17 +16,17 @@ public class TavernPonderPlugin implements PonderPlugin {
     }
 
     @Override
-    public void registerTags(@NonNull PonderTagRegistrationHelper<Identifier> helper) {
+    public void registerTags(PonderTagRegistrationHelper<Identifier> helper) {
         ModPonderTags.register(helper);
     }
 
     @Override
-    public void registerScenes(@NonNull PonderSceneRegistrationHelper<Identifier> helper) {
+    public void registerScenes(PonderSceneRegistrationHelper<Identifier> helper) {
         ModPonderScreen.register(helper);
     }
 
     @Override
-    public @NonNull String getModId() {
+    public String getModId() {
         return KaleidoscopeTavern.MOD_ID;
     }
 }

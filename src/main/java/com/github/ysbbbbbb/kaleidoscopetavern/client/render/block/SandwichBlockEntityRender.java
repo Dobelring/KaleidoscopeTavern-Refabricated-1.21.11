@@ -9,9 +9,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
+import org.joml.Quaternionf;
 import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
@@ -25,29 +25,25 @@ public class SandwichBlockEntityRender extends TextBlockEntityRender<SandwichBoa
     }
 
     @Override
-    protected void renderModel(SandwichBoardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
+    protected void renderModel(SandwichBoardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction) {
         // 展板使用的是方块模型，不需要特殊渲染
     }
 
     @Override
-    protected void renderText(SandwichBoardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, Direction facing) {
+    protected void renderText(SandwichBoardBlockEntityRenderState textBlockRenderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int direction) {
+
+        float angle = direction * 22.5f + 180;
+        float radians = (float) Math.toRadians(angle);
+        float xOffset = (float) (-Math.sin(radians) * 0.06f);
+        float zOffset = (float) (Math.cos(radians) * 0.06f);
+        float tiltAxisX = (float) -Math.cos(radians);
+        float tiltAxisZ = (float) -Math.sin(radians);
+
         poseStack.pushPose();
+        poseStack.translate(0.5 + xOffset, 1.06, 0.5 + zOffset);
 
-        if (facing == Direction.SOUTH) {
-            poseStack.translate(0.5, 1.06, 0.56);
-            poseStack.mulPose(Axis.XN.rotationDegrees(22.5f));
-        } else if (facing == Direction.NORTH) {
-            poseStack.translate(0.5, 1.06, 0.44);
-            poseStack.mulPose(Axis.XP.rotationDegrees(22.5f));
-        } else if (facing == Direction.EAST) {
-            poseStack.translate(0.56, 1.06, 0.5);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(22.5f));
-        } else if (facing == Direction.WEST) {
-            poseStack.translate(0.44, 1.06, 0.5);
-            poseStack.mulPose(Axis.ZN.rotationDegrees(22.5f));
-        }
-
-        poseStack.mulPose(Axis.YN.rotationDegrees(facing.get2DDataValue() * 90));
+        poseStack.mulPose(new Quaternionf().rotateAxis((float) Math.toRadians(22.5f), tiltAxisX, 0.0f, tiltAxisZ));
+        poseStack.mulPose(Axis.YN.rotationDegrees(angle));
 
         int maxWidth = 55;
         if (StringUtils.isNotBlank(textBlockRenderState.text))
