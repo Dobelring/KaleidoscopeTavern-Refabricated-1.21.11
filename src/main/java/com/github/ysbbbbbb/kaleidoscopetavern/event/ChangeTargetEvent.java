@@ -4,8 +4,6 @@ import com.github.ysbbbbbb.kaleidoscopetavern.api.event.LivingChangeTargetEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.level.Level;
 
 import static com.github.ysbbbbbb.kaleidoscopetavern.effect.GrassStealthEffect.notInGrassStealthPlant;
@@ -24,10 +22,6 @@ public class ChangeTargetEvent {
             if (notInGrassStealthPlant(level, pos) && notInGrassStealthPlant(level, abovePos)) {
                 return;
             }
-            event.setCanceled(true);
-        }
-        // 摸金校尉：猪灵/猪灵蛮兵不会仇恨玩家
-        if (event.getEntity() instanceof AbstractPiglin && newTarget.hasEffect(ModEffects.TOMB_RAIDER.get())) {
             event.setCanceled(true);
         }
     }

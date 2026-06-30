@@ -25,7 +25,7 @@ public class EffectEvent {
     }
 
     /**
-     * 摸金校尉：攻击指定类型的生物时，将目标主手物品耐久降至1后卸下掉落。
+     * 摸金校尉：攻击指定类型的生物时，有 30% 概率将目标主手物品耐久降至 1 后卸下掉落。
      */
     public static void onLivingHurt(LivingHurtEvent event) {
         if (event.getEntity().level().isClientSide) {
@@ -39,6 +39,11 @@ public class EffectEvent {
 
         LivingEntity target = event.getEntity();
         if (!target.getType().is(TagMod.TOMB_RAIDER_DISARMABLE)) {
+            return;
+        }
+
+        // 30% 概率触发卸装
+        if (target.getRandom().nextFloat() >= 0.3F) {
             return;
         }
 
