@@ -23,6 +23,12 @@ public class EffectEvent {
         PlayerTickEvents.END.register(EffectEvent::playerTicking);
     }
 
+    /**
+     * 醇热效果饥饿耗尽移除逻辑。
+     * 不能在 applyEffectTick 内调用 removeEffect，因为 tickEffects() 正在用 Iterator 遍历
+     * activeEffects map，直接 remove 会导致 ConcurrentModificationException。
+     * 此处在 PlayerTickEvent 中安全执行移除。
+     */
     private static void playerTicking(Player player) {
         if (player.level().isClientSide()) {
             return;
@@ -41,6 +47,9 @@ public class EffectEvent {
         }
     }
 
+    /**
+     * 摸金校尉：攻击指定类型的生物时，有 30% 概率将目标主手物品耐久降至 1 后卸下掉落。
+     */
     private static void onLivingHurt(LivingEntity livingEntity, DamageSource damageSource, float v, float v1, boolean b) {
         if (livingEntity.level().isClientSide()) {
             return;
@@ -52,6 +61,11 @@ public class EffectEvent {
         }
 
         if (!livingEntity.getType().builtInRegistryHolder().is(TagMod.TOMB_RAIDER_DISARMABLE)) {
+            return;
+        }
+
+        // 30% 概率触发卸装
+        if (livingEntity.level().getRandom().nextFloat() >= 0.3F) {
             return;
         }
 
