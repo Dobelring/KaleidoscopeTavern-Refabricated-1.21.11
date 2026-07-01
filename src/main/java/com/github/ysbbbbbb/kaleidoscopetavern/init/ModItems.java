@@ -12,10 +12,10 @@ import static com.github.ysbbbbbb.kaleidoscopetavern.init.ModFluids.*;
 
 public final class ModItems {
     // 葡萄
-    public static final Item GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
-    public static final Item ICE_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
-    public static final Item GOLD_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
-    public static final Item GREEN_GRAPE = new Item(new Item.Properties().food(ModFoods.GRAPE));
+    public static final Item GRAPE = new TooltipItem(new Item.Properties().food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.grape");
+    public static final Item ICE_GRAPE = new TooltipItem(new Item.Properties().food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.ice_grape");
+    public static final Item GOLD_GRAPE = new TooltipItem(new Item.Properties().food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.gold_grape");
+    public static final Item GREEN_GRAPE = new TooltipItem(new Item.Properties().food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.green_grape");
     // 野生葡萄藤
     public static final Item GRAPEVINE = new GrapevineItem();
     // 果汁桶
@@ -155,7 +155,12 @@ public final class ModItems {
     // 人字梯
     public static final Item STEPLADDER = new BlockItem(ModBlocks.STEPLADDER, new Item.Properties());
     // 藤架
-    public static final Item TRELLIS = new BlockItem(ModBlocks.TRELLIS, new Item.Properties());
+    public static final Item TRELLIS = new TooltipBlockItem(
+            ModBlocks.TRELLIS,
+            new Item.Properties(),
+            "tooltip.kaleidoscope_tavern.trellis.1",
+            "tooltip.kaleidoscope_tavern.trellis.2"
+    );
     // 果盆
     public static final Item PRESSING_TUB = new BlockItem(ModBlocks.PRESSING_TUB, new Item.Properties());
     // 龙头
