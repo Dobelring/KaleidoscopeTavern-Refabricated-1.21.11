@@ -24,11 +24,6 @@ public class ArdentHeatEffect extends BaseEffect {
     public ArdentHeatEffect(int color) {
         super(color);
     }
-
-    /**
-     * 临时变量，用来暂存玩家撞击次数
-     */
-    private static final String COLLISION_COUNT_TAG = "kaleidoscope_tavern:ardent_heat_collision_count";
     /**
      * 玩家护甲列表
      */
@@ -74,9 +69,9 @@ public class ArdentHeatEffect extends BaseEffect {
             }
         }
 
-        // 破坏方块时加速饥饿消耗（1.5 倍消耗速度）
+        // 破坏方块时加速饥饿消耗（3 倍消耗速度）
         if (brokeBlocks) {
-            player.causeFoodExhaustion(0.45F);
+            player.causeFoodExhaustion( 1.2F);
 
             List<EquipmentSlot> slots = Lists.newArrayList();
             for (EquipmentSlot slot : ARMOR_SLOTS) {
@@ -95,11 +90,11 @@ public class ArdentHeatEffect extends BaseEffect {
                     armor.hurtAndBreak(1, player, selected);
                 }
             } else {
-                // 不穿盔甲时，累计撞击 16 次扣 1 点伤害
+                // 不穿盔甲时，累计撞击 5 次扣 1 点伤害
                 int count = ((PlayerExtraData) player).kaleidoscope_tavern$getPersistentData() + 1;
-                if (count >= 16) {
+                if (count >= 5) {
                     player.hurt(player.damageSources().generic(), 1.0F);
-                    count -= 16;
+                    count -= 5;
                 }
                 ((PlayerExtraData) player).kaleidoscope_tavern$setPersistentData(count);
             }
