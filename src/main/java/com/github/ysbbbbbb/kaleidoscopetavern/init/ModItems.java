@@ -122,11 +122,10 @@ public final class ModItems {
     public static final Item BLOODY_MARY = registerItemViaBlock(ModBlocks.BLOODY_MARY, CocktailBlockItem::new);
     public static final Item SCULK_SPECIAL = registerItemViaBlock(ModBlocks.SCULK_SPECIAL, CocktailBlockItem::new);
     // 葡萄
-    public static final Item GRAPE = registerItem("grape", p -> new Item(p.food(ModFoods.GRAPE)));
-    public static final Item ICE_GRAPE = registerItem("ice_grape", p -> new Item(p.food(ModFoods.GRAPE)));
-    public static final Item GOLD_GRAPE = registerItem("gold_grape", p -> new Item(p.food(ModFoods.GRAPE)));
-
-    public static final Item GREEN_GRAPE = registerItem("green_grape", p -> new Item(p.food(ModFoods.GRAPE)));
+    public static final Item GRAPE = registerItem("grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.grape"));
+    public static final Item ICE_GRAPE = registerItem("ice_grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.ice_grape"));
+    public static final Item GOLD_GRAPE = registerItem("gold_grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.gold_grape"));
+    public static final Item GREEN_GRAPE = registerItem("green_grape", p -> new TooltipItem(p.food(ModFoods.GRAPE), "tooltip.kaleidoscope_tavern.green_grape"));
     // 野生葡萄藤
     public static final Item GRAPEVINE = registerItem("grapevine", GrapevineItem::new);
     // 黑板
@@ -149,7 +148,12 @@ public final class ModItems {
     // 人字梯
     public static final Item STEPLADDER = registerItem("stepladder", p -> new BlockItem(ModBlocks.STEPLADDER, p.useBlockDescriptionPrefix()));
     // 藤架
-    public static final Item TRELLIS = registerItem("trellis", p -> new BlockItem(ModBlocks.TRELLIS, p.useBlockDescriptionPrefix()));
+    public static final Item TRELLIS = registerItem("trellis", p -> new TooltipBlockItem(
+            ModBlocks.TRELLIS,
+            p.useBlockDescriptionPrefix(),
+            "tooltip.kaleidoscope_tavern.trellis.1",
+            "tooltip.kaleidoscope_tavern.trellis.2"
+    ));
     // 果盆
     public static final Item PRESSING_TUB = registerItem("pressing_tub", p -> new BlockItem(ModBlocks.PRESSING_TUB, p.useBlockDescriptionPrefix()));
     // 龙头
