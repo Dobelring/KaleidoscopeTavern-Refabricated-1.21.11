@@ -70,6 +70,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 	modImplementation(include("com.jamieswhiteshirt:reach-entity-attributes:2.4.0"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:loot:2.3.15+1.20.1"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:transfer:2.3.15+1.20.1"))
+	modImplementation(include("io.github.fabricators_of_create.Porting-Lib:base:2.3.15+1.20.1"))
 	//implementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
 	modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:15.20.0.132")
