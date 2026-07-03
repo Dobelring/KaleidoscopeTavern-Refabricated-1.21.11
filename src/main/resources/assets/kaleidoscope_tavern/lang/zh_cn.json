@@ -1,4 +1,6 @@
 {
+  "modmenu.nameTranslation.kaleidoscope_tavern": "森罗物语：酒馆-重织",
+  "modmenu.descriptionTranslation.kaleidoscope_tavern": "一个为Minecraft带来沉浸式酿造和丰富调酒机制的模组",
   "item_group.kaleidoscope_tavern.tavern_main.name": "森罗物语：酒馆",
   "item_group.kaleidoscope_tavern.tavern_deco.name": "森罗物语：酒馆装饰",
   "block.kaleidoscope_tavern.white_sofa": "白色沙发",

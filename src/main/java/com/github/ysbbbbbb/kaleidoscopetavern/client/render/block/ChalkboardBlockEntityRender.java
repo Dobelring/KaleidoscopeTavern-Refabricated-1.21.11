@@ -12,6 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -42,7 +43,11 @@ public class ChalkboardBlockEntityRender extends TextBlockEntityRender<Chalkboar
 
     @Override
     public void extractRenderState(@NonNull ChalkboardBlockEntity blockEntity, @NonNull ChalkboardBlockEntityRenderState blockEntityRenderState, float f, @NonNull Vec3 vec3, ModelFeatureRenderer.@Nullable CrumblingOverlay crumblingOverlay) {
-        super.extractRenderState(blockEntity, blockEntityRenderState, f, vec3, crumblingOverlay);
+        BlockEntityRenderState.extractBase(blockEntity, blockEntityRenderState, crumblingOverlay);
+        blockEntityRenderState.text = blockEntity.getText();
+        blockEntityRenderState.color = blockEntity.getColor();
+        blockEntityRenderState.glowing = blockEntity.isGlowing();
+        blockEntityRenderState.textAlignment = blockEntity.getTextAlignment();
         blockEntityRenderState.large = blockEntity.isLarge();
         blockEntityRenderState.facing = blockEntity.getBlockState().getValue(ChalkboardBlock.FACING);
     }
