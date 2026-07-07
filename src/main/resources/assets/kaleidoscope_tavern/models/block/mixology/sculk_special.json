@@ -500,5 +500,5 @@
       "scale": [1.7, 1.7, 1.7]
     }
   },
-  "render_type": "translucent"
+  "render_type": "cutout"
 }
