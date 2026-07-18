@@ -77,8 +77,9 @@ dependencies {
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
 	modCompileOnlyApi("mezz.jei:jei-${project.minecraft_version}-fabric-api:15.20.0.132")
 	modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:15.20.0.132")
-	modCompileOnly "dev.emi:emi-fabric:1.1.22+1.20.1:api"
-	modCompileOnly "dev.emi:emi-fabric:1.1.22+1.20.1"
+	//modCompileOnly "dev.emi:emi-fabric:1.1.24+1.20.1:api"
+	//modCompileOnly "dev.emi:emi-fabric:1.1.24+1.20.1"
+	modCompileOnly "maven.modrinth:emi:${emi_version}"
 	//Create
 	modImplementation "com.simibubi.create:create-fabric:6.0.8.1+build.1744-mc1.20.1"
 	// REI 前置

@@ -14,10 +14,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -25,6 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -38,8 +38,9 @@ import static net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_OFF;
 import static net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON;
 
 @SuppressWarnings("deprecation")
-public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBlock, SimpleWaterloggedBlock {
     private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 7, 11);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -74,8 +75,22 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(OPEN, false)
+                .setValue(WATERLOGGED, false)
                 .setValue(POWERED, false)
         );
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction, @NotNull BlockState blockState2, @NotNull LevelAccessor levelAccessor, @NotNull BlockPos blockPos, @NotNull BlockPos blockPos2) {
+        if (blockState.getValue(WATERLOGGED)) {
+            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        }
+        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
     }
 
     @Nullable
@@ -111,16 +126,18 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPEN, POWERED);
+        builder.add(FACING, OPEN, POWERED, WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction opposite = context.getHorizontalDirection().getOpposite();
         boolean signal = context.getLevel().hasNeighborSignal(context.getClickedPos());
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         return this.defaultBlockState()
                 .setValue(FACING, opposite)
                 .setValue(OPEN, signal)
+                .setValue(WATERLOGGED, hasWater)
                 .setValue(POWERED, signal);
     }
 

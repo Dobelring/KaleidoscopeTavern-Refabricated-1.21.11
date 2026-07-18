@@ -269,7 +269,7 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
 
         // 都不满足，那么单独放置上方就行
         BlockState blockState = state
-                .setValue(BlockStateProperties.WATERLOGGED, level.isWaterAt(pos))
+                .setValue(BlockStateProperties.WATERLOGGED, level.isWaterAt(pos.above()))
                 .setValue(HALF, Half.TOP);
         level.setBlockAndUpdate(pos.above(), blockState);
     }
@@ -290,12 +290,14 @@ public class ChalkboardBlock extends BaseEntityBlock implements SimpleWaterlogge
     }
 
     private void setChalkboard(Level level, BlockPos pos, BlockState state, PositionType position) {
-        boolean waterAt = level.isWaterAt(pos);
-        BlockState blockState = state
-                .setValue(BlockStateProperties.WATERLOGGED, waterAt)
+        BlockState blockStateBottom = state
+                .setValue(BlockStateProperties.WATERLOGGED, level.isWaterAt(pos))
                 .setValue(POSITION, position);
-        level.setBlockAndUpdate(pos, blockState.setValue(HALF, Half.BOTTOM));
-        level.setBlockAndUpdate(pos.above(), blockState.setValue(HALF, Half.TOP));
+        BlockState blockStateTop = state
+                .setValue(BlockStateProperties.WATERLOGGED, level.isWaterAt(pos.above()))
+                .setValue(POSITION, position);
+        level.setBlockAndUpdate(pos, blockStateBottom.setValue(HALF, Half.BOTTOM));
+        level.setBlockAndUpdate(pos.above(), blockStateTop.setValue(HALF, Half.TOP));
     }
 
     @Override

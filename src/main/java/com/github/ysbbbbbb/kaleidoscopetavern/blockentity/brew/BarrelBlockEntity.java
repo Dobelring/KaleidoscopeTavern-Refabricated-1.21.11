@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BarrelBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
@@ -38,11 +39,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
@@ -108,6 +111,11 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     public void tick(Level level) {
         // 盖子打开时，不进行任何 tick
         if (open) {
+            BlockState blockState = level.getBlockState(this.worldPosition.above());
+            // 在水中木桶会被灌满水
+            if (blockState.getBlock() instanceof BarrelBlock && blockState.getValue(WATERLOGGED) && this.getFluid().getFluidAmountMb() < MAX_FLUID_AMOUNT) {
+                this.getFluid().fill(FluidVariant.of(Fluids.WATER), 4000, CustomFluidTank.FluidAction.EXECUTE);
+            }
             return;
         }
 

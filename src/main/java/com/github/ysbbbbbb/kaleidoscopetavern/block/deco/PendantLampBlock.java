@@ -13,8 +13,10 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -27,8 +29,9 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class PendantLampBlock extends HorizontalDirectionalBlock {
+public class PendantLampBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public static final VoxelShape UPPER_NORTH_SOUTH_SHAPE = Block.box(1, 0, 5, 15, 16, 11);
     public static final VoxelShape UPPER_EAST_WEST_SHAPE = Block.box(5, 0, 1, 11, 16, 15);
@@ -46,12 +49,21 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
         );
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public @NotNull BlockState updateShape(BlockState state, Direction direction, @NotNull BlockState neighborState,
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @NotNull BlockState updateShape(BlockState state, @NotNull Direction direction, @NotNull BlockState neighborState,
                                            @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
         DoubleBlockHalf half = state.getValue(HALF);
         boolean isLowerHalf = half == DoubleBlockHalf.LOWER && direction == Direction.UP;
         boolean isUpperHalf = half == DoubleBlockHalf.UPPER && direction == Direction.DOWN;
@@ -83,9 +95,11 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         if (pos.getY() > level.getMinBuildHeight() + 1 && level.getBlockState(pos.below()).canBeReplaced(context)) {
             return this.defaultBlockState()
                     .setValue(FACING, context.getHorizontalDirection())
+                    .setValue(WATERLOGGED, hasWater)
                     .setValue(HALF, DoubleBlockHalf.UPPER);
         }
         return null;
@@ -94,7 +108,10 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, @NotNull ItemStack stack) {
         BlockPos below = pos.below();
-        BlockState blockState = state.setValue(HALF, DoubleBlockHalf.LOWER);
+        boolean hasWater = level.getFluidState(below).getType() == Fluids.WATER;
+        BlockState blockState = state
+                .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(WATERLOGGED, hasWater);
         level.setBlockAndUpdate(below, blockState);
     }
 
@@ -108,7 +125,7 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HALF);
+        builder.add(FACING, HALF, WATERLOGGED);
     }
 
     @Override

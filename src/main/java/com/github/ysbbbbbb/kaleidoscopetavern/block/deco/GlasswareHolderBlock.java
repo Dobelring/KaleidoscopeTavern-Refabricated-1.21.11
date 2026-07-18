@@ -14,13 +14,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -34,9 +36,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements EntityBlock, SimpleWaterloggedBlock {
     public static final VoxelShape NORTH_SOUTH_SHAPE = Block.box(0, 11, 1, 16, 16, 15);
     public static final VoxelShape EAST_WEST_SHAPE = Block.box(1, 11, 0, 15, 16, 16);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public GlasswareHolderBlock() {
         super(Properties.of()
@@ -46,6 +49,7 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
                 .lightLevel(s -> 8)
                 .noOcclusion());
         this.registerDefaultState(this.stateDefinition.any()
+                .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH));
     }
 
@@ -127,6 +131,19 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
     }
 
     @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @NotNull BlockState updateShape(@NotNull BlockState blockState, @NotNull Direction direction, @NotNull BlockState blockState2, @NotNull LevelAccessor levelAccessor, @NotNull BlockPos blockPos, @NotNull BlockPos blockPos2) {
+        if (blockState.getValue(WATERLOGGED)) {
+            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        }
+        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+    }
+
+    @Override
     @Nullable
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new GlasswareHolderBlockEntity(pos, state);
@@ -134,14 +151,15 @@ public class GlasswareHolderBlock extends HorizontalDirectionalBlock implements 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
+        builder.add(FACING, WATERLOGGED);
     }
 
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         Direction opposite = context.getHorizontalDirection().getOpposite();
-        return this.defaultBlockState().setValue(FACING, opposite);
+        return this.defaultBlockState().setValue(FACING, opposite).setValue(WATERLOGGED, hasWater);
     }
 
     @Override
