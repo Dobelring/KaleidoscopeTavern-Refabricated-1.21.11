@@ -17,22 +17,29 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CellarCabinetBlock extends AbstractStorageBlock {
+public class CellarCabinetBlock extends AbstractStorageBlock implements SimpleWaterloggedBlock {
     private static final MapCodec<CellarCabinetBlock> CODEC = simpleCodec(p -> new CellarCabinetBlock());
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public CellarCabinetBlock() {
         super();
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(POWERED, false)
+                .setValue(WATERLOGGED, false)
                 .setValue(BarCabinetBlock.POSITION, PositionType.SINGLE));
     }
 
@@ -40,6 +47,11 @@ public class CellarCabinetBlock extends AbstractStorageBlock {
     protected @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                                        Player player, InteractionHand hand, BlockHitResult hitResult) {
         return super.handleUse(state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
@@ -81,6 +93,9 @@ public class CellarCabinetBlock extends AbstractStorageBlock {
     @Override
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
                                            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
         Direction self = state.getValue(FACING);
         Direction left = self.getClockWise();
         Direction right = self.getCounterClockWise();
@@ -127,7 +142,7 @@ public class CellarCabinetBlock extends AbstractStorageBlock {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         Direction opposite = context.getHorizontalDirection().getOpposite();
-
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         BlockState left = level.getBlockState(pos.relative(opposite.getClockWise()));
         BlockState right = level.getBlockState(pos.relative(opposite.getCounterClockWise()));
 
@@ -148,6 +163,7 @@ public class CellarCabinetBlock extends AbstractStorageBlock {
         return this.defaultBlockState()
                 .setValue(FACING, opposite)
                 .setValue(POWERED, signal)
+                .setValue(WATERLOGGED, hasWater)
                 .setValue(BarCabinetBlock.POSITION, position);
     }
 
@@ -159,7 +175,7 @@ public class CellarCabinetBlock extends AbstractStorageBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED, BarCabinetBlock.POSITION);
+        builder.add(FACING, POWERED, BarCabinetBlock.POSITION, WATERLOGGED);
     }
 
     @Override

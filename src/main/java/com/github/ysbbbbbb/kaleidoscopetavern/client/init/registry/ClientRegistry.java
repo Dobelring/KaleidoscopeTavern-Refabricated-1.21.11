@@ -71,6 +71,8 @@ public final class ClientRegistry {
                 XP_BOTTLE
         );
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
+                TILTED_RACK,
+                HOLDER,
                 PRESSING_TUB,
                 BARREL,
                 CHALKBOARD,
