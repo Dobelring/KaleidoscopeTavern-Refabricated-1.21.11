@@ -7,16 +7,26 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -25,28 +35,69 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class TiltedRackBlock extends AbstractStorageBlock {
+public class TiltedRackBlock extends AbstractStorageBlock implements SimpleWaterloggedBlock {
     public static final VoxelShape NORTH_SHAPE = Block.box(0, 0, 5, 16, 14, 15);
     public static final VoxelShape SOUTH_SHAPE = Block.box(0, 0, 1, 16, 14, 11);
     public static final VoxelShape EAST_SHAPE = Block.box(1, 0, 0, 11, 14, 16);
     public static final VoxelShape WEST_SHAPE = Block.box(5, 0, 0, 15, 14, 16);
     private static final MapCodec<TiltedRackBlock> CODEC = simpleCodec(TiltedRackBlock::new);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     public TiltedRackBlock(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
+                .setValue(WATERLOGGED, false)
                 .setValue(POWERED, false));
     }
 
+    @Deprecated
     public TiltedRackBlock() {
         this(Properties.of());
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState state,
+            @NonNull LevelReader level,
+            @NonNull ScheduledTickAccess ticks,
+            @NonNull BlockPos pos,
+            @NonNull Direction directionToNeighbour,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource random
+    ) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
     protected @NotNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
                                                    @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
         return super.handleUse(state, level, pos, player, hand, hitResult);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        if (stateForPlacement == null)
+            return null;
+        return stateForPlacement.setValue(WATERLOGGED, hasWater);
     }
 
     @Override

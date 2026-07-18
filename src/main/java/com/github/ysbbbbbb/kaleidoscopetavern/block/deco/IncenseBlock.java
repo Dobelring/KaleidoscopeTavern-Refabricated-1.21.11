@@ -17,10 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
@@ -42,11 +43,12 @@ import java.util.function.Supplier;
 import static net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_OFF;
 import static net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON;
 
-public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBlock {
+public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBlock, SimpleWaterloggedBlock {
     private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 7, 11);
     private static final MapCodec<IncenseBlock> CODEC = simpleCodec(p -> new IncenseBlock(
             p, () -> ParticleTypes.CHERRY_LEAVES, () -> ParticleTypes.CHERRY_LEAVES
     ));
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
     private static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -95,8 +97,31 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(OPEN, false)
+                .setValue(WATERLOGGED, false)
                 .setValue(POWERED, false)
         );
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState state,
+            @NonNull LevelReader level,
+            @NonNull ScheduledTickAccess ticks,
+            @NonNull BlockPos pos,
+            @NonNull Direction directionToNeighbour,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource random
+    ) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Nullable
@@ -132,16 +157,18 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, OPEN, POWERED);
+        builder.add(FACING, OPEN, POWERED, WATERLOGGED);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction opposite = context.getHorizontalDirection().getOpposite();
         boolean signal = context.getLevel().hasNeighborSignal(context.getClickedPos());
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         return this.defaultBlockState()
                 .setValue(FACING, opposite)
                 .setValue(OPEN, signal)
+                .setValue(WATERLOGGED, hasWater)
                 .setValue(POWERED, signal);
     }
 

@@ -13,13 +13,22 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -29,10 +38,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class CircularRackBlock extends AbstractStorageBlock {
+public class CircularRackBlock extends AbstractStorageBlock implements SimpleWaterloggedBlock {
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 2, 16);
     private static final MapCodec<CircularRackBlock> CODEC = simpleCodec(CircularRackBlock::new);
-
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public CircularRackBlock(Properties properties) {
         super(properties
                 .mapColor(MapColor.WOOD)
@@ -43,11 +52,35 @@ public class CircularRackBlock extends AbstractStorageBlock {
                 .ignitedByLava());
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
+                .setValue(WATERLOGGED, false)
                 .setValue(POWERED, false));
     }
 
+    @Deprecated
     public CircularRackBlock() {
         this(Properties.of());
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState state,
+            @NonNull LevelReader level,
+            @NonNull ScheduledTickAccess ticks,
+            @NonNull BlockPos pos,
+            @NonNull Direction directionToNeighbour,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource random
+    ) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override
@@ -59,6 +92,22 @@ public class CircularRackBlock extends AbstractStorageBlock {
     @Override
     protected boolean blockListCheck(ItemStack stack) {
         return stack.is(TagMod.CIRCULAR_RACK_BLOCKLIST);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        if (stateForPlacement == null)
+            return null;
+        return stateForPlacement.setValue(WATERLOGGED, hasWater);
     }
 
     @Override
