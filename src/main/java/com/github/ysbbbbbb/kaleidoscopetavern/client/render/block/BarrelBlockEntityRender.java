@@ -103,7 +103,7 @@ public class BarrelBlockEntityRender implements BlockEntityRenderer<BarrelBlockE
             poseStack.translate(0, 2, 0);
 
             float percent = fluidAmount / (float) IBarrel.MAX_FLUID_AMOUNT;
-            float y = percent * 0.65f;
+            float y = percent * 0.7f;
             Fluid fluid = fluidTank.getFluid();
             RenderUtils.renderFluid(fluid, minecraft.level, barrel.blockPos, poseStack, buffer, barrel.lightCoords, 16, y);
             poseStack.popPose();

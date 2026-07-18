@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
+import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BarrelBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.recipe.BarrelRecipe;
@@ -15,6 +16,7 @@ import com.github.ysbbbbbb.kaleidoscopetavern.util.fluids.FluidUtils;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.IItemHandler;
 import com.github.ysbbbbbb.kaleidoscopetavern.util.neo.ItemStackHandler;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -35,6 +37,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
@@ -43,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
 public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     /**
@@ -103,6 +107,11 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     public void tick(Level level) {
         // 盖子打开时，不进行任何 tick
         if (open) {
+            BlockState blockState = level.getBlockState(this.worldPosition.above());
+            // 在水中木桶会被灌满水
+            if (blockState.getBlock() instanceof BarrelBlock && blockState.getValue(WATERLOGGED) && this.getFluid().getFluidAmountMb() < MAX_FLUID_AMOUNT) {
+                this.getFluid().fill(FluidVariant.of(Fluids.WATER), 4000, CustomFluidTank.FluidAction.EXECUTE);
+            }
             return;
         }
 

@@ -16,8 +16,10 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -30,15 +32,15 @@ import org.jspecify.annotations.NonNull;
 import java.util.Collections;
 import java.util.List;
 
-public class PendantLampBlock extends HorizontalDirectionalBlock {
+public class PendantLampBlock extends HorizontalDirectionalBlock implements SimpleWaterloggedBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
 
     public static final VoxelShape UPPER_NORTH_SOUTH_SHAPE = Block.box(1, 0, 5, 15, 16, 11);
     public static final VoxelShape UPPER_EAST_WEST_SHAPE = Block.box(5, 0, 1, 11, 16, 15);
     public static final VoxelShape LOWER_NORTH_SOUTH_SHAPE = Block.box(1, 1, 5, 15, 16, 11);
     public static final VoxelShape LOWER_EAST_WEST_SHAPE = Block.box(5, 1, 1, 11, 16, 15);
-
-    private static final MapCodec<PendantLampBlock> CODEC = simpleCodec(_ -> new PendantLampBlock());
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private static final MapCodec<PendantLampBlock> CODEC = simpleCodec(PendantLampBlock::new);
 
     public PendantLampBlock(Properties properties) {
         super(properties
@@ -51,17 +53,27 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
         );
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(WATERLOGGED, false)
                 .setValue(FACING, Direction.NORTH));
     }
 
+    @Deprecated
     public PendantLampBlock() {
         this(Properties.of());
     }
 
     @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
     protected @NotNull BlockState updateShape(BlockState state, @NonNull LevelReader level, @NonNull ScheduledTickAccess scheduledTickAccess,
-                                              @NonNull BlockPos pos, Direction direction, @NonNull BlockPos neighborPos,
+                                              @NonNull BlockPos pos, @NonNull Direction direction, @NonNull BlockPos neighborPos,
                                               @NonNull BlockState neighborState, @NonNull RandomSource random) {
+        if (state.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
         DoubleBlockHalf half = state.getValue(HALF);
         boolean isLowerHalf = half == DoubleBlockHalf.LOWER && direction == Direction.UP;
         boolean isUpperHalf = half == DoubleBlockHalf.UPPER && direction == Direction.DOWN;
@@ -93,9 +105,11 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
         Level level = context.getLevel();
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
         if (pos.getY() > level.getMinY() + 1 && level.getBlockState(pos.below()).canBeReplaced(context)) {
             return this.defaultBlockState()
                     .setValue(FACING, context.getHorizontalDirection())
+                    .setValue(WATERLOGGED, hasWater)
                     .setValue(HALF, DoubleBlockHalf.UPPER);
         }
         return null;
@@ -104,7 +118,10 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, @NonNull ItemStack stack) {
         BlockPos below = pos.below();
-        BlockState blockState = state.setValue(HALF, DoubleBlockHalf.LOWER);
+        boolean hasWater = level.getFluidState(below).getType() == Fluids.WATER;
+        BlockState blockState = state
+                .setValue(HALF, DoubleBlockHalf.LOWER)
+                .setValue(WATERLOGGED, hasWater);
         level.setBlockAndUpdate(below, blockState);
     }
 
@@ -118,7 +135,7 @@ public class PendantLampBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HALF);
+        builder.add(FACING, HALF, WATERLOGGED);
     }
 
     @Override
