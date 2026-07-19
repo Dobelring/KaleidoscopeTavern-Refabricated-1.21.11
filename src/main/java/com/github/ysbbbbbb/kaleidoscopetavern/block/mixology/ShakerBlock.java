@@ -56,7 +56,10 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
                 .pushReaction(PushReaction.DESTROY)
                 .sound(SoundType.LANTERN)
         );
-        this.defaultBlockState().setValue(WATERLOGGED, false);
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(WATERLOGGED, false)
+        );
     }
 
     @Deprecated
@@ -67,6 +70,17 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
     @Override
     public @NotNull FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        BlockPos blockPosBelow = blockPos.below();
+        BlockState blockStateBelow = levelReader.getBlockState(blockPosBelow);
+        return this.canSurviveOn(levelReader, blockPosBelow, blockStateBelow);
+    }
+
+    private boolean canSurviveOn(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        return blockState.isFaceSturdy(blockGetter, blockPos, Direction.UP);
     }
 
     @Override
@@ -83,7 +97,7 @@ public class ShakerBlock extends Block implements EntityBlock, SimpleWaterlogged
         if (state.getValue(WATERLOGGED)) {
             ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+        return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
     }
 
     @Override

@@ -25,6 +25,7 @@ public class SignatureCocktailBlock extends CocktailBlock implements EntityBlock
         super(properties);
     }
 
+    @Deprecated
     public SignatureCocktailBlock() {
         super();
     }

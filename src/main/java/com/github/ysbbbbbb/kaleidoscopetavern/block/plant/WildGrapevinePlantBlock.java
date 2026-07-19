@@ -6,17 +6,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.BlockUtil;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
-public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements BonemealableBlock {
+public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final MapCodec<WildGrapevinePlantBlock> CODEC = simpleCodec(WildGrapevinePlantBlock::new);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
 
@@ -26,6 +36,23 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
                 .instabreak()
                 .sound(SoundType.CAVE_VINES)
                 .pushReaction(PushReaction.DESTROY), Direction.DOWN, SHAPE, false);
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        if (stateForPlacement == null)
+            return null;
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        return stateForPlacement.setValue(WATERLOGGED, hasWater);
     }
 
     @Override
@@ -39,9 +66,32 @@ public class WildGrapevinePlantBlock extends GrowingPlantBodyBlock implements Bo
     }
 
     @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState state,
+            @NonNull LevelReader level,
+            @NonNull ScheduledTickAccess ticks,
+            @NonNull BlockPos pos,
+            @NonNull Direction directionToNeighbour,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource random
+    ) {
+        if (state.getValue(WATERLOGGED)) {
+            ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, directionToNeighbour, neighbourPos, neighbourState, random);
+    }
+
+    @Override
     protected boolean canAttachTo(BlockState state) {
         // 树叶不属于 SupportType.FULL，故需要特殊判断一下
         return state.is(BlockTags.LEAVES);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
     }
 
     @Override
