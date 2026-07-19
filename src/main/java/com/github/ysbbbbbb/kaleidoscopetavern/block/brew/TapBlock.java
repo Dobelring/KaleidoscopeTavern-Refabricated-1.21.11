@@ -214,7 +214,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             return null;
         }
         return createTickerHelper(blockEntityType, ModBlocks.TAP_BE,
-                (levelIn, pos, stateIn, tap) -> tap.tick(levelIn));
+                (levelIn, _, _, tap) -> tap.tick(levelIn));
     }
 
     private boolean isValidConnection(BlockState barrelState, Direction tapFacing) {
@@ -237,11 +237,27 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
     }
 
     @Override
-    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        Direction direction = blockState.getValue(FACING);
+        BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
+        BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
+        return blockStateBase.isFaceSturdy(levelReader, blockPos, direction) || blockStateBase.is(Blocks.CAULDRON);
+    }
+
+    @Override
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState blockState,
+            @NonNull LevelReader levelReader,
+            @NonNull ScheduledTickAccess scheduledTickAccess,
+            @NonNull BlockPos blockPos,
+            @NonNull Direction direction,
+            @NonNull BlockPos neighbourPos,
+            @NonNull BlockState neighbourState,
+            @NonNull RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
             scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
-        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
+        return direction == blockState.getValue(FACING).getOpposite() && !blockState.canSurvive(levelReader, blockPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, neighbourPos, neighbourState, randomSource);
     }
 
     @Override
