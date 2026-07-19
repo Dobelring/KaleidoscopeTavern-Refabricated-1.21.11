@@ -15,6 +15,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -90,7 +91,7 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return !blockState.canSurvive(levelAccessor, blockPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
     }
 
     @Nullable
@@ -127,6 +128,17 @@ public class IncenseBlock extends HorizontalDirectionalBlock implements EntityBl
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, OPEN, POWERED, WATERLOGGED);
+    }
+
+    @Override
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        BlockPos blockPos2 = blockPos.below();
+        BlockState blockState2 = levelReader.getBlockState(blockPos2);
+        return this.canSurviveOn(levelReader, blockPos2, blockState2);
+    }
+
+    private boolean canSurviveOn(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        return blockState.isFaceSturdy(blockGetter, blockPos, Direction.UP);
     }
 
     @Override

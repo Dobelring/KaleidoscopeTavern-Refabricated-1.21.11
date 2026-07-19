@@ -27,13 +27,21 @@ public class DrinkEffectSyncS2CMessage implements FabricPacket {
     private final CompoundTag data;
 
     public DrinkEffectSyncS2CMessage(FriendlyByteBuf buf) {
-        this.data = buf.readNbt();
+        CompoundTag decodedData = buf.readNbt();
+        if (decodedData == null) {
+            throw new IllegalArgumentException("Drink effect sync payload cannot be empty");
+        }
+        this.data = decodedData;
+    }
+
+    private DrinkEffectSyncS2CMessage(CompoundTag data) {
+        this.data = data;
     }
 
     /**
      * 从当前服务端 INSTANCE 构建消息
      */
-    public static DrinkEffectSyncS2CMessage fromServer(FriendlyByteBuf buf) {
+    public static DrinkEffectSyncS2CMessage fromServer() {
         CompoundTag syncData = new CompoundTag();
         ListTag entries = new ListTag();
         for (DrinkEffectData data : DrinkEffectDataReloadListener.INSTANCE.values()) {
@@ -46,8 +54,7 @@ public class DrinkEffectSyncS2CMessage implements FabricPacket {
                     "Failed to encode drink effect data for sync: {}", error.message())));
         }
         syncData.put(ENTRIES, entries);
-        buf.writeNbt(syncData);
-        return new DrinkEffectSyncS2CMessage(buf);
+        return new DrinkEffectSyncS2CMessage(syncData);
     }
 
     public static DrinkEffectSyncS2CMessage decode(FriendlyByteBuf buf) {

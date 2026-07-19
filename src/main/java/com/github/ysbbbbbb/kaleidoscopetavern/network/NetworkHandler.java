@@ -9,10 +9,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class NetworkHandler {
@@ -25,11 +23,8 @@ public class NetworkHandler {
         ServerPlayNetworking.registerGlobalReceiver(TextUpdateC2SMessage.TYPE, TextUpdateC2SMessage::receive);
         ServerPlayNetworking.registerGlobalReceiver(ClearShakerC2SMessage.TYPE, ClearShakerC2SMessage::receive);
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            FriendlyByteBuf buf = PacketByteBufs.create();
-            DrinkEffectSyncS2CMessage message = DrinkEffectSyncS2CMessage.fromServer(buf);
-            server.getPlayerList().getPlayers().forEach(serverPlayer -> {
-                ServerPlayNetworking.send(serverPlayer, message.getType().getId(), buf);
-            });
+            DrinkEffectSyncS2CMessage message = DrinkEffectSyncS2CMessage.fromServer();
+            sender.sendPacket(message);
         });
     }
 
