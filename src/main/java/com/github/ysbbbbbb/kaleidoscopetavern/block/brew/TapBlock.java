@@ -112,7 +112,11 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         Direction direction = blockState.getValue(FACING);
         BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
         BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
-        return blockStateBase.isFaceSturdy(levelReader, blockPos, direction) || blockStateBase.is(Blocks.CAULDRON);
+        return
+                blockStateBase.isFaceSturdy(levelReader, blockPos, direction)
+                        || blockStateBase.getBlock() instanceof AbstractCauldronBlock
+                        || blockStateBase.is(Blocks.DRAGON_WALL_HEAD)
+                        || blockStateBase.is(Blocks.DRAGON_HEAD);
     }
 
     private void tryOpen(BlockState state, Level level, BlockPos pos, @Nullable Player player) {
