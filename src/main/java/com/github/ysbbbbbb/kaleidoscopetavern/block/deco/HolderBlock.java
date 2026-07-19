@@ -14,7 +14,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,6 +68,17 @@ public class HolderBlock extends AbstractStorageBlock implements SimpleWaterlogg
     }
 
     @Override
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        BlockPos blockPos2 = blockPos.below();
+        BlockState blockState2 = levelReader.getBlockState(blockPos2);
+        return this.canSurviveOn(levelReader, blockPos2, blockState2);
+    }
+
+    private boolean canSurviveOn(BlockGetter blockGetter, BlockPos blockPos, BlockState blockState) {
+        return blockState.isFaceSturdy(blockGetter, blockPos, Direction.UP);
+    }
+
+    @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player,
                                           @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
         return super.handleUse(state, level, pos, player, hand, hitResult);
@@ -76,7 +89,7 @@ public class HolderBlock extends AbstractStorageBlock implements SimpleWaterlogg
         if (blockState.getValue(WATERLOGGED)) {
             levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+        return !blockState.canSurvive(levelAccessor, blockPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
     }
 
     @Override
