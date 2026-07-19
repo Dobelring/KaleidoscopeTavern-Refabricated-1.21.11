@@ -12,18 +12,19 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,17 +40,21 @@ import java.util.function.Supplier;
 
 import static net.minecraft.world.entity.LivingEntity.getSlotForHand;
 
-public class GrapeCropBlock extends Block implements BonemealableBlock {
+public class GrapeCropBlock extends Block implements BonemealableBlock, SimpleWaterloggedBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_5;
     public static final int MAX_AGE = BlockStateProperties.MAX_AGE_5;
     public static final VoxelShape SHAPE = Block.box(2, 6, 2, 14, 16, 14);
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private final GrowPerTickProbability probability;
     private final Supplier<ItemStack> shearResult;
 
     public GrapeCropBlock(Properties properties, GrowPerTickProbability probability, Supplier<ItemStack> shearResult) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(AGE, 0));
+        this.registerDefaultState(
+                this.stateDefinition.any()
+                        .setValue(AGE, 0)
+                        .setValue(WATERLOGGED, false));
         this.probability = probability;
         this.shearResult = shearResult;
     }
@@ -70,6 +76,20 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
                 (state, level, pos, random) -> 0.25F,
                 () -> new ItemStack(ModItems.GRAPE, 3)
         );
+    }
+
+    @Override
+    public @NotNull FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState stateForPlacement = super.getStateForPlacement(context);
+        if (stateForPlacement == null)
+            return null;
+        boolean hasWater = context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER;
+        return stateForPlacement.setValue(WATERLOGGED, hasWater);
     }
 
     @Override
@@ -110,6 +130,9 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
     @Override
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
                                            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+        if (state.getValue(WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
         if (state.canSurvive(level, pos)) {
             return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
         }
@@ -148,7 +171,7 @@ public class GrapeCropBlock extends Block implements BonemealableBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE);
+        builder.add(AGE, WATERLOGGED);
     }
 
     @Override
