@@ -13,10 +13,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -58,13 +56,37 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
                 .setValue(WATERLOGGED, false));
     }
 
+    protected boolean canSurvive(final BlockState state, final @NotNull LevelReader level, final @NotNull BlockPos pos) {
+        switch (state.getValue(ATTACH_FACE)) {
+            case WALL -> {
+                Direction direction = state.getValue(FACING);
+                BlockPos adjacentPos = pos.relative(direction.getOpposite());
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, direction);
+            }
+            case FLOOR -> {
+                BlockPos adjacentPos = pos.below();
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, Direction.UP);
+            }
+            default -> {
+                BlockPos adjacentPos = pos.above();
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, Direction.DOWN);
+            }
+        }
+    }
+
     @Override
     public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
                                            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        boolean faceValidation = switch (state.getValue(ATTACH_FACE)) {
+            case WALL -> direction == state.getValue(FACING).getOpposite();
+            case FLOOR ->  direction == Direction.DOWN;
+            default -> direction == Direction.UP;
+        };
+        return faceValidation
+                && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     @Override

@@ -21,6 +21,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -104,6 +105,14 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
             return ItemInteractionResult.SUCCESS;
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    public boolean canSurvive(@NotNull BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        Direction direction = blockState.getValue(FACING);
+        BlockPos blockPosBase = blockPos.relative(direction.getOpposite());
+        BlockState blockStateBase = levelReader.getBlockState(blockPosBase);
+        return blockStateBase.isFaceSturdy(levelReader, blockPos, direction) || blockStateBase.is(Blocks.CAULDRON);
     }
 
     private void tryOpen(BlockState state, Level level, BlockPos pos, @Nullable Player player) {
@@ -241,7 +250,7 @@ public class TapBlock extends BaseEntityBlock implements SimpleWaterloggedBlock 
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        return direction == state.getValue(FACING).getOpposite() && !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     }
 
     @Override
