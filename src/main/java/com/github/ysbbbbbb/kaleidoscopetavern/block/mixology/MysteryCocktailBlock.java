@@ -13,6 +13,7 @@ public class MysteryCocktailBlock extends CocktailBlock {
         super(properties);
     }
 
+    @Deprecated
     public MysteryCocktailBlock() {
         super();
     }
