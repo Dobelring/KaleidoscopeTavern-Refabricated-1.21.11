@@ -198,6 +198,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.CR019_PAINTING);
                     output.accept(ModItems.UNKNOWN_PAINTING);
                     output.accept(ModItems.MASTER_MARISA_PAINTING);
+                    output.accept(ModItems.NIGHT_EPIPHANY_PAINTING);
                     output.accept(ModItems.SON_OF_MAN_PAINTING);
                     output.accept(ModItems.DAVID_PAINTING);
                     output.accept(ModItems.GIRL_WITH_PEARL_EARRING_PAINTING);
