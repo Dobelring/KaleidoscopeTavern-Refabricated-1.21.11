@@ -8,10 +8,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
@@ -37,6 +34,7 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
     public static final VoxelShape FLOOR_SHAPE = Block.box(1, 0, 1, 15, 1, 15);
     public static final VoxelShape CEILING_SHAPE = Block.box(1, 15, 1, 15, 16, 15);
 
+    @Deprecated
     private @Nullable String tooltipKey;
 
     public PaintingBlock(Properties properties) {
@@ -52,12 +50,36 @@ public class PaintingBlock extends HorizontalDirectionalBlock implements SimpleW
                 .setValue(WATERLOGGED, false));
     }
 
+    protected boolean canSurvive(final BlockState state, final @NonNull LevelReader level, final @NonNull BlockPos pos) {
+        switch (state.getValue(ATTACH_FACE)) {
+            case WALL -> {
+                Direction direction = state.getValue(FACING);
+                BlockPos adjacentPos = pos.relative(direction.getOpposite());
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, direction);
+            }
+            case FLOOR -> {
+                BlockPos adjacentPos = pos.below();
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, Direction.UP);
+            }
+            default -> {
+                BlockPos adjacentPos = pos.above();
+                return level.getBlockState(adjacentPos).isFaceSturdy(level, adjacentPos, Direction.DOWN);
+            }
+        }
+    }
+
     @Override
-    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos blockPos2, @NonNull BlockState blockState2, @NonNull RandomSource randomSource) {
+    protected @NonNull BlockState updateShape(@NonNull BlockState blockState, @NonNull LevelReader levelReader, @NonNull ScheduledTickAccess scheduledTickAccess, @NonNull BlockPos blockPos, @NonNull Direction direction, @NonNull BlockPos neighbourPos, @NonNull BlockState neighbourState, @NonNull RandomSource randomSource) {
         if (blockState.getValue(WATERLOGGED)) {
             scheduledTickAccess.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelReader));
         }
-        return super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, blockPos2, blockState2, randomSource);
+        boolean faceValidation = switch (blockState.getValue(ATTACH_FACE)) {
+            case WALL -> direction == blockState.getValue(FACING).getOpposite();
+            case FLOOR ->  direction == Direction.DOWN;
+            default -> direction == Direction.UP;
+        };
+        return faceValidation
+                && !blockState.canSurvive(levelReader, blockPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(blockState, levelReader, scheduledTickAccess, blockPos, direction, neighbourPos, neighbourState, randomSource);
     }
 
     @Override

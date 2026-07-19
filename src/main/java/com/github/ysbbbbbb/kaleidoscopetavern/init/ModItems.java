@@ -104,6 +104,7 @@ public final class ModItems {
     public static final Item GREAT_WAVE_PAINTING = registerItem("great_wave_painting", p -> new PaintingBlockItem(ModBlocks.GREAT_WAVE_PAINTING, p));
     public static final Item MONA_LISA_PAINTING = registerItem("mona_lisa_painting", p -> new PaintingBlockItem(ModBlocks.MONA_LISA_PAINTING, p));
     public static final Item MONDRIAN_PAINTING = registerItem("mondrian_painting", p -> new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING, p));
+    public static final Item NIGHT_EPIPHANY_PAINTING = registerItem("night_epiphany_painting", p -> new PaintingBlockItem(ModBlocks.NIGHT_EPIPHANY_PAINTING, p));
     // 空瓶
     public static final Item EMPTY_BOTTLE = registerItemViaBlock(ModBlocks.EMPTY_BOTTLE, BottleBlockItem::new);
     public static final Item EMPTY_GLASSWARE = registerItemViaBlock(ModBlocks.EMPTY_GLASSWARE, GlasswareBlockItem::new);

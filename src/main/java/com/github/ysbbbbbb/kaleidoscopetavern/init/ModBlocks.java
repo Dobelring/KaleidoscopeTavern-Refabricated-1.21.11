@@ -114,7 +114,7 @@ public final class ModBlocks {
     public static final Block GREAT_WAVE_PAINTING = paintingReg("great_wave_painting");
     public static final Block MONA_LISA_PAINTING = paintingReg("mona_lisa_painting");
     public static final Block MONDRIAN_PAINTING = paintingReg("mondrian_painting");
-    public static final Block NIGHT_EPIPHANY_PAINTING = paintingRegSpecial("night_epiphany_painting");
+    public static final Block NIGHT_EPIPHANY_PAINTING = paintingReg("night_epiphany_painting");
     // 空瓶
     public static final Block EMPTY_BOTTLE = commonReg("empty_bottle", BottleBlock::simpleBottle, BlockBehaviour.Properties.of());
     public static final Block EMPTY_GLASSWARE = commonReg("empty_glassware", GlasswareBlock::new, BlockBehaviour.Properties.of());
