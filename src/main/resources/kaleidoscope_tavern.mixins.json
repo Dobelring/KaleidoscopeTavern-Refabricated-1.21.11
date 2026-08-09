@@ -20,7 +20,8 @@
     "client.ItemRendererMixin",
     "client.LeftClickMixin",
     "client.ModelBakeryMixin",
-    "client.PlayerRendererMixin"
+    "client.PlayerRendererMixin",
+    "compat.dragonlib.DragonLibBlockModelCompatMixin"
   ],
   "overwrites": {
     "requireAnnotations": true
