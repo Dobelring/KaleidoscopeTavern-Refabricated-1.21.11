@@ -1,5 +1,6 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.mixin.plugin;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 public class KaleidoscopeTavernMixinPlugin implements IMixinConfigPlugin {
+    private static final String DRAGONLIB_BLOCK_MODEL_COMPAT =
+            "com.github.ysbbbbbb.kaleidoscopetavern.mixin.compat.dragonlib.DragonLibBlockModelCompatMixin";
+
     @Override
     public void onLoad(String mixinPackage) {
 
@@ -20,6 +24,10 @@ public class KaleidoscopeTavernMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (DRAGONLIB_BLOCK_MODEL_COMPAT.equals(mixinClassName)) {
+            FabricLoader loader = FabricLoader.getInstance();
+            return loader.isModLoaded("dragonlib") && loader.isModLoaded("porting_lib_model_loader");
+        }
         return true;
     }
 
