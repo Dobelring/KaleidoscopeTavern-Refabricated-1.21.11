@@ -15,7 +15,6 @@
     "requireAnnotations": true
   },
   "client": [
-    "compat.dragonlib.DragonLibBlockModelCompatMixin",
     "client.EntityRendererDispatcherMixin",
     "client.GameRendererMixin",
     "client.HumanoidModelMixin",
