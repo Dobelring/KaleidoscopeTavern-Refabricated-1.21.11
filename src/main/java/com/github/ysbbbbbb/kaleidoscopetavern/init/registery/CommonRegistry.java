@@ -20,6 +20,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+
+import java.util.function.Predicate;
 
 public final class CommonRegistry {
     public static void init() {
@@ -42,6 +45,11 @@ public final class CommonRegistry {
         TapBehaviorManager.register(Blocks.DRAGON_HEAD, new DragonHeadTapBehavior());
         TapBehaviorManager.register(Blocks.DRAGON_WALL_HEAD, new DragonHeadTapBehavior());
         TapBehaviorManager.register(Blocks.MELON, new WatermelonTapBehavior());
+        // 所有官方含水（waterlogged）方块都可以给龙头供水，接水效果与水炼药锅一致
+        TapBehaviorManager.register(
+                state -> state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED),
+                new WaterCauldronTapBehavior()
+        );
     }
 
     public static void events() {
