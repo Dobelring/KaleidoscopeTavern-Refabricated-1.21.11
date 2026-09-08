@@ -91,6 +91,10 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
     @Override
     public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
+        // 如果是空手，那么可以尝试取回
+        if (!player.getItemInHand(hand).isEmpty()) {
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+        }
 
         // 尝试给玩家物品
         if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
