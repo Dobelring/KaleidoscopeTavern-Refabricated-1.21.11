@@ -50,10 +50,10 @@ dependencies {
 	minecraft("com.mojang:minecraft:${providers.gradleProperty("minecraft_version").get()}")
 	compileOnly ("maven.modrinth:create-fly:${providers.gradleProperty("create_version").get()}")
 	implementation("net.fabricmc:fabric-loader:${providers.gradleProperty("loader_version").get()}")
-	compileOnly("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
+	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${providers.gradleProperty("rei_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${providers.gradleProperty("rei_version").get()}")
-	compileOnly ("me.shedaniel.cloth:cloth-config-fabric:26.2.155")
+	compileOnly ("me.shedaniel.cloth:cloth-config-fabric:26.3.158")
 	compileOnly ("dev.architectury:architectury-fabric:21.0.2")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
@@ -63,7 +63,7 @@ dependencies {
 	}
 	compileOnly ("fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${providers.gradleProperty("forge_config_api_version").get()}")
 	compileOnly("mezz.jei:jei-${providers.gradleProperty("jei_version").get()}")
-	compileOnly("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
+	implementation("eu.pb4:trinkets:${providers.gradleProperty("trinkets_version").get()}")
 }
 
 tasks.processResources {
