@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -86,32 +88,48 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
     }
 
     @Override
-    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hitResult) {
-        // 如果是空手，那么可以尝试取回
-        if (!player.getItemInHand(hand).isEmpty()) {
+    public @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state,
+                                                @NonNull Level level, @NonNull BlockPos pos,
+                                                @NonNull Player player, @NonNull InteractionHand hand,
+                                                @NonNull BlockHitResult hitResult) {
+        if (!stack.isEmpty() || !player.getItemInHand(hand).isEmpty()) {
             return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         }
 
-        // 尝试给玩家物品
-        if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
-            ItemStack removeItem = be.removeItem();
-            if (!removeItem.isEmpty()) {
+        // 只在服务端修改方块实体和方块状态，避免客户端预测造成物品丢失。
+        if (!level.isClientSide()) {
+            ItemStack removeItem = ItemStack.EMPTY;
+            if (level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
+                removeItem = be.removeItem();
                 be.refresh();
-                ItemUtils.giveItemToPlayer(player, removeItem);
-                // 播放放置的音效
-                level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS);
+            }
+            // 兼容旧存档中未写入方块实体的酒瓶。
+            if (removeItem.isEmpty()) {
+                removeItem = new ItemStack(this.asItem());
+            }
+
+            ItemUtils.giveItemToPlayer(player, removeItem);
+            level.playSound(null, pos, SoundEvents.GLASS_PLACE, SoundSource.BLOCKS);
+
+            int count = state.getValue(this.countProperty);
+            if (count > 1) {
+                level.setBlockAndUpdate(pos, state.setValue(this.countProperty, count - 1));
+            } else {
+                level.removeBlock(pos, false);
             }
         }
-
-        int count = state.getValue(this.countProperty);
-        if (count > 1) {
-            // 如果数量大于 1，那么就减少数量
-            level.setBlockAndUpdate(pos, state.setValue(this.countProperty, count - 1));
-        } else {
-            // 否则就直接破坏
-            level.removeBlock(pos, false);
-        }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void setPlacedBy(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+                            @Nullable LivingEntity placer, @NonNull ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof DrinkBlockEntity be) {
+            if (be.addItem(stack)) {
+                be.refresh();
+            }
+        }
     }
 
     @Override
@@ -149,7 +167,7 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
 
     @Override
     public @NotNull List<ItemStack> getDrops(@NonNull BlockState state, LootParams.@NonNull Builder params) {
-        List<ItemStack> stacks = super.getDrops(state, params);
+        List<ItemStack> stacks = new ArrayList<>();
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof DrinkBlockEntity be) {
             for (ItemStack stack : be.getItems()) {
@@ -157,6 +175,11 @@ public class DrinkBlock extends BottleBlock implements EntityBlock {
                     stacks.add(stack.copy());
                 }
             }
+        }
+        // 酒类方块没有独立的方块战利品表；缺少实体内容时按状态数量兜底掉落。
+        int count = state.getValue(this.countProperty);
+        while (stacks.size() < count) {
+            stacks.add(new ItemStack(this.asItem()));
         }
         return stacks;
     }

@@ -2,7 +2,6 @@ package com.github.ysbbbbbb.kaleidoscopetavern.mixin.client;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEffects;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
