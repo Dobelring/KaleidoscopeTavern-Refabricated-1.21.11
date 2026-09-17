@@ -52,6 +52,7 @@ public abstract class AbstractStorageBlock extends HorizontalDirectionalBlock im
         super(properties);
     }
 
+	@Deprecated
     public AbstractStorageBlock() {
         super(Properties.of()
                 .mapColor(MapColor.WOOD)

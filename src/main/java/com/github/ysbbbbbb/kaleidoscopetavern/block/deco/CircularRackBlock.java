@@ -45,12 +45,12 @@ public class CircularRackBlock extends AbstractStorageBlock implements SimpleWat
 
     public CircularRackBlock(Properties properties) {
         super(properties
-                .mapColor(MapColor.WOOD)
+                .mapColor(MapColor.METAL)
                 .strength(2.5F)
-                .sound(SoundType.WOOD)
+                .sound(SoundType.IRON)
                 .noOcclusion()
                 .lightLevel(_ -> 14)
-                .ignitedByLava());
+        );
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false)
