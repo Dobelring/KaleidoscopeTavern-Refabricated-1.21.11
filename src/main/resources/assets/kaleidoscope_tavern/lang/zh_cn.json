@@ -287,5 +287,6 @@
   "kaleidoscope_tavern.ponder.grapevine_planting.text_5": "葡萄成熟后，空手采摘会掉落1-2个葡萄",
   "kaleidoscope_tavern.ponder.grapevine_planting.text_6": "用剪刀采摘则会掉落2-3个葡萄",
   "kaleidoscope_tavern.ponder.tag.brewing": "酿酒",
-  "kaleidoscope_tavern.ponder.tag.brewing.description": "从零开始学习酿酒所需要知道的基础知识"
+  "kaleidoscope_tavern.ponder.tag.brewing.description": "从零开始学习酿酒所需要知道的基础知识",
+  "config.jade.plugin_kaleidoscope_tavern.pressing_tub": "果盆"
 }
