@@ -44,12 +44,12 @@ public class CircularRackBlock extends AbstractStorageBlock implements SimpleWat
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public CircularRackBlock(Properties properties) {
         super(properties
-                .mapColor(MapColor.WOOD)
+                .mapColor(MapColor.METAL)
                 .strength(2.5F)
-                .sound(SoundType.WOOD)
+                .sound(SoundType.IRON)
                 .noOcclusion()
                 .lightLevel(_ -> 14)
-                .ignitedByLava());
+        );
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false)
