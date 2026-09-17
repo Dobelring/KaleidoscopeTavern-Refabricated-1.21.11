@@ -2,8 +2,6 @@
   "modmenu.nameTranslation.kaleidoscope_tavern": "Kaleidoscope Tavern Refabricated",
   "modmenu.descriptionTranslation.kaleidoscope_tavern": "Brew wine in a unique & fancy way!",
   "config.jade.plugin_kaleidoscope_tavern.pressing_tub": "Pressing Tub",
-
-
   "item_group.kaleidoscope_tavern.tavern_main.name": "Kaleidoscope: Tavern",
   "item_group.kaleidoscope_tavern.tavern_deco.name": "Kaleidoscope: Tavern Deco",
   "block.kaleidoscope_tavern.white_sofa": "White Sofa",
