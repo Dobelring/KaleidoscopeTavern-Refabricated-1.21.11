@@ -110,6 +110,7 @@ public final class ModBlocks {
     public static final Block MONA_LISA_PAINTING = new PaintingBlock();
     public static final Block MONDRIAN_PAINTING = new PaintingBlock();
     public static final Block NIGHT_EPIPHANY_PAINTING = new PaintingBlock();
+    public static final Block DOBELRING_PAINTING = new PaintingBlock();
 
     // 桌子
     public static final Block TABLE = new TableBlock();
@@ -632,6 +633,7 @@ public final class ModBlocks {
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mona_lisa_painting"), MONA_LISA_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mondrian_painting"), MONDRIAN_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "night_epiphany_painting"), NIGHT_EPIPHANY_PAINTING);
+        Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "dobelring_painting"), DOBELRING_PAINTING);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "pressing_tub"), PRESSING_TUB);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_bottle"), EMPTY_BOTTLE);
         Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "empty_glassware"), EMPTY_GLASSWARE);

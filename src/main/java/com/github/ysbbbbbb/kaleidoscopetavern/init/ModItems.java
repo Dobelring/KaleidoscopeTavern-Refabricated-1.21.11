@@ -150,6 +150,7 @@ public final class ModItems {
     public static final Item MONA_LISA_PAINTING = new PaintingBlockItem(ModBlocks.MONA_LISA_PAINTING);
     public static final Item MONDRIAN_PAINTING = new PaintingBlockItem(ModBlocks.MONDRIAN_PAINTING);
     public static final Item NIGHT_EPIPHANY_PAINTING = new PaintingBlockItem(ModBlocks.NIGHT_EPIPHANY_PAINTING);
+    public static final Item DOBELRING_PAINTING = new PaintingBlockItem(ModBlocks.DOBELRING_PAINTING);
 
     // 吧台
     public static final Item BAR_COUNTER = new BlockItem(ModBlocks.BAR_COUNTER, new Item.Properties());
@@ -345,6 +346,7 @@ public final class ModItems {
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mona_lisa_painting"), MONA_LISA_PAINTING);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "mondrian_painting"), MONDRIAN_PAINTING);
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "night_epiphany_painting"), NIGHT_EPIPHANY_PAINTING);
+        Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "dobelring_painting"), DOBELRING_PAINTING);
 
         // 其他方块物品
         Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(KaleidoscopeTavern.MOD_ID, "bar_counter"), BAR_COUNTER);
