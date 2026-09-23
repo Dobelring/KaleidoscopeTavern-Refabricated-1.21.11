@@ -125,6 +125,7 @@ public class BlockLootTables extends BlockLootSubProvider {
         dropSelf(ModBlocks.MONA_LISA_PAINTING);
         dropSelf(ModBlocks.MONDRIAN_PAINTING);
         dropSelf(ModBlocks.NIGHT_EPIPHANY_PAINTING);
+        dropSelf(ModBlocks.DOBELRING_PAINTING);
 
         // 垂灯
         dropSelf(ModBlocks.BELL_PENDANT_LAMP);
