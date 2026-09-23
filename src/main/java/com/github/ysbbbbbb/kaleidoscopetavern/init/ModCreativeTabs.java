@@ -210,6 +210,7 @@ public final class ModCreativeTabs {
                     output.accept(ModItems.MONA_LISA_PAINTING);
                     output.accept(ModItems.MONDRIAN_PAINTING);
                     output.accept(ModItems.NIGHT_EPIPHANY_PAINTING);
+                    output.accept(ModItems.DOBELRING_PAINTING);
 
                     output.accept(ModItems.CHALKBOARD);
 
