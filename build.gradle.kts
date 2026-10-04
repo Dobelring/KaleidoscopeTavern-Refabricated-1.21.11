@@ -53,8 +53,8 @@ dependencies {
 	implementation("maven.modrinth:jade:${providers.gradleProperty("jade_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${providers.gradleProperty("rei_version").get()}")
 	compileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${providers.gradleProperty("rei_version").get()}")
-	compileOnly ("me.shedaniel.cloth:cloth-config-fabric:26.3.158")
-	compileOnly ("dev.architectury:architectury-fabric:21.0.2")
+	compileOnly ("me.shedaniel.cloth:cloth-config-fabric:26.3.159")
+	compileOnly ("dev.architectury:architectury-fabric:22.0.3")
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	compileOnly("maven.modrinth:rrv:${providers.gradleProperty("rrv_version").get()}") {
