@@ -78,7 +78,7 @@ public class WildGrapevineDecorator extends TreeDecorator {
             }
             if (i == chainLength - 1 || !context.isAir(pos.below())) {
                 // 最底部放 head（向下生长端）
-
+                context.setBlock(pos, ModBlocks.WILD_GRAPEVINE.defaultBlockState());
                 break;
             } else {
                 // 上方放 body（植物体）

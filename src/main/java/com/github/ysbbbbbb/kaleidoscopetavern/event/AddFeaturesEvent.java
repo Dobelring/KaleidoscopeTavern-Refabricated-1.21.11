@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 
 public class AddFeaturesEvent {
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AddFeaturesEvent.class);
     public static void addFeatures() {
         ServerLifecycleEvents.SERVER_STARTED.register(server -> applyWildGrapevineDecorators(server.registryAccess()
                 .lookupOrThrow(Registries.FEATURE)));
@@ -27,6 +28,14 @@ public class AddFeaturesEvent {
     private static void applyWildGrapevineDecorators(HolderLookup.RegistryLookup<Feature> registryLookup) {
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.SUPER_BIRCH_BEES_0002, 0.002f, 3, 3);
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.SUPER_BIRCH_BEES, 1f, 1, 3);
+
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.YELLOW_POPLAR, 0.002f, 3, 3);
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.RED_POPLAR, 0.020f, 3, 3);
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.ORANGE_POPLAR, 0.002f, 3, 3);
+
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.YELLOW_POPLAR_LEAF_LITTER, 0.002f, 3, 3);
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.RED_POPLAR_LEAF_LITTER, 0.002f, 3, 3);
+        addWildGrapevineTreeDeco(registryLookup, TreeFeatures.ORANGE_POPLAR_LEAF_LITTER, 0.002f, 3, 3);
 
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.OAK_BEES_0002_LEAF_LITTER, 0.002f, 3, 3);
         addWildGrapevineTreeDeco(registryLookup, TreeFeatures.OAK_BEES_002, 0.02f, 2, 3);
@@ -54,6 +63,7 @@ public class AddFeaturesEvent {
     ) {
         var holder = registryLookup.get(id).orElse(null);
         if (holder == null || !(holder.value() instanceof TreeFeature treeFeature)) {
+            LOGGER.warn("Could not attach wild grapevine decorator to tree feature {}", id.identifier());
             return;
         }
         var decorators = treeFeature.decorators();
@@ -67,5 +77,7 @@ public class AddFeaturesEvent {
                         .add(new WildGrapevineDecorator(probability, maxVineCount, vineChainLength))
                         .build()
         );
+        LOGGER.info("Attached wild grapevine decorator to {} (probability={}, maxVines={}, chainLength={})",
+                id.identifier(), probability, maxVineCount, vineChainLength);
     }
 }
