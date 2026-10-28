@@ -33,7 +33,7 @@ public abstract class ItemInHandMixin {
                                     PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords);
 
     @Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER), cancellable = true)
-    private void renderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack,
+    private void kaleidoscopeTavern$renderArmWithItem(AbstractClientPlayer player, float frameInterp, float xRot, InteractionHand hand, float attack,
                                    ItemStack itemStack, float inverseArmHeight, PoseStack poseStack,
                                    SubmitNodeCollector submitNodeCollector, int lightCoords, CallbackInfo ci,
                                    @Local(name = "arm") HumanoidArm arm) {

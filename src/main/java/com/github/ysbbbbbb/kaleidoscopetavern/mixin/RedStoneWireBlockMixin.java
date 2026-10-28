@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class RedStoneWireBlockMixin {
 
     @Inject(method = "shouldConnectTo(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;)Z", at = @At("HEAD"), cancellable = true)
-    private static void shouldConnectTo(BlockState blockState, Direction direction, CallbackInfoReturnable<Boolean> cir) {
+    private static void kaleidoscopeTavern$shouldConnectTo(BlockState blockState, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (blockState.is(ModBlocks.TAP)) cir.setReturnValue(true);
     }
 }

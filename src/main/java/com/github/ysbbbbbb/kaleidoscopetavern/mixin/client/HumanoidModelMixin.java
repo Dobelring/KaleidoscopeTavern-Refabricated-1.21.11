@@ -43,7 +43,7 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    private void poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+    private void kaleidoscopeTavern$poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
         float rot = kaleidoscope_tavern$shakeOffset(state, HumanoidArm.RIGHT);
         if (rot != 0.0F) {
             this.rightArm.xRot = 1.375F * Mth.PI - Mth.PI * rot;
@@ -53,7 +53,7 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    private void poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+    private void kaleidoscopeTavern$poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
         float rot = kaleidoscope_tavern$shakeOffset(state, HumanoidArm.LEFT);
         if (rot != 0.0F) {
             this.leftArm.xRot = 1.375F * Mth.PI + Mth.PI * rot;
