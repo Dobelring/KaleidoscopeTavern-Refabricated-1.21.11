@@ -22,7 +22,7 @@ public class LeftClickMixin {
     public LocalPlayer player;
 
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;swing(Lnet/minecraft/world/InteractionHand;)V", shift = At.Shift.BY))
-    private void ATTACK(CallbackInfoReturnable<Boolean> cir) {
+    private void kaleidoscopeTavern$atk(CallbackInfoReturnable<Boolean> cir) {
         PlayerLeftClickEvent event = new PlayerLeftClickEvent(this.player, InteractionHand.MAIN_HAND);
         event.post();
     }

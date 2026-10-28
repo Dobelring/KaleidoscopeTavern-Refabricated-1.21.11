@@ -29,12 +29,12 @@ public class GameRendererMixin {
     private Minecraft minecraft;
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
-    private float includeTipsyInSpinningTick(float nauseaIntensity) {
+    private float kaleidoscopeTavern$includeTipsyInSpinningTick(float nauseaIntensity) {
         return Math.max(nauseaIntensity, this.getTipsySpinningIntensity(1.0F));
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(value = "CONSTANT", args = "floatValue=7.0F"))
-    private float slowTipsySpinningSpeed(float nauseaSpinningSpeed) {
+    private float kaleidoscopeTavern$slowTipsySpinningSpeed(float nauseaSpinningSpeed) {
         LocalPlayer player = this.minecraft.player;
         if (player == null) {
             return nauseaSpinningSpeed;
@@ -46,7 +46,7 @@ public class GameRendererMixin {
     }
 
     @ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getEffectBlendFactor(Lnet/minecraft/core/Holder;F)F"))
-    private float includeTipsyInSpinningRender(float nauseaIntensity, DeltaTracker deltaTracker) {
+    private float kaleidoscopeTavern$includeTipsyInSpinningRender(float nauseaIntensity, DeltaTracker deltaTracker) {
         float partialTicks = deltaTracker.getGameTimeDeltaPartialTick(false);
         return Math.max(nauseaIntensity, this.getTipsySpinningIntensity(partialTicks));
     }

@@ -26,7 +26,7 @@ public abstract class PlayerRendererMixin<AvatarEntity extends Avatar & ClientAv
     }
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At("TAIL"))
-    private void extractRenderState(AvatarEntity avatar, AvatarRenderState avatarRenderState, float f, CallbackInfo ci) {
+    private void kaleidoscopeTavern$extractRenderState(AvatarEntity avatar, AvatarRenderState avatarRenderState, float f, CallbackInfo ci) {
         if (avatar.hasEffect(ModEffects.GRASS_STEALTH))
             avatar.setInvisible(PlayerRenderEvent.shouldCancelRender(avatar));
     }

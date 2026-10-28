@@ -19,7 +19,7 @@ public abstract class MobMixin extends LivingEntity {
     }
 
     @Inject(method = "setTarget", at = @At("HEAD"), cancellable = true)
-    public void setTarget(LivingEntity livingEntity, CallbackInfo ci) {
+    public void kaleidoscopeTavern$setTarget(LivingEntity livingEntity, CallbackInfo ci) {
         LivingChangeTargetEvent livingChangeTargetEvent = EventHooks.onLivingChangeTarget(this, livingEntity, LivingChangeTargetEvent.LivingTargetType.MOB_TARGET);
         if (livingChangeTargetEvent.isCanceled()) ci.cancel();
     }

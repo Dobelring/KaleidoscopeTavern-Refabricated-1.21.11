@@ -38,7 +38,7 @@ public abstract class ItemInHandMixin {
             ordinal = 1,
             shift = At.Shift.AFTER,
             opcode = Opcodes.GETSTATIC), cancellable = true)
-    public void renderArmWithItem(
+    public void kaleidoscopeTavern$renderArmWithItem(
             AbstractClientPlayer abstractClientPlayer,
             float f,
             float g,

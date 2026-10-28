@@ -51,7 +51,7 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    private void poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+    private void kaleidoscopeTavern$poseRightArmShaking(HumanoidRenderState state, CallbackInfo ci) {
         ItemStack shakingStack = kaleidoscope_tavern$getShakingStack(state);
         if (shakingStack.isEmpty() || !(shakingStack.getItem() instanceof ShakerItem)) {
             return;
@@ -71,7 +71,7 @@ public abstract class HumanoidModelMixin {
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    private void poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
+    private void kaleidoscopeTavern$poseLeftArmShaking(HumanoidRenderState state, CallbackInfo ci) {
         ItemStack shakingStack = kaleidoscope_tavern$getShakingStack(state);
         if (shakingStack.isEmpty() || !(shakingStack.getItem() instanceof ShakerItem)) {
             return;
