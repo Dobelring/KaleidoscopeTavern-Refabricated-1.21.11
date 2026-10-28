@@ -44,7 +44,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
 
 
     @Inject(method = "poseRightArm", at = @At("HEAD"), cancellable = true)
-    public void poseRightArmShaking(T livingEntity, CallbackInfo ci) {
+    public void kaleidoscopeTavern$poseRightArmShaking(T livingEntity, CallbackInfo ci) {
         boolean bl3 = livingEntity.getMainArm() == HumanoidArm.RIGHT;
         if (livingEntity instanceof AbstractClientPlayer player) {
             if (!player.getItemInHand(bl3 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND).isEmpty() && player.getItemInHand(bl3 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND).getItem() instanceof ShakerItem) {
@@ -59,7 +59,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity> extends Ageable
     }
 
     @Inject(method = "poseLeftArm", at = @At("HEAD"), cancellable = true)
-    public void poseLeftArmShaking(T livingEntity, CallbackInfo ci) {
+    public void kaleidoscopeTavern$poseLeftArmShaking(T livingEntity, CallbackInfo ci) {
         boolean bl3 = livingEntity.getMainArm() == HumanoidArm.LEFT;
         if (livingEntity instanceof AbstractClientPlayer player) {
             if (!player.getItemInHand(bl3 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND).isEmpty() && player.getItemInHand(bl3 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND).getItem() instanceof ShakerItem) {

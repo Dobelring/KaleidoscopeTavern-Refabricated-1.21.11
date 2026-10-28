@@ -30,7 +30,7 @@ public class EntityRendererDispatcherMixin {
     private Map<EntityType<?>, EntityRenderer<?>> renderers;
 
     @Inject(method = "onResourceManagerReload", at = @At("TAIL"))
-    private void onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
+    private void kaleidoscopeTavern$onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
         for (EntityRenderer<? extends Player> renderer : this.playerRenderers.values()) {
             if (renderer instanceof LivingEntityRenderer<?, ?> livingRenderer) {
                 livingRenderer.addLayer(new StringLightsLayer(livingRenderer));

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityMixin {
 
     @Inject(method = "getEquipmentSlotForItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/entity/EquipmentSlot;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Equipable;getEquipmentSlot()Lnet/minecraft/world/entity/EquipmentSlot;"), cancellable = true)
-    private static void getEquipmentSlotForItem(ItemStack itemStack, CallbackInfoReturnable<EquipmentSlot> cir) {
+    private static void kaleidoscopeTavern$getEquipmentSlotForItem(ItemStack itemStack, CallbackInfoReturnable<EquipmentSlot> cir) {
         if (itemStack.getItem() instanceof StringLightsBlockItem) {
             if (cir == null || itemStack.isEmpty()) {
                 return;

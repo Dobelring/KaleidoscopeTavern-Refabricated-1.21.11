@@ -35,7 +35,7 @@ public class GameRendererMixin {
     Minecraft minecraft;
 
     @WrapOperation(method = "renderLevel", at = @At(value = "INVOKE", target = "Lorg/joml/Matrix4f;mul(Lorg/joml/Matrix4fc;)Lorg/joml/Matrix4f;"))
-    private Matrix4f renderLevel(Matrix4f instance, Matrix4fc matrix, Operation<Matrix4f> original, DeltaTracker deltaTracker) {
+    private Matrix4f kaleidoscopeTavern$renderLevel(Matrix4f instance, Matrix4fc matrix, Operation<Matrix4f> original, DeltaTracker deltaTracker) {
         float rollDegrees = this.getSlightlyTipsyRoll(deltaTracker);
         if (rollDegrees == 0.0F) {
             return original.call(instance, matrix);

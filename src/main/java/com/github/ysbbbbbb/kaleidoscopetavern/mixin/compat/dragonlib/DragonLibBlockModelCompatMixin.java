@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DragonLibBlockModelCompatMixin implements BlockModelExtensions {
     @SuppressWarnings("all")
     @Unique
-    private Transformation kaleidoscope_tavern$rootTransform;
+    private Transformation kaleidoscopeTavern$rootTransform;
 
     @Override
     public void dragonlib$setRootTransform(Transformation rootTransform) {

@@ -62,7 +62,7 @@ dependencies {
 	modImplementation "maven.modrinth:jade:${project.jade_version}"
 	modImplementation("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}")
 	// Mezz config
-	modImplementation "maven.modrinth:7tEfOcA7:Q5Yns1Qe"
+	modImplementation "maven.modrinth:7tEfOcA7:YDOPBdPJ"
 	modCompileOnly "maven.modrinth:emi:${emi_version}"
 	modImplementation "maven.modrinth:5aaWibi9:JagCscwi"
 	modImplementation "maven.modrinth:dragonlib:jxxpeecT"

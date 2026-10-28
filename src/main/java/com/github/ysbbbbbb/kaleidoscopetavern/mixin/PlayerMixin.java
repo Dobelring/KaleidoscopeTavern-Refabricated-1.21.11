@@ -27,17 +27,17 @@ public abstract class PlayerMixin extends LivingEntity implements PlayerExtraDat
     private static final EntityDataAccessor<CompoundTag> PERSISTENT_DATA = SynchedEntityData.defineId(Player.class, EntityDataSerializers.COMPOUND_TAG);
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    public void defineSyncedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
+    public void kaleidoscopeTavern$defineSyncedData(SynchedEntityData.Builder builder, CallbackInfo ci) {
         builder.define(PERSISTENT_DATA, new CompoundTag());
     }
 
     @Inject(method = "tick", at = @At("HEAD"))
-    public void tickPre(CallbackInfo ci) {
+    public void kaleidoscopeTavern$tickPre(CallbackInfo ci) {
         PlayerTickEvents.START.invoker().onStartOfPlayerTick((Player) (Object) this);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    public void tickPost(CallbackInfo ci) {
+    public void kaleidoscopeTavern$tickPost(CallbackInfo ci) {
         PlayerTickEvents.END.invoker().onEndOfPlayerTick((Player) (Object) this);
     }
 
