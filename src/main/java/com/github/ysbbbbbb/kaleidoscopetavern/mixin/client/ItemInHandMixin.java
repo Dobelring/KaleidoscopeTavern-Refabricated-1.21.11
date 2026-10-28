@@ -30,7 +30,7 @@ public abstract class ItemInHandMixin {
     private Minecraft minecraft;
 
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER), cancellable = true)
-    private void renderArmWithItem(
+    private void kaleidoscopeTavern$renderArmWithItem(
             PlayerRenderState playerState,
             FirstPersonHandsAndItemsRenderState state,
             float partialTicks,
