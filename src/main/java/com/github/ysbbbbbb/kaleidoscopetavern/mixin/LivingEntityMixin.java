@@ -26,13 +26,13 @@ public abstract class LivingEntityMixin extends Entity {
     }
 
     @Inject(method = "getEquipmentSlotForItem", at = @At("HEAD"), cancellable = true)
-    private static void getEquipmentSlotForItem(ItemStack itemStack, CallbackInfoReturnable<EquipmentSlot> cir) {
+    private static void kaleidoscopeTavern$getEquipmentSlotForItem(ItemStack itemStack, CallbackInfoReturnable<EquipmentSlot> cir) {
         if (itemStack.getItem() instanceof StringLightsBlockItem)
             cir.setReturnValue(EquipmentSlot.CHEST);
     }
 
     @Inject(method = "maxUpStep", at = @At("HEAD"), cancellable = true)
-    private void maxUpStep(CallbackInfoReturnable<Float> cir) {
+    private void kaleidoscopeTavern$maxUpStep(CallbackInfoReturnable<Float> cir) {
         if (this.hasEffect(ModEffects.HIGH_HEELS.get())) cir.setReturnValue(1.55F);
     }
 }

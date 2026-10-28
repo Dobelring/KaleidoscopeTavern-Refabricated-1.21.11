@@ -30,7 +30,7 @@ public class EntityRendererDispatcherMixin {
     private Map<EntityType<?>, EntityRenderer<?>> renderers;
 
     @Inject(method = "onResourceManagerReload", at = @At("TAIL"))
-    private <R extends LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> void onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
+    private <R extends LivingEntityRenderer<? extends Player, ? extends EntityModel<? extends Player>>> void kaleidoscopeTavern$onResourceManagerReload(ResourceManager resourceManager, CallbackInfo ci) {
         for (var skin : this.playerRenderers.keySet()) {
             LivingEntityRenderer renderer = (R) this.playerRenderers.get(skin);
             if (renderer != null) {

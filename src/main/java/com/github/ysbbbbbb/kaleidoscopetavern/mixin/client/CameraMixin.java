@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class CameraMixin {
     
     @WrapOperation(method = "setup", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;setRotation(FF)V", ordinal = 0))
-    private void setup(Camera instance, float f, float g, Operation<Void> original, @Local(argsOnly = true, ordinal = 0) float ft) {
+    private void kaleidoscopeTavern$setup(Camera instance, float f, float g, Operation<Void> original, @Local(argsOnly = true, ordinal = 0) float ft) {
         var cameraSetup = new ViewportEvent.ComputeCameraAngles(
                 ((Camera) (Object)this), ft,
                 f,
