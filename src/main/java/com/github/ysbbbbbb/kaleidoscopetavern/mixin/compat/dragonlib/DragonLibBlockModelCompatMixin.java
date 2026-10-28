@@ -18,6 +18,6 @@ public abstract class DragonLibBlockModelCompatMixin implements BlockModelExtens
 
     @Override
     public void dragonlib$setRootTransform(Transformation rootTransform) {
-        this.kaleidoscope_tavern$rootTransform = rootTransform;
+        this.kaleidoscopeTavern$rootTransform = rootTransform;
     }
 }
