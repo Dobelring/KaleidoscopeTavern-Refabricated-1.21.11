@@ -48,7 +48,7 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation("net.fabricmc.fabric-api:fabric-api:${providers.gradleProperty("fabric_api_version").get()}")
 	// Mezz config
-	implementation("maven.modrinth:7tEfOcA7:2T4ew9Zj")
+	implementation("maven.modrinth:7tEfOcA7:MflJexJm")
 	compileOnly("maven.modrinth:rrv:${providers.gradleProperty("rrv_version").get()}") {
 		exclude(group = "net.fabricmc.fabric-api")
 		exclude(group = "eu.pb4")
