@@ -7,13 +7,18 @@ import com.github.ysbbbbbb.kaleidoscopetavern.block.dispenser.BottleBlockDispens
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.PressingTubBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.resources.DrinkEffectDataReloadListener;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.AddFeaturesEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.event.ChangeTargetEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.EffectEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.event.VanillaBottlePlaceEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.game.grape.GoldGrapePlant;
+import com.github.ysbbbbbb.kaleidoscopetavern.game.grape.IceGrapePlant;
+import com.github.ysbbbbbb.kaleidoscopetavern.game.grape.NormalGrapePlant;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.TapBehaviorManager;
 import com.github.ysbbbbbb.kaleidoscopetavern.game.tap.impl.*;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModBlocks;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModItems;
 import com.github.ysbbbbbb.kaleidoscopetavern.network.NetworkHandler;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.IKTEvent;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -48,8 +53,16 @@ public final class CommonRegistry {
         AddFeaturesEvent.addFeatures();
         EffectEvent.register();
         VanillaBottlePlaceEvent.register();
-        PlantGrapeEvent.register();
-        LivingChangeTargetEvent.register();
+        IKTEvent.CALLBACK.register(event -> {
+            if (event instanceof PlantGrapeEvent plantGrapeEvent) {
+                GoldGrapePlant.onPlant(plantGrapeEvent);
+                IceGrapePlant.onPlant(plantGrapeEvent);
+                NormalGrapePlant.onPlant(plantGrapeEvent);
+            }
+            if (event instanceof LivingChangeTargetEvent livingChangeTargetEvent) {
+                ChangeTargetEvent.onTarget(livingChangeTargetEvent);
+            }
+        });
         PlayerLeftClickEvent.register();
     }
 

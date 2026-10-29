@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.BarrelTapEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.BarrelBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.BaseBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.crafting.container.BarrelRecipeContainer;
@@ -50,6 +51,9 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
      * 酒桶检查时间，每 5s 检查一次，选取最接近的质数，避免与其他周期性事件同时发生，导致性能问题
      */
     private static final int CHECK_INTERVAL = 97;
+
+    private boolean freeTapConsumption;
+
     /**
      * 配方缓存
      */
@@ -422,23 +426,30 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
         if (output.getStackInSlot(0).isEmpty()) {
             return;
         }
-        // 酿醋
-        if (this.recipeId == null || this.recipeId.equals(BarrelRecipeSerializer.EMPTY_RECIPE_ID)) {
-            this.transform(level, tapPos, Ingredient.of(ModItems.EMPTY_BOTTLE), ModItems.VINEGAR.getDefaultInstance());
-            return;
-        }
-        // 查询配方
-        level.getRecipeManager().byKey(this.recipeId).ifPresentOrElse(recipe -> {
-            if (recipe.value() instanceof BarrelRecipe barrelRecipe) {
-                this.transform(level, tapPos, barrelRecipe.carrier(), barrelRecipe.result());
-            } else {
-                // 不是 BarrelRecipe？虽然不太可能，但是变成醋吧
+        BarrelTapEvent event = new BarrelTapEvent(level, this.getBlockPos(), tapPos, this.getBlockState());
+        event.post();
+        this.freeTapConsumption = event.isFreeConsumption();
+        try {
+            // 酿醋
+            if (this.recipeId == null || this.recipeId.equals(BarrelRecipeSerializer.EMPTY_RECIPE_ID)) {
                 this.transform(level, tapPos, Ingredient.of(ModItems.EMPTY_BOTTLE), ModItems.VINEGAR.getDefaultInstance());
+                return;
             }
-        }, () -> {
-            // 没有找到配方，变成醋
-            this.transform(level, tapPos, Ingredient.of(ModItems.EMPTY_BOTTLE), ModItems.VINEGAR.getDefaultInstance());
-        });
+            // 查询配方
+            level.getRecipeManager().byKey(this.recipeId).ifPresentOrElse(recipe -> {
+                if (recipe.value() instanceof BarrelRecipe barrelRecipe) {
+                    this.transform(level, tapPos, barrelRecipe.carrier(), barrelRecipe.result());
+                } else {
+                    // 不是 BarrelRecipe？虽然不太可能，但是变成醋吧
+                    this.transform(level, tapPos, Ingredient.of(ModItems.EMPTY_BOTTLE), ModItems.VINEGAR.getDefaultInstance());
+                }
+            }, () -> {
+                // 没有找到配方，变成醋
+                this.transform(level, tapPos, Ingredient.of(ModItems.EMPTY_BOTTLE), ModItems.VINEGAR.getDefaultInstance());
+            });
+        } finally {
+            this.freeTapConsumption = false;
+        }
     }
 
     private @Nullable ItemEntity findCarrierEntity(Level level, BlockPos tapPos, Ingredient carrier) {
@@ -450,6 +461,16 @@ public class BarrelBlockEntity extends BaseBlockEntity implements IBarrel {
     }
 
     private ItemStack extractOneOutput(ItemStack result) {
+        if (this.freeTapConsumption) {
+            this.freeTapConsumption = false;
+            ItemStack resultStack = result.copy();
+            resultStack.setCount(1);
+            if (resultStack.getItem() instanceof BottleBlockItem bottleBlockItem) {
+                resultStack = bottleBlockItem.getFilledStack(this.getBrewLevel());
+            }
+            return resultStack;
+        }
+
         // 取出一个成品，仅用于计数，实际产物由配方 result 决定
         ItemStack stack = output.extractItem(0, 1, false);
         if (!stack.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.item;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.api.blockentity.IBarrel;
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.DrinkBrewEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.block.brew.DrinkBlock;
 import com.github.ysbbbbbb.kaleidoscopetavern.blockentity.brew.DrinkBlockEntity;
 import com.github.ysbbbbbb.kaleidoscopetavern.datamap.data.DrinkEffectData;
@@ -111,11 +112,22 @@ public class DrinkBlockItem extends BottleBlockItem implements IHasContainer {
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        DrinkBrewEvent.Pre event = new DrinkBrewEvent.Pre(player.getItemInHand(hand), level, player, hand);
+        event.post();
+        if (event.isCanceled()) {
+            return InteractionResultHolder.fail(player.getItemInHand(hand));
+        }
         return ItemUtils.startUsingInstantly(level, player, hand);
     }
 
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+        DrinkBrewEvent.Post event = new DrinkBrewEvent.Post(stack, level, entity);
+        event.post();
+        if (event.isCanceled()) {
+            return stack;
+        }
+
         if (entity instanceof ServerPlayer serverPlayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
