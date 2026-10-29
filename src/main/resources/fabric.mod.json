@@ -42,6 +42,7 @@
 		"trinkets": "*"
 	},
 	"breaks": {
-		"dragonlib": "<1.21.1-beta-3.0.28"
+		"dragonlib": "<1.21.1-beta-3.0.28",
+		"kaleidoscope_world_liquor": "<=1.1.13.1"
 	}
 }
