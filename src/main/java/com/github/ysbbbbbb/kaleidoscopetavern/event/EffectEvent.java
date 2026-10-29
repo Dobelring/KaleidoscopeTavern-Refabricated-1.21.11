@@ -1,8 +1,8 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.event;
 
+import com.github.ysbbbbbb.kaleidoscopetavern.api.event.special.PlayerTickEvent;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.ModEffects;
 import com.github.ysbbbbbb.kaleidoscopetavern.init.tag.TagMod;
-import io.github.fabricators_of_create.porting_lib.entity.events.PlayerTickEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingHurtEvent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class EffectEvent {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register(EffectEvent::onLivingDeath);
-        PlayerTickEvents.END.register(EffectEvent::playerTicking);
+        PlayerTickEvent.END.register(EffectEvent::playerTicking);
         LivingHurtEvent.HURT.register(EffectEvent::onLivingHurt);
     }
 

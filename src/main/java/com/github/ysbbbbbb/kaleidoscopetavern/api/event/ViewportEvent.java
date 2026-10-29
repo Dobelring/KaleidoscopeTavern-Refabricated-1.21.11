@@ -1,12 +1,12 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.api.event;
 
 import com.github.ysbbbbbb.kaleidoscopetavern.client.event.CameraAnglesEvent;
-import com.github.ysbbbbbb.kaleidoscopetavern.util.event.IEvent;
+import com.github.ysbbbbbb.kaleidoscopetavern.util.event.IKTEvent;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 
-public abstract class ViewportEvent implements IEvent {
+public abstract class ViewportEvent implements IKTEvent {
     private final GameRenderer renderer;
     private final Camera camera;
     private final double partialTick;
@@ -70,11 +70,6 @@ public abstract class ViewportEvent implements IEvent {
 
         public void setRoll(float roll) {
             this.roll = roll;
-        }
-
-        @Override
-        public void post() {
-            CALLBACK.invoker().post(this);
         }
     }
 }
