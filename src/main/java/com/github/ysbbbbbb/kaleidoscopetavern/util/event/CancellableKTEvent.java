@@ -1,6 +1,7 @@
 package com.github.ysbbbbbb.kaleidoscopetavern.util.event;
 
-public abstract class CancellableEvent implements IEvent {
+//森罗酒馆相关的各类可取消事件专用的类
+public abstract class CancellableKTEvent implements IKTEvent {
 
     boolean isCanceled = false;
 
